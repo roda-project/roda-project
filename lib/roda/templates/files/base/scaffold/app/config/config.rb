@@ -9,9 +9,13 @@ module Config
           locale: ["pt-br", "en"]
         },
         db: {
-          url: not_production? ? "postgres://dev:dev@localhost:5432/app_#{environment}" : ENV["DATABASE_URL"]
+          url: not_production? ? dev_db_url : ENV["DATABASE_URL"]
         }
       }
+    end
+
+    def dev_db_url
+      "postgres://dev:dev@localhost:5432/app_#{environment}"
     end
 
     def not_production? = environment != "production"

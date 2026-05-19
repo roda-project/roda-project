@@ -3,7 +3,7 @@
 
 require_relative '../lib/roda/project'
 
-Roda::Project.call
+Roda::Project::CLI.new.call
 
 
 

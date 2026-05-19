@@ -35,7 +35,7 @@ class App < Roda
   plugin :json_parser
   plugin :sessions, secret: Config.get[:secret]
   plugin :i18n, **Config.get[:i18n]
-  <% if context[:include_rodauth] %>
+  <% if context[:rodauth] %>
   # Authentication
   plugin :rodauth do
     enable :login, :logout, :create_account, :verify_account
@@ -52,7 +52,6 @@ class App < Roda
     hmac_secret ENV["RODAUTH_HMAC_SECRET"]
   end
   <% end %>
-
   def config = @config ||= Config.get
   def html = @html ||= Views::Html.new(t)
   def self.branch(args, &) = hash_branch(args, &)
@@ -61,13 +60,10 @@ class App < Roda
     r.rodauth
     r.hash_branches
     # session[:locale] = 'pt-br'
-
     # r.i18n_set_locale_from(:session)
-
-    <% if context[:include_rodauth] %>
+    <% if context[:rodauth] %>
     rodauth.require_authentication
     <% end %>
-
     r.root do
       "#{t.hello.message}: #{rodauth.account![:email]}"
     end
