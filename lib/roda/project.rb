@@ -22,7 +22,7 @@ module Roda
       database = reader.read_line("Database? (Y/n) › ").chomp
       if database != ""
       else
-        database = reader.read_line("(1) SQlite (2) PostgreSQL (3) MySql › ")
+        database = reader.read_line("(1) SQlite (2) PostgreSQL (3) MySQL › ")
         auth = reader.read_line("Rodauth? (authentication) (Y/n) › ")
       end
       puts pastel.bright_black("\n[creating project: #{project_name}]\n")
