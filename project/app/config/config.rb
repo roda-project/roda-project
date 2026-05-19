@@ -11,7 +11,7 @@ module Config
           locale: ["pt-br", "en"]
         },
         db: {
-          url: not_production? ? <%= context.dev_db_url %> : ENV["DATABASE_URL"]
+          url: not_production? ? "sqlite://db/#{environment}.db" : ENV["DATABASE_URL"]
         }
       }
     end

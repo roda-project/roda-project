@@ -4,14 +4,7 @@ class App < Roda
   autoload_hash_branch_dir("./app/routes")
   plugin :all_verbs
   plugin :not_found
-  <% if context.fullstack? %>
-  # Views
-  plugin :hash_branch_view_subdir
-  plugin :partials, views: "app/views"
-  plugin :render, layout: "./layout"
-  plugin :content_for, append: false
-  plugin :flash
-  <% end %>
+  
   # Request / Response
   plugin :halt
   plugin :json
@@ -39,16 +32,12 @@ class App < Roda
   plugin :json_parser
   plugin :sessions, secret: Config.get[:secret]
   plugin :i18n, **Config.get[:i18n]
-<% if context.rodauth? %><% if context.api? %>
+
   # Authentication
   plugin :rodauth, json: :only do
     enable :jwt
     jwt_secret Config.get[:jwt_secret]
-<% else %>
-  # Authentication
-  plugin :rodauth do
-    enable :login, :logout, :create_account, :verify_account
-<% end %>
+
     accounts_table :accounts
     password_hash_table :account_password_hashes
     use_database_authentication_functions? false
@@ -59,21 +48,19 @@ class App < Roda
 
     hmac_secret Config.get[:hmac_secret]
   end
-<% end %>
+
   def config = @config ||= Config.get
   def self.branch(args, &) = hash_branch(args, &)
-  <% if context.fullstack? %>
-  def html = @html ||= Views::Html.new(t)
-  <% end %>
+  
 
   route do |r|
     r.rodauth
     r.hash_branches
     # session[:locale] = 'pt-br'
     # r.i18n_set_locale_from(:session)
-    <% if context.rodauth %>
+    
     rodauth.require_authentication
-    <% end %>
+    
     r.root do
       { message: "#{t.hello.message}: #{rodauth.account![:email]}" }
     end
