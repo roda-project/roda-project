@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
 require "tty-file"
+require 'fileutils'
 require "tty-reader"
 require "pastel"
-require_relative "project/modifiers"
 require_relative "project/version"
 
 module Roda
@@ -30,10 +30,11 @@ module Roda
         #File.expand_path("../../../templates/dir", __dir__),
         #"dir"
       #)
-      #TTY::File.copy_directory(
-        #File.expand_path("templates/base/fullstack", __dir__),
-        #"fullstack"
-      #)
+      TTY::File.copy_directory(
+        File.expand_path("templates/base/fullstack", __dir__),
+        "fullstack"
+      )
+      FileUtils.cp_r(File.expand_path("templates/views", __dir__), 'fullstack/app/views')
       puts "run rake to see all available tasks\n\n"
     rescue TTY::Reader::InputInterrupt
       puts "\n\nGoodbye"

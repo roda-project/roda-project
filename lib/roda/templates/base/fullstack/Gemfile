@@ -1,0 +1,49 @@
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+# Base
+gem "roda"
+gem "roda-i18n"
+gem "zeitwerk"
+
+# Authentication
+gem "rodauth"
+gem "bcrypt"
+gem "mail"
+
+# Database
+gem "sequel"
+gem "pg"
+# gem "sequel_pg"
+# gem 'jdbc-sqlite3'
+
+# Web Server
+gem "puma"
+# gem "falcon"
+# gem 'iodine'
+# gem 'thin'
+
+# Performance
+gem "oj"
+# gem 'async'
+
+# CLI
+gem "rake"
+
+# Security
+# gem "rack-attack"
+
+# Misc
+gem "html_slice"
+
+group :development do
+  gem "guard-puma"
+  gem "guard-livereload"
+  gem "rack-livereload"
+  gem "rack-test"
+  gem "debug"
+  gem "base64"
+  gem "standard"
+  gem "rspec"
+end
