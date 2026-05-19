@@ -30,12 +30,33 @@ module Roda
         #File.expand_path("../../../templates/dir", __dir__),
         #"dir"
       #)
+      puts "* creating base project"
       TTY::File.copy_directory(
         File.expand_path("templates/base/fullstack", __dir__),
-        "fullstack"
+        "fullstack",
+        context: {
+          include_rodauth: true
+        },
+        verbose: false
       )
-      FileUtils.cp_r(File.expand_path("templates/views", __dir__), 'fullstack/app/views')
-      puts "run rake to see all available tasks\n\n"
+
+      puts "* including rodauth"
+      FileUtils.cp_r(
+        File.expand_path("templates/files/rodauth/app/models", __dir__),
+        'fullstack/app/models'
+      )
+      FileUtils.cp(
+        File.expand_path("templates/files/rodauth/db/migrations/001_add_rodauth.rb", __dir__),
+        'fullstack/db/migrations/001_add_rodauth.rb'
+      )
+
+      puts "* including views"
+      FileUtils.cp_r(
+        File.expand_path("templates/files/views/app/views", __dir__),
+        'fullstack/app/views'
+      )
+
+      puts "\nrun rake to see all available tasks\n\n"
     rescue TTY::Reader::InputInterrupt
       puts "\n\nGoodbye"
     end
