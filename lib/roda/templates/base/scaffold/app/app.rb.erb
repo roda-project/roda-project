@@ -1,18 +1,21 @@
 class App < Roda
   # Routing
-  plugin :hash_branch_view_subdir
   plugin :autoload_hash_branches
   autoload_hash_branch_dir("./app/routes")
   plugin :all_verbs
   plugin :not_found
-  # Rendering
+  <% if context.fullstack? %>
+  # Views
+  plugin :hash_branch_view_subdir
   plugin :partials, views: "app/views"
   plugin :render, layout: "./layout"
   plugin :content_for, append: false
+  plugin :flash
+  <% end %>
+  # Request / Response
   plugin :halt
   plugin :json
   plugin :exception_page
-  # Request / Response
   plugin :caching
   plugin :cookies
   plugin :default_headers
@@ -27,19 +30,19 @@ class App < Roda
     # csp.frame_ancestors :none
     # csp.block_all_mixed_content
   end
+
   # CSRF Protection
   plugin :route_csrf
+
   # Other
   plugin :common_logger, Providers::Logger.get
-  plugin :flash
   plugin :json_parser
   plugin :sessions, secret: Config.get[:secret]
   plugin :i18n, **Config.get[:i18n]
-  <% if context.rodauth %>
+  <% if context.rodauth? %>
   # Authentication
   plugin :rodauth do
     enable :login, :logout, :create_account, :verify_account
-    db DB
 
     accounts_table :accounts
     password_hash_table :account_password_hashes
@@ -53,8 +56,10 @@ class App < Roda
   end
   <% end %>
   def config = @config ||= Config.get
-  def html = @html ||= Views::Html.new(t)
   def self.branch(args, &) = hash_branch(args, &)
+  <% if context.fullstack? %>
+  def html = @html ||= Views::Html.new(t)
+  <% end %>
 
   route do |r|
     r.rodauth
@@ -65,7 +70,7 @@ class App < Roda
     rodauth.require_authentication
     <% end %>
     r.root do
-      "#{t.hello.message}: #{rodauth.account![:email]}"
+      { message: "#{t.hello.message}: #{rodauth.account![:email]}" }
     end
   end
 

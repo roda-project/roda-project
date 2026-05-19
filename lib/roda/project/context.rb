@@ -1,6 +1,12 @@
 module Roda
   module Project
     class Context
+      def foo_bar_example
+        return 'view("bar")' if fullstack?
+
+        '{ foo: "bar" }'
+      end
+
       def fullstack?
         base == Roda::Project::Fullstack
       end
