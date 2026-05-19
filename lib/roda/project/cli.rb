@@ -59,6 +59,7 @@ module Roda
           puts "* adding database"
           tty_cp_r("database", "db")
           tty_cp("database", "app/config/providers/db/conn.rb")
+          add_rodauth
         end
       end
 
