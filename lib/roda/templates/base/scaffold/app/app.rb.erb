@@ -71,12 +71,10 @@ class App < Roda
     <% if context.rodauth? %>
     r.rodauth
     rodauth.require_authentication
+    <% end  %>
     r.root do
-      { message: "#{t.hello.message}: #{rodauth.account![:email]}" }
-    end<% else %>
-    r.root do
-      { message: "#{t.hello.message}" }
-    end<% end  %>
+      <%= context.root_example %>
+    end
   end
 
   error do |e|

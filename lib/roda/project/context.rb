@@ -7,6 +7,16 @@ module Roda
         '{ foo: "bar" }'
       end
 
+      def root_example
+        if rodauth?
+          return '"#{t.hello.message}: #{rodauth.account![:email]}"' if fullstack?
+          return '{ message: "#{t.hello.message}: #{rodauth.account![:email]}" }'
+        end
+        return '"#{t.hello.message}"' if fullstack?
+
+         '{ message: "#{t.hello.message}" }'
+      end
+
       def fullstack?
         base == Roda::Project::FULLSTACK
       end
