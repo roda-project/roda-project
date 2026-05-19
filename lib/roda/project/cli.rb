@@ -15,19 +15,9 @@ module Roda
         @context.project_name = read_line("Project name › ", 'project')
         @context.base = read_line("(1) API (2) Fullstack › ", Roda::Project::API).to_i
         @context.database = read_line("Database? (Y/n) › ", true)
-        if @context.database
+        if @context.database?
           @context.database_type = read_line("(1) SQlite (2) PostgreSQL (3) MySQL › ", Roda::Project::SQLite).to_i
           @context.rodauth = read_line("Rodauth? (authentication) (Y/n) › ", true)
-          if @context.database_type == Roda::Project::MySQL
-            @context.dev_db_url ='"mysql2://user:password@localhost/app_#{environment}"'
-            @context.db_gem = 'mysql2'
-          elsif @context.database_type == Roda::Project::PostgreSQL
-            @context.dev_db_url ='"postgres://dev:dev@localhost:5432/app_#{environment}"'
-            @context.db_gem = 'pg'
-          else
-            @context.dev_db_url ='"sqlite://db/#{environment}.db"'
-            @context.db_gem = 'sqlite3'
-          end
         end
       rescue TTY::Reader::InputInterrupt
         puts "\n\nGoodbye"
@@ -42,7 +32,7 @@ module Roda
           context: @context,
         )
 
-        if @context.base == Roda::Project::Fullstack
+        if @context.fullstack?
           puts "* adding front-end"
           tty_cp_r('front-end', 'app/assets')
           tty_cp('front-end', 'esbuild.js')
@@ -50,16 +40,16 @@ module Roda
           cp_r('front-end', 'app/views')
         end
 
-        if @context.database
+        if @context.database?
           puts "* adding database"
           tty_cp_r('database', 'db')
           tty_cp('database', 'app/config/providers/db/conn.rb')
 
-          if @context.rodauth
+          if @context.rodauth?
             puts "* adding rodauth"
             tty_cp_r('rodauth', 'app/models')
             tty_cp('rodauth', 'db/migrations/001_add_rodauth.rb')
-            if @context.base == Roda::Project::Fullstack
+            if @context.fullstack?
               cp('rodauth', 'app/views/create-account.erb')
             end
           end
