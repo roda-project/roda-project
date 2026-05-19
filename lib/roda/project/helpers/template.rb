@@ -6,7 +6,7 @@ module Roda
           TTY::File.copy_directory(
             File.expand_path("../../templates/#{type}/#{path}", __dir__),
             "#{@context.project_name}/#{path}",
-            context: @context,
+            context: @context
           )
         end
 
@@ -27,7 +27,7 @@ module Roda
         def cp(type, path)
           File.write(
             "#{@context.project_name}/#{path}",
-            File.read(File.expand_path("../../templates/#{type}/#{path}", __dir__)),
+            File.read(File.expand_path("../../templates/#{type}/#{path}", __dir__))
           )
         end
       end

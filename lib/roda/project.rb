@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require "tty-file"
-require 'fileutils'
+require "fileutils"
 require "tty-reader"
 require "pastel"
 require_relative "project/version"
@@ -15,9 +15,9 @@ module Roda
     class Error < StandardError; end
 
     API = 1
-    Fullstack = 2
-    SQLite = 1
-    PostgreSQL = 2
-    MySQL = 3
+    FULLSTACK = 2
+    SQLITE = 1
+    POSTGRESQL = 2
+    MYSQL = 3
   end
 end

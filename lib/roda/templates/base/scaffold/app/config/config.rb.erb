@@ -9,10 +9,10 @@ module Config
         i18n: {
           translations: ["app/config/locales", "app/config/locales/foo"],
           locale: ["pt-br", "en"]
-        },
+        },<% if context.database? %>
         db: {
           url: not_production? ? <%= context.dev_db_url %> : ENV["DATABASE_URL"]
-        }
+        }<% end %>
       }
     end
 

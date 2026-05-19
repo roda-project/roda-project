@@ -13,7 +13,7 @@ gem "jwt"
 <% end %>
 # Database
 gem "sequel"
-gem "<%= context.db_gem %>"
+<%= "gem \"#{context.db_gem}\"" if context.database? %>
 
 # Web Server
 gem "puma"

@@ -9,5 +9,6 @@ group :test, :development do
   gem "irb"
   gem "rake", "~> 13.0"
   gem "rspec", "~> 3.0"
+  gem "rspec-snapshot"
   gem "standard"
 end

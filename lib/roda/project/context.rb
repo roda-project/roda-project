@@ -8,7 +8,7 @@ module Roda
       end
 
       def fullstack?
-        base == Roda::Project::Fullstack
+        base == Roda::Project::FULLSTACK
       end
 
       def api?
@@ -27,40 +27,40 @@ module Roda
         @database_type = val
 
         if mysql?
-          @dev_db_url ='"mysql2://user:password@localhost/app_#{environment}"'
-          @db_gem = 'mysql2'
+          @dev_db_url = '"mysql2://user:password@localhost/app_#{environment}"'
+          @db_gem = "mysql2"
         elsif postgresql?
-          @dev_db_url ='"postgres://user:password@localhost:5432/app_#{environment}"'
-          @db_gem = 'pg'
+          @dev_db_url = '"postgres://user:password@localhost:5432/app_#{environment}"'
+          @db_gem = "pg"
         else
-          @dev_db_url ='"sqlite://db/#{environment}.db"'
-          @db_gem = 'sqlite3'
+          @dev_db_url = '"sqlite://db/#{environment}.db"'
+          @db_gem = "sqlite3"
         end
       end
 
       def mysql?
         return false unless database?
 
-        database_type == Roda::Project::MySQL
+        database_type == Roda::Project::MYSQL
       end
 
       def postgresql?
         return false unless database?
 
-        database_type == Roda::Project::PostgreSQL
+        database_type == Roda::Project::POSTGRESQL
       end
 
       def sqlite?
         return false unless database?
 
-        database_type == Roda::Project::SQlite
+        database_type == Roda::Project::SQLITE
       end
 
       attr_accessor(
         :project_name,
         :base,
         :database,
-        :rodauth,
+        :rodauth
       )
       attr_reader :database_type, :dev_db_url, :db_gem
     end

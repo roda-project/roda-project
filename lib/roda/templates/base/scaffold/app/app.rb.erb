@@ -61,22 +61,22 @@ class App < Roda
   end
 <% end %>
   def config = @config ||= Config.get
-  def self.branch(args, &) = hash_branch(args, &)
-  <% if context.fullstack? %>
-  def html = @html ||= Views::Html.new(t)
-  <% end %>
+  def self.branch(args, &) = hash_branch(args, &)<% if context.fullstack? %>
+  def html = @html ||= Views::Html.new(t)<% end %>
 
   route do |r|
-    r.rodauth
     r.hash_branches
     # session[:locale] = 'pt-br'
     # r.i18n_set_locale_from(:session)
-    <% if context.rodauth %>
+    <% if context.rodauth? %>
+    r.rodauth
     rodauth.require_authentication
-    <% end %>
     r.root do
       { message: "#{t.hello.message}: #{rodauth.account![:email]}" }
-    end
+    end<% else %>
+    r.root do
+      { message: "#{t.hello.message}" }
+    end<% end  %>
   end
 
   error do |e|
