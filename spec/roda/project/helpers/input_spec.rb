@@ -1,5 +1,3 @@
-
-
 RSpec.describe Roda::Project::Helpers::Input do
   # Create a dummy class to include the module for testing
   let(:dummy_class) do
