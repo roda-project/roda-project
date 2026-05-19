@@ -1,0 +1,15 @@
+require_relative "../spec_helper"
+
+describe "hello" do
+  it "test models" do
+    Account.create(email: "foo@bar.com")
+
+    expect(Account.count).to eq(1)
+  end
+
+  it "test requests" do
+    get "/"
+
+    expect(last_response.status).to eq(302)
+  end
+end

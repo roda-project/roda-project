@@ -9,10 +9,10 @@ loader.push_dir("#{__dir__}/app")
 loader.collapse("#{__dir__}/lib")
 loader.collapse("#{__dir__}/app/services")
 loader.collapse("#{__dir__}/app/config")
-<% if context[:database] %>
+
 loader.inflector.inflect("db" => "DB")
 loader.collapse("#{__dir__}/app/models")
-<% end %>
+
 
 # [
 # 'config',
@@ -29,13 +29,13 @@ require "debug" if Config.not_production?
 Oj.mimic_JSON
 
 # Providers
-<% if context[:database] %>
+
 Providers::DB::Conn.boot
-<% end %>
+
 Providers::Mailer.boot
 Providers::Logger.boot
 
 # Consts
-<% if context[:database] %>
+
 DB = Providers::DB::Conn.get
-<% end %>
+

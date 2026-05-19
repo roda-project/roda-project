@@ -6,17 +6,14 @@ source "https://rubygems.org"
 gem "roda"
 gem "roda-i18n"
 gem "zeitwerk"
-
+<% if context.rodauth %>
 # Authentication
 gem "rodauth"
-gem "bcrypt"
-gem "mail"
+<% end %>
 
 # Database
 gem "sequel"
-gem "pg"
-# gem "sequel_pg"
-# gem 'jdbc-sqlite3'
+gem "<%= context.db_gem %>"
 
 # Web Server
 gem "puma"
@@ -36,6 +33,8 @@ gem "rake"
 
 # Misc
 gem "html_slice"
+gem "mail"
+gem "bcrypt"
 
 group :development do
   gem "guard-puma"

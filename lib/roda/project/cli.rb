@@ -3,86 +3,69 @@
 module Roda
   module Project
     class CLI
+      include Helpers::Template
+      include Helpers::Input
+
       def initialize
-        @context = {
-          project_name: 'project',
-          rodauth: false,
-          base: 1,
-          database: true,
-          database_type: 1,
-        }
+        @context = Context.new
         @pastel = Pastel.new
 
-        reader = TTY::Reader.new
         puts(@pastel.bright_black("[roda-project v#{Roda::Project::VERSION}]\n"))
 
-        project_name = reader.read_line("Project name › ").chomp
-        @context[:project_name] = (project_name == "")? @context[:project_name] : project_name
-        @context[:base] = reader.read_line("(1) API (2) Fullstack › ").chomp
-        @context[:database] = reader.read_line("Database? (Y/n) › ").chomp
-        if @context[:database] != ""
-        else
-          @context[:database_type] = reader.read_line("(1) SQlite (2) PostgreSQL (3) MySQL › ")
-          @context[:rodauth] = reader.read_line("Rodauth? (authentication) (Y/n) › ")
+        @context.project_name = read_line("Project name › ", 'project')
+        @context.base = read_line("(1) API (2) Fullstack › ", Roda::Project::API).to_i
+        @context.database = read_line("Database? (Y/n) › ", true)
+        if @context.database
+          @context.database_type = read_line("(1) SQlite (2) PostgreSQL (3) MySQL › ", Roda::Project::SQLite).to_i
+          @context.rodauth = read_line("Rodauth? (authentication) (Y/n) › ", true)
+          if @context.database_type == Roda::Project::MySQL
+            @context.dev_db_url ='"mysql2://user:password@localhost/app_#{environment}"'
+            @context.db_gem = 'mysql2'
+          elsif @context.database_type == Roda::Project::PostgreSQL
+            @context.dev_db_url ='"postgres://dev:dev@localhost:5432/app_#{environment}"'
+            @context.db_gem = 'pg'
+          else
+            @context.dev_db_url ='"sqlite://db/#{environment}.db"'
+            @context.db_gem = 'sqlite3'
+          end
         end
-      end
-
-      def call
-        puts @pastel.bright_black("\n[project: #{@context[:project_name]}]\n")
-        puts "* creating base project"
-        TTY::File.copy_directory(
-          File.expand_path("../templates/files/base/scaffold", __dir__),
-          @context[:project_name],
-          context: @context,
-        )
-
-        puts "* adding database"
-        tty_cp_r('database', 'db')
-        tty_cp('database', 'app/config/providers/db/conn.rb')
-
-        puts "* adding front-end"
-        cp_r('front-end', 'app/views')
-        tty_cp_r('front-end', 'app/assets')
-        tty_cp('front-end', 'esbuild.js')
-        tty_cp('front-end', 'package.json')
-
-        puts "* adding rodauth"
-        tty_cp_r('rodauth', 'app/models')
-        tty_cp('rodauth', 'db/migrations/001_add_rodauth.rb')
-        cp('rodauth', 'app/views/create-account.erb')
-
-        puts "\nrun rake to see all available tasks\n\n"
       rescue TTY::Reader::InputInterrupt
         puts "\n\nGoodbye"
       end
 
-      def tty_cp_r(type, path)
+      def call
+        puts @pastel.bright_black("\n[project: #{@context.project_name}]\n")
+        puts "* creating base project"
         TTY::File.copy_directory(
-          File.expand_path("../templates/files/#{type}/#{path}", __dir__),
-          "#{@context[:project_name]}/#{path}",
+          File.expand_path("../templates/base/scaffold", __dir__),
+          @context.project_name,
           context: @context,
         )
-      end
 
-      def cp_r(type, path)
-        FileUtils.cp_r(
-          File.expand_path("../templates/files/#{type}/#{path}", __dir__),
-          "#{@context[:project_name]}/#{path}"
-        )
-      end
+        if @context.base == Roda::Project::Fullstack
+          puts "* adding front-end"
+          tty_cp_r('front-end', 'app/assets')
+          tty_cp('front-end', 'esbuild.js')
+          tty_cp('front-end', 'package.json')
+          cp_r('front-end', 'app/views')
+        end
 
-      def tty_cp(type, path)
-        TTY::File.copy_file(
-          File.expand_path("../templates/files/#{type}/#{path}", __dir__),
-          "#{@context[:project_name]}/#{path}"
-        )
-      end
+        if @context.database
+          puts "* adding database"
+          tty_cp_r('database', 'db')
+          tty_cp('database', 'app/config/providers/db/conn.rb')
 
-      def cp(type, path)
-        File.write(
-          "#{@context[:project_name]}/#{path}",
-          File.read(File.expand_path("../templates/files/#{type}/#{path}", __dir__)),
-        )
+          if @context.rodauth
+            puts "* adding rodauth"
+            tty_cp_r('rodauth', 'app/models')
+            tty_cp('rodauth', 'db/migrations/001_add_rodauth.rb')
+            if @context.base == Roda::Project::Fullstack
+              cp('rodauth', 'app/views/create-account.erb')
+            end
+          end
+        end
+
+        puts "\nrun rake to see all available tasks\n\n"
       end
     end
   end

@@ -1,0 +1,79 @@
+class App < Roda
+  # Routing
+  plugin :hash_branch_view_subdir
+  plugin :autoload_hash_branches
+  autoload_hash_branch_dir("./app/routes")
+  plugin :all_verbs
+  plugin :not_found
+  # Rendering
+  plugin :partials, views: "app/views"
+  plugin :render, layout: "./layout"
+  plugin :content_for, append: false
+  plugin :halt
+  plugin :json
+  plugin :exception_page
+  # Request / Response
+  plugin :caching
+  plugin :cookies
+  plugin :default_headers
+  plugin :content_security_policy do |csp|
+    # csp.default_src :none
+    # csp.img_src :self
+    # csp.style_src :self
+    # csp.script_src :self
+    # csp.font_src :self
+    # csp.form_action :self
+    # csp.base_uri :none
+    # csp.frame_ancestors :none
+    # csp.block_all_mixed_content
+  end
+  # CSRF Protection
+  plugin :route_csrf
+  # Other
+  plugin :common_logger, Providers::Logger.get
+  plugin :flash
+  plugin :json_parser
+  plugin :sessions, secret: Config.get[:secret]
+  plugin :i18n, **Config.get[:i18n]
+  
+  # Authentication
+  plugin :rodauth do
+    enable :login, :logout, :create_account, :verify_account
+    db DB
+
+    accounts_table :accounts
+    password_hash_table :account_password_hashes
+    use_database_authentication_functions? false
+    # base_url "http://localhost:9292"
+    login_column :email
+    # Redirect logged in users to the wherever login redirects to
+    already_logged_in { redirect "/" }
+
+    hmac_secret ENV["RODAUTH_HMAC_SECRET"]
+  end
+  
+  def config = @config ||= Config.get
+  def html = @html ||= Views::Html.new(t)
+  def self.branch(args, &) = hash_branch(args, &)
+
+  route do |r|
+    r.rodauth
+    r.hash_branches
+    # session[:locale] = 'pt-br'
+    # r.i18n_set_locale_from(:session)
+    
+    rodauth.require_authentication
+    
+    r.root do
+      "#{t.hello.message}: #{rodauth.account![:email]}"
+    end
+  end
+
+  error do |e|
+    next exception_page(e, css_file: "/public/exception_page.css") if Config.not_production?
+  end
+
+  not_found do
+    "not found"
+  end
+end
