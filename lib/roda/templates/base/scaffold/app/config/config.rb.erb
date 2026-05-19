@@ -2,10 +2,10 @@ module Config
   class << self
     def get
       @config ||= {
-        secret: ENV["SESSION_SECRET"] || 'REPLACE-----8HiF)>l0hbPk£vBQ#IrYsoO}14k\l+-/gIU[j}l0hbPk£vBQ#IrY',
+        secret: ENV["SESSION_SECRET"] || 'DEV-ONLY-8<FQF8HiF)>l0hbPk£vBQ#IrYsoO}14k\l+-/gIU[j}l0hbPk£vBQ#IrY',
         environment:,
-        hmac_secret: ENV["RODAUTH_HMAC_SECRET"] || 'REPLACE',
-        jwt_secret: ENV["JWT_SECRET"] || 'REPLACE',
+        hmac_secret: ENV["RODAUTH_HMAC_SECRET"] || 'DEV-ONLY',
+        jwt_secret: ENV["JWT_SECRET"] || 'DEV-ONLY',
         i18n: {
           translations: ["app/config/locales", "app/config/locales/foo"],
           locale: ["pt-br", "en"]
