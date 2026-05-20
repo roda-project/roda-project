@@ -1,5 +1,4 @@
 RSpec.describe Roda::Project::Helpers::Input do
-  # Create a dummy class to include the module for testing
   let(:dummy_class) do
     Class.new do
       include Roda::Project::Helpers::Input
@@ -48,7 +47,7 @@ RSpec.describe Roda::Project::Helpers::Input do
     context "when reader is called" do
       it "initializes TTY::Reader once" do
         instance.reader
-        instance.reader # Call again to ensure memoization
+        instance.reader
         expect(TTY::Reader).to have_received(:new).once
       end
     end

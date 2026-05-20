@@ -1,6 +1,14 @@
 module Roda
   module Project
     class Context
+      attr_accessor(
+        :project_name,
+        :base,
+        :database,
+        :rodauth
+      )
+      attr_reader :database_type, :dev_db_url, :db_gem
+
       def foo_bar_example
         return 'view("bar")' if fullstack?
 
@@ -14,7 +22,7 @@ module Roda
         end
         return '"#{t.hello.message}"' if fullstack?
 
-         '{ message: "#{t.hello.message}" }'
+        '{ message: "#{t.hello.message}" }'
       end
 
       def fullstack?
@@ -65,14 +73,6 @@ module Roda
 
         database_type == Roda::Project::SQLITE
       end
-
-      attr_accessor(
-        :project_name,
-        :base,
-        :database,
-        :rodauth
-      )
-      attr_reader :database_type, :dev_db_url, :db_gem
     end
   end
 end

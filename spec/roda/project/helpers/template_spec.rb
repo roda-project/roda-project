@@ -4,7 +4,6 @@ require "fileutils"
 require "tty-file"
 
 RSpec.describe Roda::Project::Helpers::Template do
-  # Create a dummy class to include the module for testing
   let(:dummy_class) do
     Class.new do
       include Roda::Project::Helpers::Template

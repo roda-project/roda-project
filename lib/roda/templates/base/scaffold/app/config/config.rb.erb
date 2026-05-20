@@ -8,7 +8,7 @@ module Config
         jwt_secret: ENV["JWT_SECRET"] || 'DEV-ONLY',
         i18n: {
           translations: ["app/config/locales", "app/config/locales/foo"],
-          locale: ["pt-br", "en"]
+          locale: ["en", "pt-br"]
         },<% if context.database? %>
         db: {
           url: not_production? ? <%= context.dev_db_url %> : ENV["DATABASE_URL"]

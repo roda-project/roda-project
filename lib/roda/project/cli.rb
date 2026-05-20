@@ -9,7 +9,9 @@ module Roda
       def initialize(context: Context.new, pastel: Pastel.new)
         @context = context
         @pastel = pastel
+      end
 
+      def call
         puts @pastel.bright_black("[roda-project v#{Roda::Project::VERSION}]\n")
 
         @context.project_name = read_line("Project name › ", "project")
@@ -19,18 +21,19 @@ module Roda
           @context.database_type = read_line("(1) SQlite (2) PostgreSQL (3) MySQL › ", Roda::Project::SQLITE).to_i
           @context.rodauth = read_line("Rodauth? (authentication) (Y/n) › ", true)
         end
-      rescue TTY::Reader::InputInterrupt
-        puts "\n\nGoodbye"
-      end
 
-      def call
         puts @pastel.bright_black("\n[project: #{@context.project_name}]\n")
 
-        create_base_project
-        add_front_end
-        add_database
+        #create_base_project
+        #add_front_end
+        #add_database
 
-        puts "\nrun rake to see all available tasks\n\n"
+        puts "\nto run the project:\n\n"
+        puts "$ cd #{@context.project_name} && bundle"
+        puts "$ rake dev:watch"
+        puts "\nrun 'rake' to see all available tasks\n\n"
+      rescue TTY::Reader::InputInterrupt
+        puts "\n\nGoodbye"
       end
 
       private

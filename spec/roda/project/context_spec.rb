@@ -3,15 +3,6 @@
 RSpec.describe Roda::Project::Context do
   subject(:context) { described_class.new }
 
-  # Mock constants used in the Context class
-  before do
-    stub_const("Roda::Project::FULLSTACK", "fullstack")
-    stub_const("Roda::Project::API", "api")
-    stub_const("Roda::Project::MYSQL", "mysql")
-    stub_const("Roda::Project::POSTGRESQL", "postgresql")
-    stub_const("Roda::Project::SQLITE", "sqlite")
-  end
-
   describe "attributes" do
     it { is_expected.to respond_to(:project_name) }
     it { is_expected.to respond_to(:project_name=) }
