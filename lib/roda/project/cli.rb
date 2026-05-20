@@ -16,10 +16,13 @@ module Roda
         puts @pastel.bright_black("[roda-project v#{Roda::Project::VERSION}]\n")
 
         @context.project_name = read_line("Project name › ", "project")
-        @context.base = read_line("(#{Roda::Project::FULLSTACK}) Fullstack (#{Roda::Project::API}) API › ", Roda::Project::FULLSTACK).to_i
+        @context.base = read_line("(#{fullstack_id}) Fullstack (#{api_id}) API › ", fullstack_id).to_i
         @context.database = read_line("Database? (Y/n) › ", true)
         if @context.database?
-          @context.database_type = read_line("(#{Roda::Project::SQLITE}) SQlite (#{Roda::Project::POSTGRESQL}) PostgreSQL (#{Roda::Project::MYSQL}) MySQL › ", Roda::Project::SQLITE).to_i
+          @context.database_type = read_line(
+            "(#{sqlite_id}) SQlite (#{postgresql_id}) PostgreSQL (#{mysql_id}) MySQL › ",
+            sqlite_id
+          ).to_i
           @context.rodauth = read_line("Rodauth? (authentication) (Y/n) › ", true)
         end
 
@@ -38,6 +41,12 @@ module Roda
       end
 
       private
+
+      def fullstack_id = Roda::Project::FULLSTACK
+      def mysql_id = Roda::Project::MYSQL
+      def sqlite_id = Roda::Project::SQLITE
+      def postgresql_id = Roda::Project::POSTGRESQL
+      def api_id = Roda::Project::API
 
       def create_base_project
         puts "* creating base project"

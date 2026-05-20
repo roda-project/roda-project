@@ -6,7 +6,7 @@ require_relative "../../../lib/roda/project/cli"
 RSpec.describe Roda::Project::CLI do
   after { FileUtils.rm_rf(tmp_path) }
   let(:tmp_path) { File.expand_path("../../tmp", __dir__) }
-  let(:dir) { 'spec/tmp/' }
+  let(:dir) { "spec/tmp/" }
 
   before { allow($stdout).to receive(:write) }
 
@@ -22,20 +22,32 @@ RSpec.describe Roda::Project::CLI do
     "#{app_name}/#{name}"
   end
 
+  BASE_FILES_WITH_LOGIC =
+    [
+      "Gemfile",
+      "boot.rb",
+      "Rakefile",
+      "app/app.rb",
+      "app/routes/foo.rb",
+      "app/config/config.rb",
+      "spec/app/app_spec.rb",
+      "spec/spec_helper.rb"
+    ]
+
   RODAUTH_FRONT_FILES =
     [
-      "app/views/create-account.erb",
+      "app/views/create-account.erb"
     ]
 
   DB_FILES =
     [
-      "app/config/providers/db/conn.rb",
+      "app/config/providers/db/conn.rb"
     ]
 
   RODAUTH_BACK_FILES =
     [
       "app/models/account.rb",
-      "db/migrations/001_add_rodauth.rb",
+      "db/migrations/001_add_rodauth.rb"
     ]
 
   FRONT_FILES =
@@ -45,21 +57,11 @@ RSpec.describe Roda::Project::CLI do
       "app/views/html.rb",
       "app/views/layout.erb",
       "esbuild.js",
-      "package.json",
-    ]
-
-  BASE_FILES_WITH_LOGIC =
-    [
-      "Gemfile",
-      "boot.rb",
-      "Rakefile",
-      "app/app.rb",
-      "app/routes/foo.rb",
-      "app/config/config.rb",
+      "package.json"
     ]
 
   context "when creating a fullstack project with database (SQLite) and Rodauth >" do
-    let(:app_name) { 'fullstack_sqlite_rodauth_project' }
+    let(:app_name) { "fullstack_sqlite_rodauth_project" }
     before do
       allow_any_instance_of(Roda::Project::CLI).to receive(:read_line).and_return(
         app_name, "1", true, "1", true
@@ -77,14 +79,14 @@ RSpec.describe Roda::Project::CLI do
 
     (FRONT_FILES + DB_FILES + RODAUTH_BACK_FILES + RODAUTH_FRONT_FILES)
       .each do |path|
-      it "#{path} exist" do
-        expect(file_exist?(path)).to(be_truthy)
-      end
+        it "#{path} exist" do
+          expect(file_exist?(path)).to(be_truthy)
+        end
     end
   end
 
   context "when creating an API project without a database >" do
-    let(:app_name) { 'api_no_database_project' }
+    let(:app_name) { "api_no_database_project" }
     before do
       allow_any_instance_of(Roda::Project::CLI).to receive(:read_line).and_return(
         app_name, "2", false
@@ -102,9 +104,9 @@ RSpec.describe Roda::Project::CLI do
 
     (FRONT_FILES + RODAUTH_BACK_FILES + RODAUTH_FRONT_FILES)
       .each do |path|
-      it "#{path} dont exists" do
-        expect(file_exist?(path)).to(be_falsey)
-      end
+        it "#{path} dont exists" do
+          expect(file_exist?(path)).to(be_falsey)
+        end
     end
   end
 
@@ -132,7 +134,7 @@ RSpec.describe Roda::Project::CLI do
         end
       end
 
-    (RODAUTH_FRONT_FILES)
+    RODAUTH_FRONT_FILES
       .each do |path|
         it "#{path} dont exists" do
           expect(file_exist?(path)).to(be_falsey)
@@ -159,9 +161,9 @@ RSpec.describe Roda::Project::CLI do
 
     (FRONT_FILES + DB_FILES)
       .each do |path|
-      it "#{path} exist" do
-        expect(file_exist?(path)).to(be_truthy)
-      end
+        it "#{path} exist" do
+          expect(file_exist?(path)).to(be_truthy)
+        end
     end
   end
 end
