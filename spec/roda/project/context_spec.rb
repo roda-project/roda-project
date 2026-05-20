@@ -94,12 +94,14 @@ RSpec.describe Roda::Project::Context do
       end
     end
 
+    # rubocop:disable Lint/InterpolationCheck
     context "when fullstack? is false" do
       before { allow(context).to receive(:fullstack?).and_return(false) }
       it "returns the rodauth non-fullstack example" do
         expect(context.root_example).to eq('{ message: "#{t.hello.message}" }')
       end
     end
+    # rubocop:enable Lint/InterpolationCheck
   end
 
   describe "#database_type=" do

@@ -3,6 +3,7 @@
 require_relative "../../../lib/roda/project"
 require_relative "../../../lib/roda/project/cli"
 
+# rubocop:disable Lint/ConstantDefinitionInBlock
 RSpec.describe Roda::Project::CLI do
   after { FileUtils.rm_rf(tmp_path) }
   let(:tmp_path) { File.expand_path("../../tmp", __dir__) }
@@ -167,3 +168,4 @@ RSpec.describe Roda::Project::CLI do
     end
   end
 end
+# rubocop:enable Lint/ConstantDefinitionInBlock

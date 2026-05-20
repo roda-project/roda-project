@@ -9,6 +9,7 @@ module Roda
       )
       attr_reader :database_type, :dev_db_url, :db_gem
 
+      # rubocop:disable Lint/InterpolationCheck
       def foo_bar_example
         return 'view("bar")' if fullstack?
 
@@ -20,6 +21,7 @@ module Roda
 
         '{ message: "#{t.hello.message}" }'
       end
+      # rubocop:enable Lint/InterpolationCheck
 
       def fullstack?
         base == Roda::Project::FULLSTACK
