@@ -87,39 +87,17 @@ RSpec.describe Roda::Project::Context do
   end
 
   describe "#root_example" do
-    context "when rodauth? is true" do
-      before { allow(context).to receive(:rodauth?).and_return(true) }
-
-      context "and fullstack? is true" do
-        before { allow(context).to receive(:fullstack?).and_return(true) }
-        it "returns the rodauth fullstack example" do
-          expect(context.root_example).to eq('"#{t.hello.message}: #{rodauth.account![:email]}"')
-        end
-      end
-
-      context "and fullstack? is false" do
-        before { allow(context).to receive(:fullstack?).and_return(false) }
-        it "returns the rodauth non-fullstack example" do
-          expect(context.root_example).to eq('{ message: "#{t.hello.message}: #{rodauth.account![:email]}" }')
-        end
+    context "when fullstack? is true" do
+      before { allow(context).to receive(:fullstack?).and_return(true) }
+      it "returns the rodauth fullstack example" do
+        expect(context.root_example).to eq("view(\"index\")")
       end
     end
 
-    context "when rodauth? is false" do
-      before { allow(context).to receive(:rodauth?).and_return(false) }
-
-      context "and fullstack? is true" do
-        before { allow(context).to receive(:fullstack?).and_return(true) }
-        it "returns the non-rodauth fullstack example" do
-          expect(context.root_example).to eq('"#{t.hello.message}"')
-        end
-      end
-
-      context "and fullstack? is false" do
-        before { allow(context).to receive(:fullstack?).and_return(false) }
-        it "returns the non-rodauth non-fullstack example" do
-          expect(context.root_example).to eq('{ message: "#{t.hello.message}" }')
-        end
+    context "when fullstack? is false" do
+      before { allow(context).to receive(:fullstack?).and_return(false) }
+      it "returns the rodauth non-fullstack example" do
+        expect(context.root_example).to eq('{ message: "#{t.hello.message}" }')
       end
     end
   end

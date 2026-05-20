@@ -61,7 +61,7 @@ class App < Roda
     rodauth.require_authentication
     
     r.root do
-      { message: "#{t.hello.message}: #{rodauth.account![:email]}" }
+      { message: "#{t.hello.message}" }
     end
   end
 

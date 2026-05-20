@@ -16,11 +16,7 @@ module Roda
       end
 
       def root_example
-        if rodauth?
-          return '"#{t.hello.message}: #{rodauth.account![:email]}"' if fullstack?
-          return '{ message: "#{t.hello.message}: #{rodauth.account![:email]}" }'
-        end
-        return '"#{t.hello.message}"' if fullstack?
+        return 'view("index")' if fullstack?
 
         '{ message: "#{t.hello.message}" }'
       end

@@ -2,9 +2,9 @@ require_relative "../spec_helper"
 
 describe "hello" do
   it "test requests" do
-    get "/"
-
-    expect(last_response.status).to eq(302)
+    get "/"<% if context.rodauth? %>
+    expect(last_response.status).to eq(302)<% else %>
+    expect(last_response.status).to eq(200)<% end %>
   end
   <% if context.database? %>
   it "test models" do

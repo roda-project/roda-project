@@ -50,7 +50,7 @@ class App < Roda
     # r.i18n_set_locale_from(:session)
     
     r.root do
-      "#{t.hello.message}"
+      view("index")
     end
   end
 
