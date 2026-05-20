@@ -5,13 +5,6 @@ class App < Roda
   plugin :all_verbs
   plugin :not_found
   
-  # Views
-  plugin :hash_branch_view_subdir
-  plugin :partials, views: "app/views"
-  plugin :render, layout: "./layout"
-  plugin :content_for, append: false
-  plugin :flash
-  
   # Request / Response
   plugin :halt
   plugin :json
@@ -41,8 +34,9 @@ class App < Roda
   plugin :i18n, **Config.get[:i18n]
 
   # Authentication
-  plugin :rodauth do
-    enable :login, :logout, :create_account, :verify_account
+  plugin :rodauth, json: :only do
+    enable :jwt
+    jwt_secret Config.get[:jwt_secret]
 
     accounts_table :accounts
     password_hash_table :account_password_hashes
@@ -57,7 +51,6 @@ class App < Roda
 
   def config = @config ||= Config.get
   def self.branch(args, &) = hash_branch(args, &)
-  def html = @html ||= Views::Html.new(t)
 
   route do |r|
     r.hash_branches
@@ -68,7 +61,7 @@ class App < Roda
     rodauth.require_authentication
     
     r.root do
-      "#{t.hello.message}: #{rodauth.account![:email]}"
+      { message: "#{t.hello.message}: #{rodauth.account![:email]}" }
     end
   end
 

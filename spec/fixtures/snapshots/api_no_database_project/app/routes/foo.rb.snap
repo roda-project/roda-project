@@ -1,7 +1,7 @@
 class App
   branch "foo" do |r|
     r.get "bar" do
-      view("bar")
+      { foo: "bar" }
     end
   end
 end

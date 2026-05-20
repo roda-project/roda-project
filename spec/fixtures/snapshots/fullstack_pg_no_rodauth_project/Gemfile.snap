@@ -7,13 +7,9 @@ gem "roda"
 gem "roda-i18n"
 gem "zeitwerk"
 
-# Authentication
-gem "rodauth"
-gem "jwt"
-
 # Database
 gem "sequel"
-gem "sqlite3"
+gem "pg"
 
 # Web Server
 gem "puma"

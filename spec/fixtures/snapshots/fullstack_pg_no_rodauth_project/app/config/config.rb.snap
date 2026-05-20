@@ -11,7 +11,7 @@ module Config
           locale: ["en", "pt-br"]
         },
         db: {
-          url: not_production? ? "sqlite://db/#{environment}.db" : ENV["DATABASE_URL"]
+          url: not_production? ? "postgres://user:password@localhost:5432/app_#{environment}" : ENV["DATABASE_URL"]
         }
       }
     end

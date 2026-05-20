@@ -14,8 +14,8 @@ module Roda
   module Project
     class Error < StandardError; end
 
-    API = 1
-    FULLSTACK = 2
+    FULLSTACK = 1
+    API = 2
     SQLITE = 1
     POSTGRESQL = 2
     MYSQL = 3

@@ -5,13 +5,6 @@ class App < Roda
   plugin :all_verbs
   plugin :not_found
   
-  # Views
-  plugin :hash_branch_view_subdir
-  plugin :partials, views: "app/views"
-  plugin :render, layout: "./layout"
-  plugin :content_for, append: false
-  plugin :flash
-  
   # Request / Response
   plugin :halt
   plugin :json
@@ -40,35 +33,16 @@ class App < Roda
   plugin :sessions, secret: Config.get[:secret]
   plugin :i18n, **Config.get[:i18n]
 
-  # Authentication
-  plugin :rodauth do
-    enable :login, :logout, :create_account, :verify_account
-
-    accounts_table :accounts
-    password_hash_table :account_password_hashes
-    use_database_authentication_functions? false
-    # base_url "http://localhost:9292"
-    login_column :email
-    # Redirect logged in users to the wherever login redirects to
-    already_logged_in { redirect "/" }
-
-    hmac_secret Config.get[:hmac_secret]
-  end
-
   def config = @config ||= Config.get
   def self.branch(args, &) = hash_branch(args, &)
-  def html = @html ||= Views::Html.new(t)
 
   route do |r|
     r.hash_branches
     # session[:locale] = 'pt-br'
     # r.i18n_set_locale_from(:session)
     
-    r.rodauth
-    rodauth.require_authentication
-    
     r.root do
-      "#{t.hello.message}: #{rodauth.account![:email]}"
+      { message: "#{t.hello.message}" }
     end
   end
 

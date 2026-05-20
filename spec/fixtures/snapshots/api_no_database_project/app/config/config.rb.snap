@@ -10,9 +10,6 @@ module Config
           translations: ["app/config/locales", "app/config/locales/foo"],
           locale: ["en", "pt-br"]
         },
-        db: {
-          url: not_production? ? "sqlite://db/#{environment}.db" : ENV["DATABASE_URL"]
-        }
       }
     end
 

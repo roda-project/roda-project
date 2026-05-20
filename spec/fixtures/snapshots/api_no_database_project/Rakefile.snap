@@ -2,27 +2,10 @@
 
 require_relative "boot"
 require "fileutils"
-require "sequel"
-require "sequel/extensions/migration"
 
 # List rake tasks
 task :default do
   system("rake -T")
-end
-
-# DB Migrate Task
-namespace :db do
-  desc "Migrate the database. Optional: provide target version, e.g., 'rake db:migrate[123]'"
-  task :migrate, [:target] do |t, args|
-    Sequel.extension :migration
-    db = Providers::DB::Conn.get
-    if args[:target]
-      Sequel::Migrator.run(db, "db/migrations", target: args[:target].to_i)
-    else
-      Sequel::Migrator.run(db, "db/migrations")
-    end
-    puts "Database migration complete."
-  end
 end
 
 # Console Task
@@ -90,41 +73,6 @@ end
 
 # Generate Tasks
 namespace :g do
-  desc "Generate an empty Sequel migration. Usage: 'rake generate:migration[migration_name]'"
-  task :migration, [:migration_name] do |t, args|
-    migration_name = args[:migration_name]
-    if migration_name.nil? || migration_name.empty?
-      puts "Usage: rake generate:migration[migration_name]"
-      exit 1
-    end
-
-    migrations_path = File.expand_path("./db/migrations", __dir__)
-    FileUtils.mkdir_p(migrations_path) unless File.directory?(migrations_path)
-
-    existing_migrations = Dir.glob(File.join(migrations_path, "*.rb"))
-    max_number = existing_migrations.map do |file|
-      File.basename(file).match(/^(\d+)/)&.captures&.first.to_i
-    end.max || 0
-    next_number = (max_number + 1).to_s.rjust(3, "0")
-
-    filename = File.join(migrations_path, "#{next_number}_#{migration_name}.rb")
-
-    content = <<~RUBY
-      Sequel.migration do
-        up do
-          # add your migration here
-        end
-
-        down do
-          # remove your migration here
-        end
-      end
-    RUBY
-
-    File.write(filename, content)
-    puts "Created migration: #{filename}"
-  end
-  
   desc "Generate routes and tests, also generate views if views directory is present. Usage: 'rake generate:routes[branch_name,route1,method:route2]'"
   task :routes, [:branch_name, :routes] do |t, args|
     branch_name = args.branch_name
