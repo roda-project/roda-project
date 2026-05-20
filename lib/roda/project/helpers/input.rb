@@ -6,6 +6,7 @@ module Roda
           val = reader.read_line(prompt).chomp
           return default if val == ""
           return false if val == "n"
+          return true if val == "Y" # Add this line
 
           val
         end
