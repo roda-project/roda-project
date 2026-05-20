@@ -6,14 +6,10 @@ source "https://rubygems.org"
 gem "roda"
 gem "roda-i18n"
 gem "zeitwerk"
-<% if context.rodauth? %>
-# Authentication
-gem "rodauth"
-gem "jwt"
-<% end %>
+
 # Database
 gem "sequel"
-<%= "gem \"#{context.db_gem}\"" if context.database? %>
+
 
 # Web Server
 gem "puma"

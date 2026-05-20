@@ -6,9 +6,10 @@ module Roda
       include Helpers::Template
       include Helpers::Input
 
-      def initialize(context: Context.new, pastel: Pastel.new)
+      def initialize(context: Context.new, pastel: Pastel.new, dir: nil)
         @context = context
         @pastel = pastel
+        @dir = dir
       end
 
       def call
@@ -24,9 +25,9 @@ module Roda
 
         puts @pastel.bright_black("\n[project: #{@context.project_name}]\n")
 
-        #create_base_project
-        #add_front_end
-        #add_database
+        create_base_project
+        add_front_end
+        add_database
 
         puts "\nto run the project:\n\n"
         puts "$ cd #{@context.project_name} && bundle"
@@ -42,7 +43,7 @@ module Roda
         puts "* creating base project"
         TTY::File.copy_directory(
           File.expand_path("../templates/base/scaffold", __dir__),
-          @context.project_name,
+          "#{@dir}#{@context.project_name}",
           context: @context
         )
       end
