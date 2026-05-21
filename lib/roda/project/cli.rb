@@ -17,6 +17,7 @@ module Roda
 
         @context.project_name = read_line("Project name › ", "project")
         @context.base = read_line("(#{fullstack_id}) Fullstack (#{api_id}) API › ", fullstack_id).to_i
+        @context.tests = read_line("(#{rspec_id}) RSpec (#{minitest_id}) Minitest › ", rspec_id).to_i
         @context.database = read_line("Database? (Y/n) › ", true)
         if @context.database?
           @context.database_type = read_line(
@@ -25,7 +26,6 @@ module Roda
           ).to_i
           @context.rodauth = read_line("Rodauth? (authentication) (Y/n) › ", true)
         end
-        @context.tests = read_line("(#{rspec_id}) RSpec (#{minitest_id}) Minitest › ", rspec_id).to_i
 
         puts @pastel.bright_black("\n[project: #{@context.project_name}]\n")
 

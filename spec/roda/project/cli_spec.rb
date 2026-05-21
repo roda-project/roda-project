@@ -61,11 +61,11 @@ RSpec.describe Roda::Project::CLI do
       "package.json"
     ]
 
-  context "when creating a fullstack project with database (SQLite) and Rodauth >" do
+  context "when creating a fullstack project with minitest, database (SQLite) and Rodauth >" do
     let(:app_name) { "fullstack_sqlite_rodauth_project" }
     before do
       allow_any_instance_of(Roda::Project::CLI).to receive(:read_line).and_return(
-        app_name, "1", true, "1", true
+        app_name, "1", "2", true, "1", true
       )
 
       cli = described_class.new(dir:)
@@ -90,7 +90,7 @@ RSpec.describe Roda::Project::CLI do
     let(:app_name) { "api_no_database_project" }
     before do
       allow_any_instance_of(Roda::Project::CLI).to receive(:read_line).and_return(
-        app_name, "2", false
+        app_name, "2", "1", false
       )
 
       cli = described_class.new(dir:)
@@ -115,7 +115,7 @@ RSpec.describe Roda::Project::CLI do
     let(:app_name) { "api_rodauth" }
     before do
       allow_any_instance_of(Roda::Project::CLI).to receive(:read_line).and_return(
-        app_name, "2", true, "2", true
+        app_name, "2", "1", true, "2", true
       )
 
       cli = described_class.new(dir:)
@@ -147,7 +147,7 @@ RSpec.describe Roda::Project::CLI do
     let(:app_name) { "fullstack_pg_no_rodauth_project" }
     before do
       allow_any_instance_of(Roda::Project::CLI).to receive(:read_line).and_return(
-        app_name, "1", true, "2", false
+        app_name, "1", "1", true, "2", false
       )
 
       cli = described_class.new(dir:)
