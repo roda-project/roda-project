@@ -31,6 +31,7 @@ module Roda
         create_base_project
         add_front_end
         add_database
+        add_test_files
 
         puts "\ninstall dependences:\n\n"
         puts "$ cd #{@context.project_name} && bundle"
@@ -94,6 +95,11 @@ module Roda
             cp("rodauth", "app/views/create-account.erb")
           end
         end
+      end
+
+      def add_test_files
+        puts "* adding test files"
+        tty_cp_r("tests/rspec", "spec")
       end
     end
   end
