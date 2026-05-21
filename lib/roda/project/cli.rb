@@ -32,10 +32,19 @@ module Roda
         add_front_end
         add_database
 
-        puts "\nto run the project:\n\n"
+        puts "\ninstall dependences:\n\n"
         puts "$ cd #{@context.project_name} && bundle"
+        if @context.database?
+          puts "\nput your dev database credentials in app/config/config.rb and migrate:\n\n"
+          puts "$ rake db:migrate"
+        end
+        puts "\nrun and watch the project in dev mode:\n\n"
         puts "$ rake dev:watch"
-        puts "\nrun 'rake' to see all available tasks\n\n"
+        if @context.fullstack?
+          puts "\ncompile and watch assets:\n\n"
+          puts "$ rake assets:watch"
+        end
+        puts "\nrun 'rake' inside #{@context.project_name} to see all available tasks\n\n"
       rescue TTY::Reader::InputInterrupt
         puts "\n\nGoodbye"
       end
