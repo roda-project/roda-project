@@ -25,6 +25,7 @@ module Roda
           ).to_i
           @context.rodauth = read_line("Rodauth? (authentication) (Y/n) › ", true)
         end
+        @context.tests = read_line("(#{rspec_id}) RSpec (#{minitest_id}) Minitest › ", rspec_id).to_i
 
         puts @pastel.bright_black("\n[project: #{@context.project_name}]\n")
 
@@ -57,6 +58,8 @@ module Roda
       def sqlite_id = Roda::Project::SQLITE
       def postgresql_id = Roda::Project::POSTGRESQL
       def api_id = Roda::Project::API
+      def rspec_id = Roda::Project::RSPEC
+      def minitest_id = Roda::Project::MINITEST
 
       def create_base_project
         puts "* creating base project"
@@ -99,7 +102,12 @@ module Roda
 
       def add_test_files
         puts "* adding test files"
-        tty_cp_r("tests/rspec", "spec")
+
+        if @context.rspec?
+          tty_cp_r("tests/rspec", "spec")
+        else
+          tty_cp_r("tests/minitest", "spec")
+        end
       end
     end
   end

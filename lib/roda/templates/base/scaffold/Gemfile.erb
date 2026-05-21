@@ -43,6 +43,9 @@ group :development do
   gem "rack-test"
   gem "debug"
   gem "base64"
-  gem "standard"
-  gem "rspec"
+  gem "standard"<% if context.minitest? %>
+  gem "minitest"
+  gem "minitest-hooks"
+<% else %>
+  gem "rspec"<% end %>
 end

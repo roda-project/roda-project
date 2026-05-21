@@ -5,9 +5,18 @@ module Roda
         :project_name,
         :base,
         :database,
-        :rodauth
+        :rodauth,
+        :tests
       )
       attr_reader :database_type, :dev_db_url, :db_gem
+
+      def rspec?
+        tests == Roda::Project::RSPEC
+      end
+
+      def minitest?
+        tests == Roda::Project::MINITEST
+      end
 
       # rubocop:disable Lint/InterpolationCheck
       def foo_bar_example

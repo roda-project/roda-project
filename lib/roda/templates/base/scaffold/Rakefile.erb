@@ -46,8 +46,9 @@ end
 
 # Test Task
 desc "Run tests"
-task :test do
-  system("RACK_ENV=test bundle exec rspec")
+task :test do<% if context.rspec? %>
+  system("RACK_ENV=test bundle exec rspec")<% else %>
+  system("RACK_ENV=test bundle exec minitest spec/")<% end %>
 end
 
 # Development Server Task

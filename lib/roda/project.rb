@@ -19,5 +19,7 @@ module Roda
     SQLITE = 1
     POSTGRESQL = 2
     MYSQL = 3
+    RSPEC = 1
+    MINITEST = 2
   end
 end
