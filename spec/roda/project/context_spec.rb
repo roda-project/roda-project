@@ -15,10 +15,41 @@ RSpec.describe Roda::Project::Context do
     it { is_expected.to respond_to(:database_type) }
     it { is_expected.to respond_to(:dev_db_url) }
     it { is_expected.to respond_to(:db_gem) }
+    it { is_expected.to respond_to(:tests) }
+    it { is_expected.to respond_to(:tests=) }
 
     it "allows setting and getting project_name" do
       context.project_name = "MyProject"
       expect(context.project_name).to eq("MyProject")
+    end
+
+    it "allows setting and getting tests" do
+      context.tests = "rspec"
+      expect(context.tests).to eq("rspec")
+    end
+  end
+
+  describe "#rspec?" do
+    context "when tests is Roda::Project::RSPEC" do
+      before { context.tests = Roda::Project::RSPEC }
+      it { is_expected.to be_rspec }
+    end
+
+    context "when tests is not Roda::Project::RSPEC" do
+      before { context.tests = Roda::Project::MINITEST }
+      it { is_expected.not_to be_rspec }
+    end
+  end
+
+  describe "#minitest?" do
+    context "when tests is Roda::Project::MINITEST" do
+      before { context.tests = Roda::Project::MINITEST }
+      it { is_expected.to be_minitest }
+    end
+
+    context "when tests is not Roda::Project::MINITEST" do
+      before { context.tests = Roda::Project::RSPEC }
+      it { is_expected.not_to be_minitest }
     end
   end
 

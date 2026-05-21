@@ -29,6 +29,20 @@ RSpec.describe Roda::Project::Helpers::Input do
       end
     end
 
+    context "when user enters 'Y'" do
+      it "returns true" do
+        allow(reader_double).to receive(:read_line).with(prompt).and_return("Y")
+        expect(instance.read_line(prompt, default_value)).to be(true)
+      end
+    end
+
+    context "when user enters 'y'" do
+      it "returns true" do
+        allow(reader_double).to receive(:read_line).with(prompt).and_return("y")
+        expect(instance.read_line(prompt, default_value)).to be(true)
+      end
+    end
+
     context "when user enters a non-empty, non-'n' string" do
       it "returns the entered string" do
         user_input = "some value"
