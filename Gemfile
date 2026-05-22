@@ -10,5 +10,5 @@ group :test, :development do
   gem "rake", "~> 13.0"
   gem "rspec", "~> 3.0"
   gem "rspec-snapshot"
-  gem "standard"
+  gem "standard", ">= 1.35.1"
 end
