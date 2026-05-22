@@ -13,7 +13,8 @@ module Roda
         def tty_cp(type, path)
           TTY::File.copy_file(
             File.expand_path("../../templates/#{type}/#{path}", __dir__),
-            "#{@dir}#{@context.project_name}/#{path}"
+            "#{@dir}#{@context.project_name}/#{path}",
+            context: @context
           )
         end
 

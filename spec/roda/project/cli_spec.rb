@@ -28,7 +28,6 @@ RSpec.describe Roda::Project::CLI do
       "Gemfile",
       "boot.rb",
       "Rakefile",
-      "app/app.rb",
       "app/routes/foo.rb",
       "app/config/config.rb",
       "spec/app/app_spec.rb",
@@ -72,7 +71,7 @@ RSpec.describe Roda::Project::CLI do
       cli.call
     end
 
-    BASE_FILES_WITH_LOGIC.each do |path|
+    (BASE_FILES_WITH_LOGIC + ["app/fullstack_sqlite_rodauth_project.rb"]).each do |path|
       it "generates the correct: #{path}" do
         expect(file(path)).to match_snapshot(snap(path))
       end
@@ -97,7 +96,7 @@ RSpec.describe Roda::Project::CLI do
       cli.call
     end
 
-    BASE_FILES_WITH_LOGIC.each do |path|
+    (BASE_FILES_WITH_LOGIC + ["app/api_no_database_project.rb"]).each do |path|
       it "generates the correct: #{path}" do
         expect(file(path)).to match_snapshot(snap(path))
       end
@@ -122,7 +121,7 @@ RSpec.describe Roda::Project::CLI do
       cli.call
     end
 
-    BASE_FILES_WITH_LOGIC.each do |path|
+    (BASE_FILES_WITH_LOGIC + ["app/api_rodauth.rb"]).each do |path|
       it "generates the correct: #{path}" do
         expect(file(path)).to match_snapshot(snap(path))
       end
@@ -154,7 +153,7 @@ RSpec.describe Roda::Project::CLI do
       cli.call
     end
 
-    BASE_FILES_WITH_LOGIC.each do |path|
+    (BASE_FILES_WITH_LOGIC + ["app/fullstack_pg_no_rodauth_project.rb"]).each do |path|
       it "generates the correct: #{path}" do
         expect(file(path)).to match_snapshot(snap(path))
       end

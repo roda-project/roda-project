@@ -81,6 +81,12 @@ module Roda
           "#{@dir}#{@context.project_name}",
           context: @context
         )
+
+        TTY::File.copy_file(
+          File.expand_path("../templates/base/app/app.rb.erb", __dir__),
+          "#{@dir}#{@context.project_name}/app/#{@context.project_name}.rb",
+          context: @context
+        )
       end
 
       def add_front_end
