@@ -1,9 +1,6 @@
 # Rakefile
 
-require_relative "boot"
 require "fileutils"
-require "sequel"
-require "sequel/extensions/migration"
 
 # List rake tasks
 task :default do
@@ -14,6 +11,10 @@ end
 namespace :db do
   desc "Migrate the database. Optional: provide target version, e.g., 'rake db:migrate[123]'"
   task :migrate, [:target] do |t, args|
+    require_relative "boot"
+    require "sequel"
+    require "sequel/extensions/migration"
+
     Sequel.extension :migration
     db = Providers::DB::Conn.get
     if args[:target]

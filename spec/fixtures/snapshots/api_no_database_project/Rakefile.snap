@@ -1,6 +1,5 @@
 # Rakefile
 
-require_relative "boot"
 require "fileutils"
 
 # List rake tasks

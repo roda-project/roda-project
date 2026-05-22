@@ -15,6 +15,7 @@ module Roda
 
       def call
         puts @pastel.bright_black("[roda-project v#{Roda::Project::VERSION}]\n")
+        puts @pastel.italic("#{Roda::Project.messages.sample.first}\n")
 
         get_user_context
 
@@ -29,8 +30,8 @@ module Roda
         puts "$ cd #{@context.project_name} && bundle"
         if @context.database?
           unless @context.sqlite?
-            puts "\n* create your database\n\n"
-            puts "\n* put your dev database credentials in app/config/config.rb\n\n"
+            puts "\n* create your database\n"
+            puts "\n* put your dev database credentials in app/config/config.rb\n"
           end
           puts "\nmigrate the database:\n\n"
           puts "$ rake db:migrate"
