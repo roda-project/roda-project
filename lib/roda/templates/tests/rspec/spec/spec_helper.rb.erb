@@ -14,6 +14,6 @@ RSpec.configure do |config|
   end
   <% end %>
   def app
-    App.freeze.app
+    <%= context.const_project_name %>.freeze.app
   end
 end

@@ -127,6 +127,10 @@ module Roda
 
         database_type == sqlite_id
       end
+
+      def const_project_name
+        @const_project_name ||= project_name.split('_').map(&:capitalize).join
+      end
     end
   end
 end

@@ -6,7 +6,7 @@ describe "hello" do
     _(last_response.status).must_equal 302<% else %>
     _(last_response.status).must_equal 200<% end %>
   end
-  <% if context.database? %>
+  <% if context.rodauth? %>
   it "test models" do
     Account.create(email: "foo@bar.com")
 

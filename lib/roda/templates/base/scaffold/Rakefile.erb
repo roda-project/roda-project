@@ -159,7 +159,7 @@ namespace :g do<% if context.database? %>
     end.join("\n\n")
 
     content = <<~RUBY
-      class App
+      class <%= context.const_project_name %>
         branch "#{branch_name}" do |r|
       #{route_definitions}
         end

@@ -10,4 +10,4 @@ end
 # req.ip if req.path == '/signup'
 # end
 use Rack::Static, urls: ["/public"]
-run App
+run <%= context.const_project_name %>

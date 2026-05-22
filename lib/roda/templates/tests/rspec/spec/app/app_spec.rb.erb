@@ -6,7 +6,7 @@ describe "hello" do
     expect(last_response.status).to eq(302)<% else %>
     expect(last_response.status).to eq(200)<% end %>
   end
-  <% if context.database? %>
+  <% if context.rodauth? %>
   it "test models" do
     Account.create(email: "foo@bar.com")
 

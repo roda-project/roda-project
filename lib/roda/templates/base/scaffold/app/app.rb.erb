@@ -1,4 +1,4 @@
-class App < Roda
+class <%= context.const_project_name %> < Roda
   # Routing<% if context.fullstack? %>
   plugin :hash_branch_view_subdir<% end %>
   plugin :autoload_hash_branches
