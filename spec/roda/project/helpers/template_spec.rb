@@ -47,7 +47,7 @@ RSpec.describe Roda::Project::Helpers::Template do
     it "calls TTY::File.copy_file with correct arguments" do
       expect(TTY::File).to receive(:copy_file).with(
         source_file_path,
-        destination_file_path
+        destination_file_path,
         context: mock_context
       )
       instance.tty_cp(type, path)
