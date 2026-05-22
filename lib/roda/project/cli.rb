@@ -5,6 +5,7 @@ module Roda
     class CLI
       include Helpers::Template
       include Helpers::Input
+      include Helpers::Ids
 
       def initialize(context: Context.new, pastel: Pastel.new, dir: nil)
         @context = context
@@ -52,14 +53,6 @@ module Roda
       end
 
       private
-
-      def fullstack_id = Roda::Project::FULLSTACK
-      def mysql_id = Roda::Project::MYSQL
-      def sqlite_id = Roda::Project::SQLITE
-      def postgresql_id = Roda::Project::POSTGRESQL
-      def api_id = Roda::Project::API
-      def rspec_id = Roda::Project::RSPEC
-      def minitest_id = Roda::Project::MINITEST
 
       def create_base_project
         puts "* creating base project"

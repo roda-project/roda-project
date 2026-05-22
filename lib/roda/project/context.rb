@@ -1,21 +1,84 @@
 module Roda
   module Project
     class Context
-      attr_accessor(
-        :project_name,
-        :base,
-        :database,
+      include Helpers::Ids
+
+      class InvalidValue < StandardError; end
+      PROJECT_NAME_REGEX = /^[a-zA-Z][a-zA-Z0-9]*$/
+
+      attr_reader(
+        :tests,
         :rodauth,
-        :tests
+        :database,
+        :database_type,
+        :dev_db_url,
+        :db_gem,
+        :project_name,
+        :base
       )
-      attr_reader :database_type, :dev_db_url, :db_gem
+
+      def tests=(val)
+        if ![minitest_id, rspec_id].include?(val)
+          raise InvalidValue, "invalid test framework option: #{val}"
+        end
+
+        @base = val
+      end
+
+      def base=(val)
+        if ![fullstack_id, api_id].include?(val)
+          raise InvalidValue, "invalid project option: #{val}"
+        end
+
+        @base = val
+      end
+
+      def rodauth=(val)
+        val = false if !val.is_a?(Boolean)
+
+        @rodauth = val
+      end
+
+      def database=(val)
+        val = false if !val.is_a?(Boolean)
+
+        @database = val
+      end
+
+      def database_type=(val)
+        if ![mysql_id, postgresql_id, sqlite_id].include?(val)
+          raise InvalidValue, "invalid database option: #{val}"
+        end
+
+        @database_type = val
+
+        if mysql?
+          @dev_db_url = '"mysql2://user:password@localhost/app_#{environment}"'
+          @db_gem = "mysql2"
+        elsif postgresql?
+          @dev_db_url = '"postgres://user:password@localhost:5432/app_#{environment}"'
+          @db_gem = "pg"
+        else
+          @dev_db_url = '"sqlite://db/#{environment}.db"'
+          @db_gem = "sqlite3"
+        end
+      end
+
+
+      def project_name=(val)
+        if !(val =~ PROJECT_NAME_REGEX)
+          raise InvalidValue, 'project name must start with a letter and contains only letters and numbers'
+        end
+
+        @project_name = val
+      end
 
       def rspec?
-        tests == Roda::Project::RSPEC
+        tests == rspec_id
       end
 
       def minitest?
-        tests == Roda::Project::MINITEST
+        tests == minitest_id
       end
 
       # rubocop:disable Lint/InterpolationCheck
@@ -33,11 +96,11 @@ module Roda
       # rubocop:enable Lint/InterpolationCheck
 
       def fullstack?
-        base == Roda::Project::FULLSTACK
+        base == fullstack_id
       end
 
       def api?
-        base == Roda::Project::API
+        base == api_id
       end
 
       def rodauth?
@@ -48,37 +111,22 @@ module Roda
         database == true
       end
 
-      def database_type=(val)
-        @database_type = val
-
-        if mysql?
-          @dev_db_url = '"mysql2://user:password@localhost/app_#{environment}"'
-          @db_gem = "mysql2"
-        elsif postgresql?
-          @dev_db_url = '"postgres://user:password@localhost:5432/app_#{environment}"'
-          @db_gem = "pg"
-        else
-          @dev_db_url = '"sqlite://db/#{environment}.db"'
-          @db_gem = "sqlite3"
-        end
-      end
-
       def mysql?
         return false unless database?
 
-        database_type == Roda::Project::MYSQL
+        database_type == mysql_id
       end
 
       def postgresql?
         return false unless database?
 
-        database_type == Roda::Project::POSTGRESQL
+        database_type == postgresql_id
       end
 
       def sqlite?
         return false unless database?
 
-        database_type == Roda::Project::SQLITE
+        database_type == sqlite_id
       end
     end
   end
