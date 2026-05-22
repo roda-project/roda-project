@@ -1,0 +1,35 @@
+require "bundler/setup"
+Bundler.require
+
+# require 'byebug' if ENV['RACK_ENV'] != 'production'
+
+# Config file loads
+loader = Zeitwerk::Loader.new
+loader.push_dir("#{__dir__}/app")
+loader.collapse("#{__dir__}/lib")
+loader.collapse("#{__dir__}/app/services")
+loader.collapse("#{__dir__}/app/config")<% if context.database %>
+loader.inflector.inflect("db" => "DB")
+loader.collapse("#{__dir__}/app/models")<% end %>
+
+# [
+# 'config',
+# 'models',
+# 'services',
+# 'callbacks',
+# 'actions'
+# ].each do |path|
+# loader.push_dir("#{__dir__}/app/#{path}")
+# end
+loader.setup
+require "debug" if Config.not_production?
+
+Oj.mimic_JSON
+
+# Providers<% if context.database %>
+Providers::DB::Conn.boot<% end %>
+Providers::Mailer.boot
+Providers::Logger.boot
+
+# Consts<% if context.database %>
+DB = Providers::DB::Conn.get<% end %>

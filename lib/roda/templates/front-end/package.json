@@ -1,0 +1,20 @@
+{
+  "name": "rackr_scaffold",
+  "version": "1.0.0",
+  "description": "",
+  "main": "esbuild.config.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "node esbuild.js",
+    "build:watch": "node esbuild.js --watch"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@hotwired/turbo": "^7.3.0"
+  },
+  "devDependencies": {
+    "esbuild": "^0.19.0",
+    "path": "^0.12.7"
+  }
+}

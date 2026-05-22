@@ -1,0 +1,7 @@
+class ApiRodauth
+  branch "foo" do |r|
+    r.get "bar" do
+      { foo: "bar" }
+    end
+  end
+end

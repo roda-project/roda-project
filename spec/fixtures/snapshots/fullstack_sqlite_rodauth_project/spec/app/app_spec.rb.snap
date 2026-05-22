@@ -1,0 +1,14 @@
+require_relative "../spec_helper"
+
+describe "hello" do
+  it "test requests" do
+    get "/"
+    _(last_response.status).must_equal 302
+  end
+  
+  it "test models" do
+    Account.create(email: "foo@bar.com")
+
+    _(Account.count).must_equal 1
+  end
+end

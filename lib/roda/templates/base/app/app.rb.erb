@@ -1,0 +1,87 @@
+class <%= context.const_project_name %> < Roda
+  # Routing<% if context.fullstack? %>
+  plugin :hash_branch_view_subdir<% end %>
+  plugin :autoload_hash_branches
+  autoload_hash_branch_dir("./app/routes")
+  plugin :all_verbs
+  plugin :not_found
+  <% if context.fullstack? %>
+  # Views
+  plugin :partials, views: "app/views"
+  plugin :render, layout: "./layout"
+  plugin :content_for, append: false
+  plugin :flash
+  <% end %>
+  # Request / Response
+  plugin :halt
+  plugin :json
+  plugin :exception_page
+  plugin :caching
+  plugin :cookies
+  plugin :default_headers
+  plugin :content_security_policy do |csp|
+    # csp.default_src :none
+    # csp.img_src :self
+    # csp.style_src :self
+    # csp.script_src :self
+    # csp.font_src :self
+    # csp.form_action :self
+    # csp.base_uri :none
+    # csp.frame_ancestors :none
+    # csp.block_all_mixed_content
+  end
+
+  # CSRF Protection
+  plugin :route_csrf
+
+  # Other
+  plugin :common_logger, Providers::Logger.get
+  plugin :json_parser
+  plugin :sessions, secret: Config.get[:secret]
+  plugin :i18n, **Config.get[:i18n]
+<% if context.rodauth? %><% if context.api? %>
+  # Authentication
+  plugin :rodauth, json: :only do
+    enable :jwt
+    jwt_secret Config.get[:jwt_secret]
+<% else %>
+  # Authentication
+  plugin :rodauth do
+    enable :login, :logout, :create_account, :verify_account
+<% end %>
+    accounts_table :accounts
+    password_hash_table :account_password_hashes
+    use_database_authentication_functions? false
+    # base_url "http://localhost:9292"
+    login_column :email
+    # Redirect logged in users to the wherever login redirects to
+    already_logged_in { redirect "/" }
+
+    hmac_secret Config.get[:hmac_secret]
+  end
+<% end %>
+  def config = @config ||= Config.get
+  def self.branch(args, &) = hash_branch(args, &)<% if context.fullstack? %>
+  def html = @html ||= Views::Html.new(t)<% end %>
+
+  route do |r|
+    r.hash_branches
+    # session[:locale] = 'pt-br'
+    # r.i18n_set_locale_from(:session)
+    <% if context.rodauth? %>
+    r.rodauth
+    rodauth.require_authentication
+    <% end  %>
+    r.root do
+      <%= context.root_example %>
+    end
+  end
+
+  error do |e|
+    next exception_page(e, css_file: "/public/exception_page.css") if Config.not_production?
+  end
+
+  not_found do
+    "not found"
+  end
+end

@@ -1,0 +1,51 @@
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+# Base
+gem "roda"
+gem "roda-i18n"
+gem "zeitwerk"
+<% if context.rodauth? %>
+# Authentication
+gem "rodauth"
+gem "jwt"
+<% end %>
+# Database
+gem "sequel"
+<%= "gem \"#{context.db_gem}\"" if context.database? %>
+
+# Web Server
+gem "puma"
+# gem "falcon"
+# gem 'iodine'
+# gem 'thin'
+
+# Performance
+gem "oj"
+# gem 'async'
+
+# CLI
+gem "rake"
+
+# Security
+# gem "rack-attack"
+
+# Misc
+gem "html_slice"
+gem "mail"
+gem "bcrypt"
+
+group :development do
+  gem "guard-puma"
+  gem "guard-livereload"
+  gem "rack-livereload"
+  gem "rack-test"
+  gem "debug"
+  gem "base64"
+  gem "standard"<% if context.minitest? %>
+  gem "minitest"
+  gem "minitest-hooks"
+<% else %>
+  gem "rspec"<% end %>
+end

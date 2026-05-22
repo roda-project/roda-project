@@ -1,6 +1,9 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
-require_relative '../lib/roda/project/commands'
+require_relative '../lib/roda/project'
 
-Dry::CLI.new(Roda::Project::Commands).call
+Roda::Project::CLI.new.call
+
+
+
