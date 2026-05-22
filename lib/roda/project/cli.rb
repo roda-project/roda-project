@@ -28,7 +28,11 @@ module Roda
         puts "\ninstall dependences:\n\n"
         puts "$ cd #{@context.project_name} && bundle"
         if @context.database?
-          puts "\nput your dev database credentials in app/config/config.rb and migrate:\n\n"
+          unless @context.sqlite?
+            puts "\n* create your database\n\n"
+            puts "\n* put your dev database credentials in app/config/config.rb\n\n"
+          end
+          puts "\nmigrate the database:\n\n"
           puts "$ rake db:migrate"
         end
         puts "\nrun and watch the project in dev mode:\n\n"

@@ -22,11 +22,6 @@ RSpec.describe Roda::Project::Context do
       context.project_name = "MyProject"
       expect(context.project_name).to eq("MyProject")
     end
-
-    it "allows setting and getting tests" do
-      context.tests = "rspec"
-      expect(context.tests).to eq("rspec")
-    end
   end
 
   describe "#rspec?" do

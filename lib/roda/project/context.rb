@@ -4,7 +4,7 @@ module Roda
       include Helpers::Ids
 
       class InvalidValue < StandardError; end
-      PROJECT_NAME_REGEX = /^[a-zA-Z][a-zA-Z0-9]*$/
+      VALID_PROJECT_NAME_REGEX = /^[a-zA-Z][a-zA-Z0-9_]*$/
 
       attr_reader(
         :tests,
@@ -22,7 +22,7 @@ module Roda
           raise InvalidValue, "Invalid test framework option"
         end
 
-        @base = val
+        @tests = val
       end
 
       def base=(val)
@@ -64,10 +64,9 @@ module Roda
         end
       end
 
-
       def project_name=(val)
-        if !(val =~ PROJECT_NAME_REGEX)
-          raise InvalidValue, 'Project name must start with a letter and contains only letters and numbers'
+        if !(val =~ VALID_PROJECT_NAME_REGEX)
+          raise InvalidValue, 'Project name must start with a letter and contains only letters, numbers and _'
         end
 
         @project_name = val
