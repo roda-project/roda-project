@@ -158,7 +158,7 @@ namespace :g do
     end.join("\n\n")
 
     content = <<~RUBY
-      class App
+      class FullstackPgNoRodauthProject
         branch "#{branch_name}" do |r|
       #{route_definitions}
         end

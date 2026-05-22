@@ -1,4 +1,4 @@
-class App
+class FullstackPgNoRodauthProject
   branch "foo" do |r|
     r.get "bar" do
       view("bar")

@@ -1,4 +1,4 @@
-class App
+class ApiRodauth
   branch "foo" do |r|
     r.get "bar" do
       { foo: "bar" }

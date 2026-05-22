@@ -1,4 +1,4 @@
-class App < Roda
+class FullstackPgNoRodauthProject < Roda
   # Routing
   plugin :hash_branch_view_subdir
   plugin :autoload_hash_branches

@@ -1,4 +1,4 @@
-class App
+class FullstackSqliteRodauthProject
   branch "foo" do |r|
     r.get "bar" do
       view("bar")

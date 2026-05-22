@@ -1,4 +1,4 @@
-class App < Roda
+class ApiRodauth < Roda
   # Routing
   plugin :autoload_hash_branches
   autoload_hash_branch_dir("./app/routes")
