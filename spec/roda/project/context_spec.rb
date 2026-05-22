@@ -24,6 +24,142 @@ RSpec.describe Roda::Project::Context do
     end
   end
 
+  describe "#tests=" do
+    context "with a valid test framework" do
+      it "sets the tests attribute" do
+        context.tests = Roda::Project::RSPEC
+        expect(context.tests).to eq(Roda::Project::RSPEC)
+      end
+    end
+
+    context "with an invalid test framework" do
+      it "raises an InvalidValue error" do
+        expect { context.tests = "invalid" }.to raise_error(Roda::Project::Context::InvalidValue, "Invalid test framework option")
+      end
+    end
+  end
+
+  describe "#base=" do
+    context "with a valid base option" do
+      it "sets the base attribute" do
+        context.base = Roda::Project::FULLSTACK
+        expect(context.base).to eq(Roda::Project::FULLSTACK)
+      end
+    end
+
+    context "with an invalid base option" do
+      it "raises an InvalidValue error" do
+        expect { context.base = "invalid" }.to raise_error(Roda::Project::Context::InvalidValue, "Invalid project option")
+      end
+    end
+  end
+
+  describe "#rodauth=" do
+    context "with true" do
+      it "sets rodauth to true" do
+        context.rodauth = true
+        expect(context.rodauth).to be true
+      end
+    end
+
+    context "with false" do
+      it "sets rodauth to false" do
+        context.rodauth = false
+        expect(context.rodauth).to be false
+      end
+    end
+
+    context "with an invalid value" do
+      it "sets rodauth to false" do
+        context.rodauth = "invalid"
+        expect(context.rodauth).to be false
+      end
+    end
+  end
+
+  describe "#database=" do
+    context "with true" do
+      it "sets database to true" do
+        context.database = true
+        expect(context.database).to be true
+      end
+    end
+
+    context "with false" do
+      it "sets database to false" do
+        context.database = false
+        expect(context.database).to be false
+      end
+    end
+
+    context "with an invalid value" do
+      it "sets database to false" do
+        context.database = "invalid"
+        expect(context.database).to be false
+      end
+    end
+  end
+
+  describe "#database_type=" do
+    context "when database_type is MYSQL" do
+      before do
+        context.database = true # Added this line
+        context.database_type = Roda::Project::MYSQL
+      end
+      it "sets database_type, dev_db_url, and db_gem correctly" do
+        expect(context.database_type).to eq(Roda::Project::MYSQL)
+        expect(context.dev_db_url).to eq('"mysql2://user:password@localhost/app_#{environment}"')
+        expect(context.db_gem).to eq("mysql2")
+      end
+    end
+
+    context "when database_type is POSTGRESQL" do
+      before do
+        context.database = true # Added this line
+        context.database_type = Roda::Project::POSTGRESQL
+      end
+      it "sets database_type, dev_db_url, and db_gem correctly" do
+        expect(context.database_type).to eq(Roda::Project::POSTGRESQL)
+        expect(context.dev_db_url).to eq('"postgres://user:password@localhost:5432/app_#{environment}"')
+        expect(context.db_gem).to eq("pg")
+      end
+    end
+
+    context "when database_type is SQLITE" do
+      before { context.database_type = Roda::Project::SQLITE }
+      it "sets database_type, dev_db_url, and db_gem correctly" do
+        expect(context.database_type).to eq(Roda::Project::SQLITE)
+        expect(context.dev_db_url).to eq('"sqlite://db/#{environment}.db"')
+        expect(context.db_gem).to eq("sqlite3")
+      end
+    end
+
+    context "with an invalid database type" do
+      it "raises an InvalidValue error" do
+        expect { context.database_type = "invalid" }.to raise_error(Roda::Project::Context::InvalidValue, "Invalid database option")
+      end
+    end
+  end
+
+  describe "#project_name=" do
+    context "with a valid project name" do
+      it "sets the project_name attribute" do
+        context.project_name = "MyProject_123"
+        expect(context.project_name).to eq("MyProject_123")
+      end
+    end
+
+    context "with an invalid project name" do
+      it "raises an InvalidValue error for starting with a number" do
+        expect { context.project_name = "1MyProject" }.to raise_error(Roda::Project::Context::InvalidValue, "Project name must start with a letter and contains only letters, numbers and _")
+      end
+
+      it "raises an InvalidValue error for containing special characters" do
+        expect { context.project_name = "My-Project" }.to raise_error(Roda::Project::Context::InvalidValue, "Project name must start with a letter and contains only letters, numbers and _")
+      end
+    end
+  end
+
   describe "#rspec?" do
     context "when tests is Roda::Project::RSPEC" do
       before { context.tests = Roda::Project::RSPEC }
@@ -128,41 +264,6 @@ RSpec.describe Roda::Project::Context do
       end
     end
     # rubocop:enable Lint/InterpolationCheck
-  end
-
-  describe "#database_type=" do
-    context "when database_type is MYSQL" do
-      before do
-        context.database = true # Added this line
-        context.database_type = Roda::Project::MYSQL
-      end
-      it "sets database_type, dev_db_url, and db_gem correctly" do
-        expect(context.database_type).to eq(Roda::Project::MYSQL)
-        expect(context.dev_db_url).to eq('"mysql2://user:password@localhost/app_#{environment}"')
-        expect(context.db_gem).to eq("mysql2")
-      end
-    end
-
-    context "when database_type is POSTGRESQL" do
-      before do
-        context.database = true # Added this line
-        context.database_type = Roda::Project::POSTGRESQL
-      end
-      it "sets database_type, dev_db_url, and db_gem correctly" do
-        expect(context.database_type).to eq(Roda::Project::POSTGRESQL)
-        expect(context.dev_db_url).to eq('"postgres://user:password@localhost:5432/app_#{environment}"')
-        expect(context.db_gem).to eq("pg")
-      end
-    end
-
-    context "when database_type is SQLITE" do
-      before { context.database_type = Roda::Project::SQLITE }
-      it "sets database_type, dev_db_url, and db_gem correctly" do
-        expect(context.database_type).to eq(Roda::Project::SQLITE)
-        expect(context.dev_db_url).to eq('"sqlite://db/#{environment}.db"')
-        expect(context.db_gem).to eq("sqlite3")
-      end
-    end
   end
 
   describe "#mysql?" do
