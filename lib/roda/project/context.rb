@@ -19,7 +19,7 @@ module Roda
 
       def tests=(val)
         if ![minitest_id, rspec_id].include?(val)
-          raise InvalidValue, "invalid test framework option: #{val}"
+          raise InvalidValue, "Invalid test framework option"
         end
 
         @base = val
@@ -27,27 +27,27 @@ module Roda
 
       def base=(val)
         if ![fullstack_id, api_id].include?(val)
-          raise InvalidValue, "invalid project option: #{val}"
+          raise InvalidValue, "Invalid project option"
         end
 
         @base = val
       end
 
       def rodauth=(val)
-        val = false if !val.is_a?(Boolean)
+        val = false if ![true, false].include?(val)
 
         @rodauth = val
       end
 
       def database=(val)
-        val = false if !val.is_a?(Boolean)
+        val = false if ![true, false].include?(val)
 
         @database = val
       end
 
       def database_type=(val)
         if ![mysql_id, postgresql_id, sqlite_id].include?(val)
-          raise InvalidValue, "invalid database option: #{val}"
+          raise InvalidValue, "Invalid database option"
         end
 
         @database_type = val
@@ -67,7 +67,7 @@ module Roda
 
       def project_name=(val)
         if !(val =~ PROJECT_NAME_REGEX)
-          raise InvalidValue, 'project name must start with a letter and contains only letters and numbers'
+          raise InvalidValue, 'Project name must start with a letter and contains only letters and numbers'
         end
 
         @project_name = val

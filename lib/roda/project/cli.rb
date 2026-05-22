@@ -16,17 +16,7 @@ module Roda
       def call
         puts @pastel.bright_black("[roda-project v#{Roda::Project::VERSION}]\n")
 
-        @context.project_name = read_line("Project name › ", "project")
-        @context.base = read_line("(#{fullstack_id}) Fullstack (#{api_id}) API › ", fullstack_id).to_i
-        @context.tests = read_line("(#{rspec_id}) RSpec (#{minitest_id}) Minitest › ", rspec_id).to_i
-        @context.database = read_line("Database? (Y/n) › ", true)
-        if @context.database?
-          @context.database_type = read_line(
-            "(#{sqlite_id}) SQlite (#{postgresql_id}) PostgreSQL (#{mysql_id}) MySQL › ",
-            sqlite_id
-          ).to_i
-          @context.rodauth = read_line("Rodauth? (authentication) (Y/n) › ", true)
-        end
+        get_user_context
 
         puts @pastel.bright_black("\n[project: #{@context.project_name}]\n")
 
@@ -53,6 +43,32 @@ module Roda
       end
 
       private
+
+      def get_user_context
+        retry_on_error { @context.project_name = read_line("Project name › ", "project") }
+        retry_on_error { @context.base = read_line("(#{fullstack_id}) Fullstack (#{api_id}) API › ", fullstack_id).to_i }
+        retry_on_error { @context.tests = read_line("(#{rspec_id}) RSpec (#{minitest_id}) Minitest › ", rspec_id).to_i }
+        retry_on_error { @context.database = read_line("Database? (Y/n) › ", true) }
+
+        if @context.database?
+          retry_on_error {
+            @context.database_type = read_line(
+              "(#{sqlite_id}) SQlite (#{postgresql_id}) PostgreSQL (#{mysql_id}) MySQL › ",
+              sqlite_id
+            ).to_i
+          }
+
+          retry_on_error { @context.rodauth = read_line("Rodauth? (authentication) (Y/n) › ", true) }
+        end
+      end
+
+      def retry_on_error
+        yield
+      rescue Roda::Project::Context::InvalidValue => e
+        puts "\n #{@pastel.red(e.message)} \n\n"
+
+        yield
+      end
 
       def create_base_project
         puts "* creating base project"
