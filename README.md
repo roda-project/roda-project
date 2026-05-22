@@ -16,19 +16,6 @@ Roda Project is a command-line interface (CLI) tool that helps you quickly scaff
 
 ## Installation
 
-Install the gem by adding it to your Gemfile:
-
-```ruby
-gem "roda-project"
-```
-
-And then execute:
-
-```bash
-bundle install
-```
-
-Or install it yourself as:
 
 ```bash
 gem install roda-project
@@ -53,74 +40,6 @@ The CLI will then guide you through a series of interactive prompts to configure
         *   **Rodauth? (authentication) (Y/n)**: Decide if you want to include Rodauth for authentication.
 
 After answering the prompts, `roda-project` will generate the project structure and files in a new directory with your specified project name.
-
-### Example Workflow
-
-```bash
-$ roda-project
-[roda-project vX.Y.Z]
-
-Project name › my_roda_app
-(1) Fullstack (2) API › 1
-(1) RSpec (2) Minitest › 1
-Database? (Y/n) › Y
-(1) SQlite (2) PostgreSQL (3) MySQL › 2
-Rodauth? (authentication) (Y/n) › Y
-
-* creating base project
-* adding front-end
-* adding database
-* adding rodauth
-* adding test files
-
-install dependences:
-
-$ cd my_roda_app && bundle
-
-* create your database
-
-* put your dev database credentials in app/config/config.rb
-
-migrate the database:
-
-$ rake db:migrate
-
-run and watch the project in dev mode:
-$ rake dev:watch
-
-compile and watch assets:
-$ rake assets:watch
-
-run 'rake' inside my_roda_app to see all available tasks
-```
-
-## After Project Generation
-
-Once your project is generated, follow the on-screen instructions:
-
-1.  Navigate into your new project directory:
-    ```bash
-    cd your_project_name
-    ```
-2.  Install dependencies:
-    ```bash
-    bundle install
-    ```
-3.  **If you chose a database other than SQLite**: Create your database manually and update your database credentials in `app/config/config.rb`.
-4.  Migrate your database:
-    ```bash
-    rake db:migrate
-    ```
-5.  Start the development server and watch for changes:
-    ```bash
-    rake dev:watch
-    ```
-6.  **For fullstack projects**: Compile and watch frontend assets:
-    ```bash
-    rake assets:watch
-    ```
-
-You can explore all available Rake tasks by running `rake` inside your project directory.
 
 ## Development
 
