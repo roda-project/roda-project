@@ -66,7 +66,7 @@ module Roda
 
       def project_name=(val)
         if !(val =~ VALID_PROJECT_NAME_REGEX)
-          raise InvalidValue, 'Project name must start with a letter and contains only letters, numbers and _'
+          raise InvalidValue, "Project name must start with a letter and contains only letters, numbers and _"
         end
 
         @project_name = val
