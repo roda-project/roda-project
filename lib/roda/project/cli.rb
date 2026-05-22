@@ -33,7 +33,7 @@ module Roda
             puts "\n* create your database\n"
             puts "\n* put your dev database credentials in app/config/config.rb\n"
           end
-          puts "\nmigrate the database:\n\n"
+          puts "\nmigrate the database (use RACK_ENV to migrate 'test' or 'production' environments):\n\n"
           puts "$ rake db:migrate"
         end
         puts "\nrun and watch the project in dev mode:\n"

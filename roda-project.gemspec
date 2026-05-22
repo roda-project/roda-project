@@ -8,8 +8,8 @@ Gem::Specification.new do |spec|
   spec.authors = ["Henrique F. Teixeira"]
   spec.email = ["hriqueft@gmail.com"]
 
-  spec.summary = "Start Roda projects quickly and easily"
-  spec.homepage = "https://roda-project.github.io"
+  spec.summary = "A command-line interface (CLI) tool that helps you quickly scaffold new Roda web applications "
+  spec.homepage = "https://github.com/roda-project"
   spec.license = "MIT"
   spec.required_ruby_version = ">= 3.2.0"
 
