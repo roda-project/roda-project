@@ -14,6 +14,8 @@ Roda Project is a command-line interface (CLI) tool that helps you quickly scaff
 *   **Testing Frameworks**: Choose between [RSpec](https://rspec.info/) or [Minitest](https://minitest.github.io/) for your testing environment.
 *   **Frontend Tooling**: For fullstack projects, includes basic frontend asset management with `esbuild`.
 
+Included in all: **Live reload**, **Zeitwerk**, and a bunch of usefull **Rake tasks**
+
 ## Installation
 
 
