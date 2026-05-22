@@ -36,10 +36,10 @@ module Roda
           puts "$ rake db:migrate"
         end
         puts "\nrun and watch the project in dev mode:\n"
-        puts "$ rake dev:watch"
+        puts "\n$ rake dev:watch"
         if @context.fullstack?
           puts "\ncompile and watch assets:\n"
-          puts "$ rake assets:watch"
+          puts "\n$ rake assets:watch"
         end
         puts "\nrun 'rake' inside #{@context.project_name} to see all available tasks\n\n"
       rescue TTY::Reader::InputInterrupt
