@@ -41,7 +41,6 @@ class FullstackPgNoRodauthProject < Roda
   plugin :i18n, **Config.get[:i18n]
 
   def config = @config ||= Config.get
-  def self.branch(args, &) = hash_branch(args, &)
   def html = @html ||= Views::Html.new(t)
 
   route do |r|

@@ -161,7 +161,7 @@ namespace :g do<% if context.database? %>
 
     content = <<~RUBY
       class <%= context.const_project_name %>
-        branch "#{branch_name}" do |r|
+        hash_branch "#{branch_name}" do |r|
       #{route_definitions}
         end
       end

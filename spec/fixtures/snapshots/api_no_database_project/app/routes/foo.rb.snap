@@ -1,5 +1,5 @@
 class ApiNoDatabaseProject
-  branch "foo" do |r|
+  hash_branch "foo" do |r|
     r.get "bar" do
       { foo: "bar" }
     end

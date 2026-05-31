@@ -34,7 +34,6 @@ class ApiNoDatabaseProject < Roda
   plugin :i18n, **Config.get[:i18n]
 
   def config = @config ||= Config.get
-  def self.branch(args, &) = hash_branch(args, &)
 
   route do |r|
     r.hash_branches

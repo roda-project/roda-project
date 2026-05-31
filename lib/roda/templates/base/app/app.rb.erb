@@ -60,8 +60,7 @@ class <%= context.const_project_name %> < Roda
     hmac_secret Config.get[:hmac_secret]
   end
 <% end %>
-  def config = @config ||= Config.get
-  def self.branch(args, &) = hash_branch(args, &)<% if context.fullstack? %>
+  def config = @config ||= Config.get<% if context.fullstack? %>
   def html = @html ||= Views::Html.new(t)<% end %>
 
   route do |r|

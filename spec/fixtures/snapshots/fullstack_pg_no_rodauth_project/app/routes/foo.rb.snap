@@ -1,5 +1,5 @@
 class FullstackPgNoRodauthProject
-  branch "foo" do |r|
+  hash_branch "foo" do |r|
     r.get "bar" do
       view("bar")
     end

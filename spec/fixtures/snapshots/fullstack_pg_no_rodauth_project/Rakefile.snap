@@ -160,7 +160,7 @@ namespace :g do
 
     content = <<~RUBY
       class FullstackPgNoRodauthProject
-        branch "#{branch_name}" do |r|
+        hash_branch "#{branch_name}" do |r|
       #{route_definitions}
         end
       end

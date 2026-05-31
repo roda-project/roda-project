@@ -18,6 +18,7 @@ module Roda
           )
         end
 
+        # For copy without parse ERB files
         def cp_r(type, path)
           FileUtils.cp_r(
             File.expand_path("../../templates/#{type}/#{path}", __dir__),
@@ -25,6 +26,7 @@ module Roda
           )
         end
 
+        # For copy without parse ERB files
         def cp(type, path)
           File.write(
             "#{@dir}#{@context.project_name}/#{path}",
