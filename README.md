@@ -9,7 +9,7 @@ Roda Project is a command-line interface (CLI) tool that helps you quickly scaff
 ## Features
 
 *   **Project Types**: Generate fullstack web applications (with frontend assets) or API-only backends.
-*   **Database Support**: Integrate with SQLite, PostgreSQL, or MySQL, including basic connection configuration and migration setup.
+*   **Database Support (Sequel)**: Integrate with SQLite, PostgreSQL, or MySQL, including basic connection configuration and migration setup.
 *   **Authentication**: Optionally include [Rodauth](https://rodauth.jeremyevans.net/) for robust authentication features.
 *   **Testing Frameworks**: Choose between [RSpec](https://rspec.info/) or [Minitest](https://minitest.github.io/) for your testing environment.
 *   **Frontend Tooling**: For fullstack projects, includes basic frontend asset management with `esbuild`.
