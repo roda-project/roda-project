@@ -196,6 +196,18 @@ RSpec.describe Roda::Project::Context do
     end
   end
 
+  describe "#minimal?" do
+    context "when base is API" do
+      before { context.base = Roda::Project::MINIMAL }
+      it { is_expected.to be_minimal }
+    end
+
+    context "when base is not API" do
+      before { context.base = Roda::Project::FULLSTACK }
+      it { is_expected.not_to be_minimal }
+    end
+  end
+
   describe "#api?" do
     context "when base is API" do
       before { context.base = Roda::Project::API }

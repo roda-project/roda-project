@@ -51,19 +51,22 @@ module Roda
 
       def get_user_context
         retry_on_error { @context.project_name = read_line("Project name › ", "project") }
-        retry_on_error { @context.base = read_line("(#{fullstack_id}) Fullstack (#{api_id}) API › ", fullstack_id).to_i }
+        retry_on_error { @context.base = read_line("(#{fullstack_id}) Fullstack (#{api_id}) API (#{minimal_id}) Minimal › ", fullstack_id).to_i }
         retry_on_error { @context.tests = read_line("(#{rspec_id}) RSpec (#{minitest_id}) Minitest › ", rspec_id).to_i }
-        retry_on_error { @context.database = read_line("Database? (Y/n) › ", true) }
 
-        if @context.database?
-          retry_on_error {
-            @context.database_type = read_line(
-              "(#{sqlite_id}) SQlite (#{postgresql_id}) PostgreSQL (#{mysql_id}) MySQL › ",
-              sqlite_id
-            ).to_i
-          }
+        unless @context.minimal?
+          retry_on_error { @context.database = read_line("Database? (Y/n) › ", true) }
 
-          retry_on_error { @context.rodauth = read_line("Rodauth? (authentication) (Y/n) › ", true) }
+          if @context.database?
+            retry_on_error {
+              @context.database_type = read_line(
+                "(#{sqlite_id}) SQlite (#{postgresql_id}) PostgreSQL (#{mysql_id}) MySQL › ",
+                sqlite_id
+              ).to_i
+            }
+
+            retry_on_error { @context.rodauth = read_line("Rodauth? (authentication) (Y/n) › ", true) }
+          end
         end
       end
 

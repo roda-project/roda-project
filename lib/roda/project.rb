@@ -17,9 +17,12 @@ module Roda
 
     FULLSTACK = 1
     API = 2
+    MINIMAL = 3
+
     SQLITE = 1
     POSTGRESQL = 2
     MYSQL = 3
+
     RSPEC = 1
     MINITEST = 2
 
