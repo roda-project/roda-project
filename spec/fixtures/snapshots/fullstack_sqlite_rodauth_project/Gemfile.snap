@@ -35,6 +35,7 @@ gem "rake"
 gem "html_slice"
 gem "mail"
 gem "bcrypt"
+gem "logger"
 
 group :development do
   gem "guard-puma"
