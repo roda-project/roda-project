@@ -36,7 +36,7 @@ roda-project
 The CLI will then guide you through a series of interactive prompts to configure your new application:
 
 1.  **Project name**: Enter the desired name for your project.
-2.  **Project type**: Choose between `(1) Fullstack` (web application with frontend) or `(2) API` (backend only).
+2.  **Project type**: Choose between `(1) Fullstack` (web application with frontend), `(2) API` (backend only) or `(3) Minimal`.
 3.  **Test framework**: Select `(1) RSpec` or `(2) Minitest`.
 4.  **Database? (Y/n)**: Decide if you want to include database support.
     *   If `Y`:
