@@ -23,7 +23,13 @@ RSpec.describe Roda::Project::CLI do
     "#{app_name}/#{name}"
   end
 
-  BASE_FILES_WITH_LOGIC =
+  BASE_MINIMAL_FILES_WITH_LOGIC =
+    [
+      "Gemfile",
+      "Rakefile",
+    ]
+
+  BASE_SCAFFOLD_FILES_WITH_LOGIC =
     [
       "Gemfile",
       "boot.rb",
@@ -71,7 +77,7 @@ RSpec.describe Roda::Project::CLI do
       cli.call
     end
 
-    (BASE_FILES_WITH_LOGIC + ["app/fullstack_sqlite_rodauth_project.rb"]).each do |path|
+    (BASE_SCAFFOLD_FILES_WITH_LOGIC + ["app/fullstack_sqlite_rodauth_project.rb"]).each do |path|
       it "generates the correct: #{path}" do
         expect(file(path)).to match_snapshot(snap(path))
       end
@@ -96,7 +102,7 @@ RSpec.describe Roda::Project::CLI do
       cli.call
     end
 
-    (BASE_FILES_WITH_LOGIC + ["app/api_no_database_project.rb"]).each do |path|
+    (BASE_SCAFFOLD_FILES_WITH_LOGIC + ["app/api_no_database_project.rb"]).each do |path|
       it "generates the correct: #{path}" do
         expect(file(path)).to match_snapshot(snap(path))
       end
@@ -121,7 +127,7 @@ RSpec.describe Roda::Project::CLI do
       cli.call
     end
 
-    (BASE_FILES_WITH_LOGIC + ["app/api_rodauth.rb"]).each do |path|
+    (BASE_SCAFFOLD_FILES_WITH_LOGIC + ["app/api_rodauth.rb"]).each do |path|
       it "generates the correct: #{path}" do
         expect(file(path)).to match_snapshot(snap(path))
       end
@@ -153,7 +159,7 @@ RSpec.describe Roda::Project::CLI do
       cli.call
     end
 
-    (BASE_FILES_WITH_LOGIC + ["app/fullstack_pg_no_rodauth_project.rb"]).each do |path|
+    (BASE_SCAFFOLD_FILES_WITH_LOGIC + ["app/fullstack_pg_no_rodauth_project.rb"]).each do |path|
       it "generates the correct: #{path}" do
         expect(file(path)).to match_snapshot(snap(path))
       end
@@ -164,6 +170,24 @@ RSpec.describe Roda::Project::CLI do
         it "#{path} exist" do
           expect(file_exist?(path)).to(be_truthy)
         end
+    end
+  end
+
+  context "when creating a minimal project with rspec >" do
+    let(:app_name) { "minimal_rspec_project" }
+    before do
+      allow_any_instance_of(Roda::Project::CLI).to receive(:read_line).and_return(
+        app_name, "3", "1"
+      )
+
+      cli = described_class.new(dir:)
+      cli.call
+    end
+
+    (BASE_MINIMAL_FILES_WITH_LOGIC).each do |path|
+      it "generates the correct: #{path}" do
+        expect(file(path)).to match_snapshot(snap(path))
+      end
     end
   end
 end

@@ -1,0 +1,35 @@
+# frozen_string_literal: true
+
+source "https://rubygems.org"
+
+# Base
+gem "roda"
+gem "zeitwerk"
+
+# Web Server
+gem "puma"
+# gem "falcon"
+# gem 'iodine'
+# gem 'thin'
+
+# Performance
+gem "oj"
+# gem 'async'
+
+# CLI
+gem "rake"
+
+# Security
+# gem "rack-attack"
+
+# Misc
+gem "bcrypt"
+
+group :development do
+  gem "guard-puma"
+  gem "rack-test"
+  gem "debug"
+  gem "base64"
+  gem "standard"
+  gem "rspec"
+end
