@@ -51,19 +51,22 @@ module Roda
 
       def get_user_context
         retry_on_error { @context.project_name = read_line("Project name › ", "project") }
-        retry_on_error { @context.base = read_line("(#{fullstack_id}) Fullstack (#{api_id}) API › ", fullstack_id).to_i }
+        retry_on_error { @context.base = read_line("(#{fullstack_id}) Fullstack (#{api_id}) API (#{minimal_id}) Minimal › ", fullstack_id).to_i }
         retry_on_error { @context.tests = read_line("(#{rspec_id}) RSpec (#{minitest_id}) Minitest › ", rspec_id).to_i }
-        retry_on_error { @context.database = read_line("Database? (Y/n) › ", true) }
 
-        if @context.database?
-          retry_on_error {
-            @context.database_type = read_line(
-              "(#{sqlite_id}) SQlite (#{postgresql_id}) PostgreSQL (#{mysql_id}) MySQL › ",
-              sqlite_id
-            ).to_i
-          }
+        unless @context.minimal?
+          retry_on_error { @context.database = read_line("Database? (Y/n) › ", true) }
 
-          retry_on_error { @context.rodauth = read_line("Rodauth? (authentication) (Y/n) › ", true) }
+          if @context.database?
+            retry_on_error {
+              @context.database_type = read_line(
+                "(#{sqlite_id}) SQlite (#{postgresql_id}) PostgreSQL (#{mysql_id}) MySQL › ",
+                sqlite_id
+              ).to_i
+            }
+
+            retry_on_error { @context.rodauth = read_line("Rodauth? (authentication) (Y/n) › ", true) }
+          end
         end
       end
 
@@ -77,6 +80,16 @@ module Roda
 
       def create_base_project
         puts "* creating base project"
+        if @context.minimal?
+          TTY::File.copy_directory(
+            File.expand_path("../templates/base/minimal", __dir__),
+            "#{@dir}#{@context.project_name}",
+            context: @context
+          )
+
+          return
+        end
+
         TTY::File.copy_directory(
           File.expand_path("../templates/base/scaffold", __dir__),
           "#{@dir}#{@context.project_name}",
@@ -122,11 +135,12 @@ module Roda
 
       def add_test_files
         puts "* adding test files"
+        minimal_dir = @context.minimal? ? "minimal/" : ""
 
         if @context.rspec?
-          tty_cp_r("tests/rspec", "spec")
+          tty_cp_r("tests/#{minimal_dir}rspec", "spec")
         else
-          tty_cp_r("tests/minitest", "spec")
+          tty_cp_r("tests/#{minimal_dir}minitest", "spec")
         end
       end
     end

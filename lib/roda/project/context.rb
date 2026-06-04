@@ -26,7 +26,7 @@ module Roda
       end
 
       def base=(val)
-        if ![fullstack_id, api_id].include?(val)
+        if ![fullstack_id, api_id, minimal_id].include?(val)
           raise InvalidValue, "Invalid project option"
         end
 
@@ -100,6 +100,10 @@ module Roda
 
       def api?
         base == api_id
+      end
+
+      def minimal?
+        base == minimal_id
       end
 
       def rodauth?
