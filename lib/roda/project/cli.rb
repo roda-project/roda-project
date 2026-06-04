@@ -80,6 +80,16 @@ module Roda
 
       def create_base_project
         puts "* creating base project"
+        if @context.minimal?
+          TTY::File.copy_directory(
+            File.expand_path("../templates/base/minimal", __dir__),
+            "#{@dir}#{@context.project_name}",
+            context: @context
+          )
+
+          return
+        end
+
         TTY::File.copy_directory(
           File.expand_path("../templates/base/scaffold", __dir__),
           "#{@dir}#{@context.project_name}",
@@ -125,11 +135,12 @@ module Roda
 
       def add_test_files
         puts "* adding test files"
+        minimal_dir = @context.minimal? ? "minimal/" : ""
 
         if @context.rspec?
-          tty_cp_r("tests/rspec", "spec")
+          tty_cp_r("tests/#{minimal_dir}rspec", "spec")
         else
-          tty_cp_r("tests/minitest", "spec")
+          tty_cp_r("tests/#{minimal_dir}minitest", "spec")
         end
       end
     end

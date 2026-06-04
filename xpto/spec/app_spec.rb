@@ -3,7 +3,6 @@ require_relative "spec_helper"
 describe "hello" do
   it "test requests" do
     get "/"
-    expect(last_response.status).to eq(200)
+    _(last_response.status).must_equal 200
   end
-
 end
