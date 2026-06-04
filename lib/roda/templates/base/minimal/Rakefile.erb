@@ -1,0 +1,60 @@
+# Rakefile
+
+require "fileutils"
+
+# List rake tasks
+task :default do
+  system("rake -T")
+end
+
+# Console Task
+desc "Open a console with application context (alias: rake c)"
+task :console do
+  system("irb -r ./boot.rb")
+end
+task c: :console
+
+# Lint Task
+desc "Run lint"
+task :lint do
+  system("bundle exec standardrb")
+end
+
+# Lint Fix Task
+desc "Auto fix lint warnings"
+task "lint:fix" do
+  system("bundle exec standardrb --fix")
+end
+
+# Test Task
+desc "Run tests"
+task :test do<% if context.rspec? %>
+  system("RACK_ENV=test bundle exec rspec")<% else %>
+  system("RACK_ENV=test bundle exec minitest spec/")<% end %>
+end
+
+# Development Server Task
+desc "Exec development server"
+task :dev do
+  system("RACK_ENV=development bundle exec puma --port 4000")
+end
+
+# Development Watch Task
+desc "Exec development server watching for changes"
+task "dev:watch" do
+  system("RACK_ENV=development bundle exec guard")
+end
+
+# Production Server Task
+desc "Exec production server"
+task :prod do
+  if ENV["DATABASE_URL"].nil?
+    puts("DATABASE_URL is empty")
+    exit 1
+  end
+  if ENV["SESSION_SECRET"].nil?
+    puts("SESSION_SECRET is empty")
+    exit 1
+  end
+  system("RUBYOPT=--yjit RUBY_YJIT_ENABLE=1 RACK_ENV=production bundle exec puma --port 4000")
+end
