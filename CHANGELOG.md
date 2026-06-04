@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.1.3] - 2026-05-31
+
+- Add "minimal" template option
+
 ## [0.1.2] - 2026-05-31
 
 - Add "logger" gem to generated Gemfile
