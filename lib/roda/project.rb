@@ -50,7 +50,7 @@ module Roda
         ['"Start where you are. Use what you have. Do what you can." - Arthur Ashe'],
         ['"A goal is a dream with a deadline." - Napoleon Hill'],
         ['"Things do not happen. Things are made to happen." - John F. Kennedy'],
-        ['"Quality is not an act, it is a habit." - Aristotle'],
+        ['"Quality is not an act, it is a habit." - Aristotle']
       ]
     end
   end
