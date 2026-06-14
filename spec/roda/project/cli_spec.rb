@@ -26,7 +26,7 @@ RSpec.describe Roda::Project::CLI do
   BASE_MINIMAL_FILES_WITH_LOGIC =
     [
       "Gemfile",
-      "Rakefile",
+      "Rakefile"
     ]
 
   BASE_SCAFFOLD_FILES_WITH_LOGIC =
@@ -85,9 +85,9 @@ RSpec.describe Roda::Project::CLI do
 
     (FRONT_FILES + DB_FILES + RODAUTH_BACK_FILES + RODAUTH_FRONT_FILES)
       .each do |path|
-        it "#{path} exist" do
-          expect(file_exist?(path)).to(be_truthy)
-        end
+      it "#{path} exist" do
+        expect(file_exist?(path)).to(be_truthy)
+      end
     end
   end
 
@@ -110,9 +110,9 @@ RSpec.describe Roda::Project::CLI do
 
     (FRONT_FILES + RODAUTH_BACK_FILES + RODAUTH_FRONT_FILES)
       .each do |path|
-        it "#{path} dont exists" do
-          expect(file_exist?(path)).to(be_falsey)
-        end
+      it "#{path} dont exists" do
+        expect(file_exist?(path)).to(be_falsey)
+      end
     end
   end
 
@@ -167,9 +167,9 @@ RSpec.describe Roda::Project::CLI do
 
     (FRONT_FILES + DB_FILES)
       .each do |path|
-        it "#{path} exist" do
-          expect(file_exist?(path)).to(be_truthy)
-        end
+      it "#{path} exist" do
+        expect(file_exist?(path)).to(be_truthy)
+      end
     end
   end
 
@@ -184,7 +184,7 @@ RSpec.describe Roda::Project::CLI do
       cli.call
     end
 
-    (BASE_MINIMAL_FILES_WITH_LOGIC).each do |path|
+    BASE_MINIMAL_FILES_WITH_LOGIC.each do |path|
       it "generates the correct: #{path}" do
         expect(file(path)).to match_snapshot(snap(path))
       end

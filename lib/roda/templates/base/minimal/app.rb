@@ -14,7 +14,7 @@ class App < Roda
 
   route do |r|
     r.root do
-      { message: "Hello world" }
+      {message: "Hello world"}
     end
   end
 

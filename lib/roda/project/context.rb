@@ -45,6 +45,7 @@ module Roda
         @database = val
       end
 
+      # rubocop:disable Lint/InterpolationCheck
       def database_type=(val)
         if ![mysql_id, postgresql_id, sqlite_id].include?(val)
           raise InvalidValue, "Invalid database option"
@@ -63,6 +64,7 @@ module Roda
           @db_gem = "sqlite3"
         end
       end
+      # rubocop:enable Lint/InterpolationCheck
 
       def project_name=(val)
         if !(val =~ VALID_PROJECT_NAME_REGEX)
@@ -133,7 +135,7 @@ module Roda
       end
 
       def const_project_name
-        @const_project_name ||= project_name.split('_').map(&:capitalize).join
+        @const_project_name ||= project_name.split("_").map(&:capitalize).join
       end
     end
   end

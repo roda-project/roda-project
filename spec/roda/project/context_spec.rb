@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# rubocop:disable Lint/InterpolationCheck
 RSpec.describe Roda::Project::Context do
   subject(:context) { described_class.new }
 
@@ -356,3 +357,4 @@ RSpec.describe Roda::Project::Context do
     end
   end
 end
+# rubocop:enable Lint/InterpolationCheck

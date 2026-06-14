@@ -1,7 +1,9 @@
 <html>
   <head>
     <meta charset='utf-8' />
-    <link rel="stylesheet" type="text/css" href="/public/css/app.css">
+
+    <%= html.css_entrypoint_tag(:app) %>
+    <%= html.js_entrypoint_tag(:app) %>
   </head>
   <body>
     <img src='/public/images/roda-project.png' />
