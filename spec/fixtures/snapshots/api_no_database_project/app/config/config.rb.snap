@@ -9,7 +9,7 @@ module Config
         i18n: {
           translations: ["app/config/locales", "app/config/locales/foo"],
           locale: ["en", "pt-br"]
-        },
+        }
       }
     end
 
