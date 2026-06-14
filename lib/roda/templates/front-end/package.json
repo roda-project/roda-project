@@ -15,6 +15,7 @@
   },
   "devDependencies": {
     "esbuild": "^0.19.0",
+    "esbuild-plugin-manifest": "^1.0.5",
     "path": "^0.12.7"
   }
 }
