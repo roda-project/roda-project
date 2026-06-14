@@ -82,7 +82,7 @@ namespace :g do
       exit 1
     end
 
-    must_generate_views = Dir.exist?(File.expand_path("../../app/views", __dir__))
+    must_generate_views = Dir.exist?(File.expand_path("./app/views", __dir__))
     ensure_and_get_path = proc do |path|
       base_path = File.expand_path(path, __dir__)
       full_path_dir = File.join(base_path, File.dirname(branch_name))
@@ -90,14 +90,14 @@ namespace :g do
 
       base_path
     end
-    parse_route_string = proc do
+    parse_route_string = proc do |route_str|
       name, method = route_str.split(":", 2)
       method ||= "get"
       [method, name]
     end
 
     # Generate routes
-    filename = File.join(ensure_and_get_path.call("../../app/routes"), "#{branch_name}.rb")
+    filename = File.join(ensure_and_get_path.call("./app/routes"), "#{branch_name}.rb")
     route_definitions = routes_list.map do |route_str|
       method, name = parse_route_string.call(route_str)
       view_line = (method == "get" && must_generate_views) ? "\n      view('#{name}')" : ""
@@ -116,7 +116,7 @@ namespace :g do
 
     # Generate views
     if must_generate_views
-      branch_views_dir = File.join(File.expand_path("../../app/views", __dir__), branch_name)
+      branch_views_dir = File.join(File.expand_path("./app/views", __dir__), branch_name)
       FileUtils.mkdir_p(branch_views_dir)
       routes_list.each do |route_str|
         method, name = parse_route_string.call(route_str)
@@ -129,7 +129,7 @@ namespace :g do
     end
 
     # Generate tests
-    test_filename = File.join(ensure_and_get_path.call("../../spec/app/routes"), "#{branch_name}_spec.rb")
+    test_filename = File.join(ensure_and_get_path.call("./spec/app/routes"), "#{branch_name}_spec.rb")
     nesting_level = branch_name.count("/")
     relative_spec_helper_path = "../" * (2 + nesting_level) + "spec_helper"
 
