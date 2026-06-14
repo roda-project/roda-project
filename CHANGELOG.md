@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.1.5] - 2026-06-14
+
+- fix "rake g:routes" bug
+
 ## [0.1.4] - 2026-06-14
 
 - Add assets versioning and manifest.json
