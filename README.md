@@ -4,6 +4,8 @@
 [![CI](https://github.com/roda-project/roda-project/actions/workflows/main.yml/badge.svg)](https://github.com/roda-project/roda-project/actions/workflows/main.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+# roda-project
+
 Roda Project is a command-line interface (CLI) tool that helps you quickly scaffold new [Roda](https://roda.jeremyevans.net/) web applications. It provides an interactive setup to generate a Roda project tailored to your specific needs, including choices for project type, database, authentication, and testing frameworks.
 
 [roda-project.github.io](https://roda-project.github.io/)
