@@ -3,13 +3,13 @@ module Config
     def get
       @config ||= {
         secret: ENV["SESSION_SECRET"] || 'DEV-ONLY-8<FQF8HiF)>l0hbPk£vBQ#IrYsoO}14k\l+-/gIU[j}l0hbPk£vBQ#IrY',
-        environment:,
+        environment:,<% if context.rodauth? %>
         hmac_secret: ENV["RODAUTH_HMAC_SECRET"] || 'DEV-ONLY',
-        jwt_secret: ENV["JWT_SECRET"] || 'DEV-ONLY',
+        jwt_secret: ENV["JWT_SECRET"] || 'DEV-ONLY',<% end %><% if context.fullstack? %>
         i18n: {
           translations: ["app/config/locales", "app/config/locales/foo"],
           locale: ["en", "pt-br"]
-        }<% if context.database? %>,
+        }<% end %><% if context.database? %>,
         db: {
           url: not_production? ? <%= context.dev_db_url %> : ENV["DATABASE_URL"]
         }<% end %><% if context.fullstack? %>,
