@@ -18,15 +18,15 @@ module Roda
       )
 
       def to_s
-        `
+        <<~RUBY
 context = Roda::Project::Context.new
 context.project_name = "#{project_name}"
-context.base = "#{id_to_string(base, :base)}"
+context.base = #{id_to_string(base, :base)}
 context.database = #{database}
-context.database_type = "#{id_to_string(database_type, :database)}"
+context.database_type = #{id_to_string(database_type, :database)}
 context.rodauth = #{rodauth}
-context.tests = "#{id_to_string(tests, :tests)}"
-        `
+context.tests = #{id_to_string(tests, :tests)}
+        RUBY
       end
 
       def tests=(val)

@@ -356,5 +356,30 @@ RSpec.describe Roda::Project::Context do
       it { is_expected.not_to be_sqlite }
     end
   end
+
+  describe "#to_s" do
+    before do
+      context.project_name = "test_project"
+      context.base = Roda::Project::FULLSTACK
+      context.database = true
+      context.database_type = Roda::Project::POSTGRESQL
+      context.rodauth = true
+      context.tests = Roda::Project::RSPEC
+    end
+
+    it "returns the string representation of the context" do
+      expected_output = <<~RUBY
+context = Roda::Project::Context.new
+context.project_name = "test_project"
+context.base = Roda::Project::FULLSTACK
+context.database = true
+context.database_type = Roda::Project::POSTGRESQL
+context.rodauth = true
+context.tests = Roda::Project::RSPEC
+      RUBY
+
+      expect(context.to_s).to eq(expected_output)
+    end
+  end
 end
 # rubocop:enable Lint/InterpolationCheck
