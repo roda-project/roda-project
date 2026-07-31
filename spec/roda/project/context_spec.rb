@@ -14,7 +14,7 @@ RSpec.describe Roda::Project::Context do
     it { is_expected.to respond_to(:rodauth) }
     it { is_expected.to respond_to(:rodauth=) }
     it { is_expected.to respond_to(:database_type) }
-    it { is_expected.to respond_to(:dev_db_url) }
+    it { is_expected.to respond_to(:default_db_url) }
     it { is_expected.to respond_to(:db_gem) }
     it { is_expected.to respond_to(:tests) }
     it { is_expected.to respond_to(:tests=) }
@@ -107,9 +107,9 @@ RSpec.describe Roda::Project::Context do
         context.database = true # Added this line
         context.database_type = Roda::Project::MYSQL
       end
-      it "sets database_type, dev_db_url, and db_gem correctly" do
+      it "sets database_type, default_db_url, and db_gem correctly" do
         expect(context.database_type).to eq(Roda::Project::MYSQL)
-        expect(context.dev_db_url).to eq('"mysql2://user:password@localhost/app_#{environment}"')
+        expect(context.default_db_url).to eq('"mysql2://user:password@localhost/app_#{environment}"')
         expect(context.db_gem).to eq("mysql2")
       end
     end
@@ -119,18 +119,18 @@ RSpec.describe Roda::Project::Context do
         context.database = true # Added this line
         context.database_type = Roda::Project::POSTGRESQL
       end
-      it "sets database_type, dev_db_url, and db_gem correctly" do
+      it "sets database_type, default_db_url, and db_gem correctly" do
         expect(context.database_type).to eq(Roda::Project::POSTGRESQL)
-        expect(context.dev_db_url).to eq('"postgres://user:password@localhost:5432/app_#{environment}"')
+        expect(context.default_db_url).to eq('"postgres://user:password@localhost:5432/app_#{environment}"')
         expect(context.db_gem).to eq("pg")
       end
     end
 
     context "when database_type is SQLITE" do
       before { context.database_type = Roda::Project::SQLITE }
-      it "sets database_type, dev_db_url, and db_gem correctly" do
+      it "sets database_type, default_db_url, and db_gem correctly" do
         expect(context.database_type).to eq(Roda::Project::SQLITE)
-        expect(context.dev_db_url).to eq('"sqlite://db/#{environment}.db"')
+        expect(context.default_db_url).to eq('"sqlite://db/#{environment}.db"')
         expect(context.db_gem).to eq("sqlite3")
       end
     end

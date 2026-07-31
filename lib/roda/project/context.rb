@@ -11,22 +11,22 @@ module Roda
         :rodauth,
         :database,
         :database_type,
-        :dev_db_url,
+        :default_db_url,
         :db_gem,
         :project_name,
         :base
       )
 
       def to_s
-        "
+        `
 context = Roda::Project::Context.new
-context.project_name = #{project_name}
-context.base = #{id_to_string(base, :base)}
+context.project_name = "#{project_name}"
+context.base = "#{id_to_string(base, :base)}"
 context.database = #{database}
-context.database_type = #{id_to_string(database_type, :database)}
+context.database_type = "#{id_to_string(database_type, :database)}"
 context.rodauth = #{rodauth}
-context.tests = #{id_to_string(tests, :tests)}
-        "
+context.tests = "#{id_to_string(tests, :tests)}"
+        `
       end
 
       def tests=(val)
@@ -66,13 +66,13 @@ context.tests = #{id_to_string(tests, :tests)}
         @database_type = val
 
         if mysql?
-          @dev_db_url = '"mysql2://user:password@localhost/app_#{environment}"'
+          @default_db_url = '"mysql2://user:password@localhost/app_#{environment}"'
           @db_gem = "mysql2"
         elsif postgresql?
-          @dev_db_url = '"postgres://user:password@localhost:5432/app_#{environment}"'
+          @default_db_url = '"postgres://user:password@localhost:5432/app_#{environment}"'
           @db_gem = "pg"
         else
-          @dev_db_url = '"sqlite://db/#{environment}.db"'
+          @default_db_url = '"sqlite://db/#{environment}.db"'
           @db_gem = "sqlite3"
         end
       end

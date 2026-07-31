@@ -11,7 +11,7 @@ module Config
           locale: ["en", "pt-br"]
         }<% end %><% if context.database? %>,
         db: {
-          url: not_production? ? <%= context.dev_db_url %> : ENV["DATABASE_URL"]
+          url: not_production? ? <%= context.default_db_url %> : ENV["DATABASE_URL"]
         }<% end %><% if context.fullstack? %>,
         assets: {
           host: '/public/assets',
