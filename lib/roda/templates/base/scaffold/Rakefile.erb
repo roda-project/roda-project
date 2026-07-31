@@ -67,7 +67,7 @@ desc "Exec development server watching for changes"
 task "dev" do
   system("RACK_ENV=development bundle exec guard")
 end
-<% if context.database? %>
+<% if context.fullstack? %>
 desc "Compile assets"
 task :assets do
   system("npm i && npm run build")

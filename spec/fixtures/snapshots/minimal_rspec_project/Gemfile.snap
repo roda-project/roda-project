@@ -16,9 +16,6 @@ gem "puma"
 gem "oj"
 # gem 'async'
 
-# CLI
-gem "rake"
-
 # Security
 # gem "rack-attack"
 

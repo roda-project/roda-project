@@ -37,10 +37,10 @@ module Roda
           puts "$ rake db:migrate"
         end
         puts "\nrun and watch the project in dev mode:\n"
-        puts "\n$ rake dev:watch"
+        puts "\n$ rake dev"
         if @context.fullstack?
           puts "\ncompile and watch assets:\n"
-          puts "\n$ rake assets:watch"
+          puts "\n$ rake dev:assets"
         end
         puts "\nrun 'rake' inside #{@context.project_name} to see all available tasks\n\n"
       rescue TTY::Reader::InputInterrupt
@@ -110,6 +110,9 @@ module Roda
           tty_cp("front-end", "esbuild.js")
           tty_cp("front-end", "package.json")
           cp_r("front-end", "app/views")
+          cp_r("front-end", "app/views")
+          cp_r("front-end", "public/assets")
+          cp_r("front-end", "public/images")
         end
       end
 
