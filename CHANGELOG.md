@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.1.6] - 2026-06-14
+
+- Minor improvements on files generated
+
 ## [0.1.5] - 2026-06-14
 
 - fix "rake g:routes" bug
