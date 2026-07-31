@@ -82,7 +82,7 @@ module Roda
         puts "* creating base project"
         if @context.minimal?
           TTY::File.copy_directory(
-            File.expand_path("../templates/base/minimal", __dir__),
+            File.expand_path("templates/base/minimal", __dir__),
             "#{@dir}#{@context.project_name}",
             context: @context
           )
@@ -91,13 +91,13 @@ module Roda
         end
 
         TTY::File.copy_directory(
-          File.expand_path("../templates/base/scaffold", __dir__),
+          File.expand_path("templates/base/scaffold", __dir__),
           "#{@dir}#{@context.project_name}",
           context: @context
         )
 
         TTY::File.copy_file(
-          File.expand_path("../templates/base/app/app.rb.erb", __dir__),
+          File.expand_path("templates/base/app/app.rb.erb", __dir__),
           "#{@dir}#{@context.project_name}/app/#{@context.project_name}.rb",
           context: @context
         )

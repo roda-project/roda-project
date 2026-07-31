@@ -23,7 +23,7 @@ RSpec.describe Roda::Project::Helpers::Template do
   let(:type) { "base" }
   let(:path) { "scaffold" }
   let(:project_root) { File.expand_path("../../../../", __dir__) }
-  let(:source_base_path) { File.join(project_root, "lib", "roda", "templates") }
+  let(:source_base_path) { File.join(project_root, "lib", "roda", "project", "templates") }
   let(:source_dir) { File.join(source_base_path, type, path) }
   let(:destination_dir) { "#{project_name}/#{path}" }
 
