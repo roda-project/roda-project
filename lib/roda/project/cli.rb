@@ -37,10 +37,10 @@ module Roda
           puts "$ rake db:migrate"
         end
         puts "\nrun and watch the project in dev mode:\n"
-        puts "\n$ rake dev:watch"
+        puts "\n$ rake dev"
         if @context.fullstack?
           puts "\ncompile and watch assets:\n"
-          puts "\n$ rake assets:watch"
+          puts "\n$ rake dev:assets"
         end
         puts "\nrun 'rake' inside #{@context.project_name} to see all available tasks\n\n"
       rescue TTY::Reader::InputInterrupt
@@ -106,18 +106,21 @@ module Roda
       def add_front_end
         if @context.fullstack?
           puts "* adding front-end"
-          tty_cp_r("front-end", "app/assets")
-          tty_cp("front-end", "esbuild.js")
-          tty_cp("front-end", "package.json")
-          cp_r("front-end", "app/views")
+          erb_cp_dir("front-end", "app/assets")
+          erb_cp_file("front-end", "esbuild.js")
+          erb_cp_file("front-end", "package.json")
+          cp_dir("front-end", "app/views")
+          cp_dir("front-end", "app/views")
+          cp_dir("front-end", "public/assets")
+          cp_dir("front-end", "public/images")
         end
       end
 
       def add_database
         if @context.database?
           puts "* adding database"
-          tty_cp_r("database", "db")
-          tty_cp("database", "app/config/providers/db/conn.rb")
+          erb_cp_dir("database", "db")
+          erb_cp_file("database", "app/config/providers/db/conn.rb")
           add_rodauth
         end
       end
@@ -125,10 +128,10 @@ module Roda
       def add_rodauth
         if @context.rodauth?
           puts "* adding rodauth"
-          tty_cp_r("rodauth", "app/models")
-          tty_cp("rodauth", "db/migrations/001_add_rodauth.rb")
+          erb_cp_dir("rodauth", "app/models")
+          erb_cp_file("rodauth", "db/migrations/001_add_rodauth.rb")
           if @context.fullstack?
-            cp("rodauth", "app/views/create-account.erb")
+            cp_file("rodauth", "app/views/create-account.erb")
           end
         end
       end
@@ -138,9 +141,9 @@ module Roda
         minimal_dir = @context.minimal? ? "minimal/" : ""
 
         if @context.rspec?
-          tty_cp_r("tests/#{minimal_dir}rspec", "spec")
+          erb_cp_dir("tests/#{minimal_dir}rspec", "spec")
         else
-          tty_cp_r("tests/#{minimal_dir}minitest", "spec")
+          erb_cp_dir("tests/#{minimal_dir}minitest", "spec")
         end
       end
     end

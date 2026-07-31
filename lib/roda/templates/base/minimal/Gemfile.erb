@@ -16,9 +16,6 @@ gem "puma"
 gem "oj"
 # gem 'async'
 
-# CLI
-gem "rake"
-
 # Security
 # gem "rack-attack"
 
@@ -33,6 +30,7 @@ group :development do
   gem "standard"<% if context.minitest? %>
   gem "minitest"
   gem "minitest-hooks"
+  gem "rake"
 <% else %>
   gem "rspec"<% end %>
 end
