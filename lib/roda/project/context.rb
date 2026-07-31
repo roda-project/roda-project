@@ -17,6 +17,18 @@ module Roda
         :base
       )
 
+      def to_s
+        "
+context = Roda::Project::Context.new
+context.project_name = #{project_name}
+context.base = #{id_to_string(base, :base)}
+context.database = #{database}
+context.database_type = #{id_to_string(database_type, :database)}
+context.rodauth = #{rodauth}
+context.tests = #{id_to_string(tests, :tests)}
+        "
+      end
+
       def tests=(val)
         if ![minitest_id, rspec_id].include?(val)
           raise InvalidValue, "Invalid test framework option"
