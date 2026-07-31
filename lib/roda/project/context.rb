@@ -17,7 +17,7 @@ module Roda
         :base
       )
 
-      def to_s
+      def to_ruby_code
         <<~RUBY
 context = Roda::Project::Context.new
 context.project_name = "#{project_name}"

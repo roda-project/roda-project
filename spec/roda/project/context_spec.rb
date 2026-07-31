@@ -357,7 +357,7 @@ RSpec.describe Roda::Project::Context do
     end
   end
 
-  describe "#to_s" do
+  describe "#to_ruby_code" do
     before do
       context.project_name = "test_project"
       context.base = Roda::Project::FULLSTACK
@@ -378,7 +378,7 @@ context.rodauth = true
 context.tests = Roda::Project::RSPEC
       RUBY
 
-      expect(context.to_s).to eq(expected_output)
+      expect(context.to_ruby_code).to eq(expected_output)
     end
   end
 end
