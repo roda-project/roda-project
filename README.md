@@ -8,7 +8,7 @@
 
 Roda Project is a command-line interface (CLI) tool that helps you quickly scaffold new [Roda](https://roda.jeremyevans.net/) web applications. It provides an interactive setup to generate a Roda project tailored to your specific needs, including choices for project type, database, authentication, and testing frameworks.
 
-Full docs in the site: [roda-project.github.io](https://roda-project.github.io/)
+Full docs: [roda-project.github.io](https://roda-project.github.io/)
 
 
 ## Installation
