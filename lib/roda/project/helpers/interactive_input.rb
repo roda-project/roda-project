@@ -1,7 +1,7 @@
 module Roda
   module Project
     module Helpers
-      module Input
+      module InteractiveInput
         def read_line(prompt, default)
           val = reader.read_line(prompt).chomp
           return default if val == ""

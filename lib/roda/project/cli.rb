@@ -3,6 +3,8 @@
 module Roda
   module Project
     class CLI < Generator
+      include Helpers::InteractiveInput
+
       def call
         puts pastel.bright_black("[roda-project v#{Roda::Project::VERSION}]\n")
         puts pastel.italic("#{Roda::Project.messages.sample.first}\n")

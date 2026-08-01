@@ -1,7 +1,7 @@
-RSpec.describe Roda::Project::Helpers::Input do
+RSpec.describe Roda::Project::Helpers::InteractiveInput do
   let(:dummy_class) do
     Class.new do
-      include Roda::Project::Helpers::Input
+      include Roda::Project::Helpers::InteractiveInput
     end
   end
   let(:instance) { dummy_class.new }
