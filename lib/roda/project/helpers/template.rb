@@ -4,7 +4,7 @@ module Roda
       module Template
         def erb_cp_dir(type, path)
           TTY::File.copy_directory(
-            File.expand_path("#{templates_path}/#{type}/#{path}", __dir__),
+            File.expand_path("#{templates_root}/#{type}/#{path}", __dir__),
             "#{@dir}#{@context.project_name}/#{path}",
             context: @context
           )
@@ -12,7 +12,7 @@ module Roda
 
         def erb_cp_file(type, path)
           TTY::File.copy_file(
-            File.expand_path("#{templates_path}/#{type}/#{path}", __dir__),
+            File.expand_path("#{templates_root}/#{type}/#{path}", __dir__),
             "#{@dir}#{@context.project_name}/#{path}",
             context: @context
           )
@@ -21,7 +21,7 @@ module Roda
         # For copy without parse ERB files
         def cp_dir(type, path)
           FileUtils.cp_r(
-            File.expand_path("#{templates_path}/#{type}/#{path}", __dir__),
+            File.expand_path("#{templates_root}/#{type}/#{path}", __dir__),
             "#{@dir}#{@context.project_name}/#{path}"
           )
         end
@@ -30,12 +30,12 @@ module Roda
         def cp_file(type, path)
           File.write(
             "#{@dir}#{@context.project_name}/#{path}",
-            File.read(File.expand_path("#{templates_path}/#{type}/#{path}", __dir__))
+            File.read(File.expand_path("#{templates_root}/#{type}/#{path}", __dir__))
           )
         end
 
-        def templates_path
-          @templates_path ||= "../templates"
+        def templates_root
+          @templates_root ||= "../templates"
         end
       end
     end

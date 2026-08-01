@@ -3,6 +3,7 @@ module Roda
     class Generator
       include Helpers::Template
       include Helpers::Ids
+      include Helpers::Input
 
       def initialize(context: Context.new, dir: nil)
         @context = context
