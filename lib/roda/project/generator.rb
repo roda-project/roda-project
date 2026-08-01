@@ -5,7 +5,7 @@ module Roda
       include Helpers::Ids
       include Helpers::Input
 
-      def initialize(context: Context.new, dir: nil)
+      def initialize(context: MainContext.new, dir: nil)
         @context = context
         @dir = dir
       end

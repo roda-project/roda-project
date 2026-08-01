@@ -17,7 +17,7 @@ RSpec.describe Roda::Project::Helpers::Template do
   end
 
   let(:project_name) { "my_roda_app" }
-  let(:mock_context) { instance_double("Roda::Project::Context", project_name: project_name) }
+  let(:mock_context) { instance_double("Roda::Project::MainContext", project_name: project_name) }
   let(:instance) { dummy_class.new(mock_context) }
 
   let(:type) { "base" }

@@ -1,6 +1,6 @@
 module Roda
   module Project
-    class Context
+    class MainContext
       include Helpers::Ids
 
       class InvalidValue < Roda::Project::Error; end
@@ -19,7 +19,7 @@ module Roda
 
       def to_ruby_code
         <<~RUBY
-context = Roda::Project::Context.new
+context = Roda::Project::MainContext.new
 context.project_name = "#{project_name}"
 context.base = #{id_to_string(base, :base)}
 context.database = #{database}

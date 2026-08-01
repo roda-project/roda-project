@@ -1,5 +1,5 @@
 require "./lib/roda/project.rb"
-c = Roda::Project::Context.new
+c = Roda::Project::MainContext.new
 c.project_name = 'test'
 c.base = Roda::Project::FULLSTACK
 c.database = true

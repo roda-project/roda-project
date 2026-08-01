@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 # rubocop:disable Lint/InterpolationCheck
-RSpec.describe Roda::Project::Context do
+RSpec.describe Roda::Project::MainContext do
   subject(:context) { described_class.new }
 
   describe "attributes" do
@@ -35,7 +35,7 @@ RSpec.describe Roda::Project::Context do
 
     context "with an invalid test framework" do
       it "raises an InvalidValue error" do
-        expect { context.tests = "invalid" }.to raise_error(Roda::Project::Context::InvalidValue, "Invalid test framework option")
+        expect { context.tests = "invalid" }.to raise_error(Roda::Project::MainContext::InvalidValue, "Invalid test framework option")
       end
     end
   end
@@ -50,7 +50,7 @@ RSpec.describe Roda::Project::Context do
 
     context "with an invalid base option" do
       it "raises an InvalidValue error" do
-        expect { context.base = "invalid" }.to raise_error(Roda::Project::Context::InvalidValue, "Invalid project option")
+        expect { context.base = "invalid" }.to raise_error(Roda::Project::MainContext::InvalidValue, "Invalid project option")
       end
     end
   end
@@ -137,7 +137,7 @@ RSpec.describe Roda::Project::Context do
 
     context "with an invalid database type" do
       it "raises an InvalidValue error" do
-        expect { context.database_type = "invalid" }.to raise_error(Roda::Project::Context::InvalidValue, "Invalid database option")
+        expect { context.database_type = "invalid" }.to raise_error(Roda::Project::MainContext::InvalidValue, "Invalid database option")
       end
     end
   end
@@ -152,11 +152,11 @@ RSpec.describe Roda::Project::Context do
 
     context "with an invalid project name" do
       it "raises an InvalidValue error for starting with a number" do
-        expect { context.project_name = "1MyProject" }.to raise_error(Roda::Project::Context::InvalidValue, "Project name must start with a letter and contains only letters, numbers and _")
+        expect { context.project_name = "1MyProject" }.to raise_error(Roda::Project::MainContext::InvalidValue, "Project name must start with a letter and contains only letters, numbers and _")
       end
 
       it "raises an InvalidValue error for containing special characters" do
-        expect { context.project_name = "My-Project" }.to raise_error(Roda::Project::Context::InvalidValue, "Project name must start with a letter and contains only letters, numbers and _")
+        expect { context.project_name = "My-Project" }.to raise_error(Roda::Project::MainContext::InvalidValue, "Project name must start with a letter and contains only letters, numbers and _")
       end
     end
   end
@@ -369,7 +369,7 @@ RSpec.describe Roda::Project::Context do
 
     it "returns the string representation of the context" do
       expected_output = <<~RUBY
-context = Roda::Project::Context.new
+context = Roda::Project::MainContext.new
 context.project_name = "test_project"
 context.base = Roda::Project::FULLSTACK
 context.database = true

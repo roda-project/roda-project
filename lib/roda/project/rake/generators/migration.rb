@@ -2,15 +2,11 @@ module Roda
   module Project
     module Rake
       module Generators
-        class Migration < Roda::Project::Generator
-          class Context
+        class Migration < Roda::Project::Rake::Generator
+          class MainContext
           end
 
           def call
-          end
-
-          def templates_root
-            @templates_root ||= "../rake/generators/templates"
           end
         end
       end
