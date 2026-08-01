@@ -3,7 +3,7 @@ module Roda
     class Context
       include Helpers::Ids
 
-      class InvalidValue < StandardError; end
+      class InvalidValue < Roda::Project::Error; end
       VALID_PROJECT_NAME_REGEX = /^[a-zA-Z][a-zA-Z0-9_]*$/
 
       attr_reader(

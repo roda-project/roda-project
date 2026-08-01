@@ -2,24 +2,16 @@
 
 module Roda
   module Project
-    class CLI
-      include Helpers::Template
+    class CLI < Roda::Project::Generator
       include Helpers::Input
-      include Helpers::Ids
-
-      def initialize(context: Context.new, pastel: Pastel.new, dir: nil)
-        @context = context
-        @pastel = pastel
-        @dir = dir
-      end
 
       def call
-        puts @pastel.bright_black("[roda-project v#{Roda::Project::VERSION}]\n")
-        puts @pastel.italic("#{Roda::Project.messages.sample.first}\n")
+        puts pastel.bright_black("[roda-project v#{Roda::Project::VERSION}]\n")
+        puts pastel.italic("#{Roda::Project.messages.sample.first}\n")
 
         get_user_context
 
-        puts @pastel.bright_black("\n[project: #{@context.project_name}]\n")
+        puts pastel.bright_black("\n[project: #{@context.project_name}]\n")
 
         create_base_project
         add_front_end
@@ -68,14 +60,6 @@ module Roda
             retry_on_error { @context.rodauth = read_line("Rodauth? (authentication) (Y/n) › ", true) }
           end
         end
-      end
-
-      def retry_on_error
-        yield
-      rescue Roda::Project::Context::InvalidValue => e
-        puts "\n #{@pastel.red(e.message)} \n\n"
-
-        yield
       end
 
       def create_base_project

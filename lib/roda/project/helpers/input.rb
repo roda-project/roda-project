@@ -14,6 +14,18 @@ module Roda
         def reader
           @reader ||= TTY::Reader.new
         end
+
+        def retry_on_error
+          yield
+        rescue Roda::Project::Error => e
+          puts "\n #{pastel.red(e.message)} \n\n"
+
+          yield
+        end
+
+        def pastel
+          @pastel ||= Pastel.new
+        end
       end
     end
   end
