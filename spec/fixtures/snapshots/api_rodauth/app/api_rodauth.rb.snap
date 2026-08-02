@@ -31,7 +31,6 @@ class ApiRodauth < Roda
   plugin :common_logger, Providers::Logger.get
   plugin :json_parser
   plugin :sessions, secret: Config.get[:secret]
-  plugin :i18n, **Config.get[:i18n]
 
   # Authentication
   plugin :rodauth, json: :only do
@@ -53,8 +52,6 @@ class ApiRodauth < Roda
 
   route do |r|
     r.hash_branches
-    # session[:locale] = 'pt-br'
-    # r.i18n_set_locale_from(:session)
     
     r.rodauth
     rodauth.require_authentication

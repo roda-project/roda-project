@@ -31,14 +31,11 @@ class ApiNoDatabaseProject < Roda
   plugin :common_logger, Providers::Logger.get
   plugin :json_parser
   plugin :sessions, secret: Config.get[:secret]
-  plugin :i18n, **Config.get[:i18n]
 
   def config = @config ||= Config.get
 
   route do |r|
     r.hash_branches
-    # session[:locale] = 'pt-br'
-    # r.i18n_set_locale_from(:session)
     
     r.root do
       { message: "#{t.hello.message}" }

@@ -1,7 +1,7 @@
 module Roda
   module Project
     module Bin
-      module Generators < Thor
+      class Generators < ::Thor
         # Roda::Project::Bin::Generators.call(context, ARGV)
         def call(context, argv)
           puts context

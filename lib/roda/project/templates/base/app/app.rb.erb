@@ -37,8 +37,8 @@ class <%= context.const_project_name %> < Roda
   # Other
   plugin :common_logger, Providers::Logger.get
   plugin :json_parser
-  plugin :sessions, secret: Config.get[:secret]
-  plugin :i18n, **Config.get[:i18n]
+  plugin :sessions, secret: Config.get[:secret]<% if context.fullstack? %>
+  plugin :i18n, **Config.get[:i18n]<% end %>
 <% if context.rodauth? %><% if context.api? %>
   # Authentication
   plugin :rodauth, json: :only do
@@ -64,9 +64,9 @@ class <%= context.const_project_name %> < Roda
   def html = @html ||= Views::Html.new(t)<% end %>
 
   route do |r|
-    r.hash_branches
+    r.hash_branches<% if context.fullstack? %>
     # session[:locale] = 'pt-br'
-    # r.i18n_set_locale_from(:session)
+    # r.i18n_set_locale_from(:session)<% end %>
     <% if context.rodauth? %>
     r.rodauth
     rodauth.require_authentication
