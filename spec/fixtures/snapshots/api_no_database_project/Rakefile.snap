@@ -6,59 +6,6 @@ task :default do
   system("rake -T")
 end
 
-desc "Open a console with application context (alias: rake c)"
-task :console do
-  system("irb -r ./boot.rb")
-end
-task c: :console
-
-desc "Run lint"
-task :lint do
-  system("bundle exec standardrb")
-end
-
-desc "Auto fix lint warnings"
-task "lint:fix" do
-  system("bundle exec standardrb --fix")
-end
-
-desc "Run tests"
-task :test do
-  system("RACK_ENV=test bundle exec rspec")
-end
-
-desc "Exec development server"
-task :server do
-  if ENV["RACK_ENV"] == "production"
-    if ENV["SESSION_SECRET"].nil?
-      puts("SESSION_SECRET is empty")
-      exit 1
-    end
-    system("RUBYOPT=--yjit RUBY_YJIT_ENABLE=1 RACK_ENV=production bundle exec puma --port 4000")
-  else
-    system("RACK_ENV=development bundle exec puma --port 4000")
-  end
-end
-
-desc "Exec development server watching for changes"
-task "dev" do
-  system("RACK_ENV=development bundle exec guard")
-end
-
-
-desc "Exec production server"
-task :prod do
-  if ENV["DATABASE_URL"].nil?
-    puts("DATABASE_URL is empty")
-    exit 1
-  end
-  if ENV["SESSION_SECRET"].nil?
-    puts("SESSION_SECRET is empty")
-    exit 1
-  end
-  system("RUBYOPT=--yjit RUBY_YJIT_ENABLE=1 RACK_ENV=production bundle exec puma --port 4000")
-end
-
 namespace :g do
   desc "Generate routes and tests, also generate views if views directory is present. Usage: 'rake generate:routes[branch_name,route1,method:route2]'"
   task :routes, [:branch_name, :routes] do |t, args|

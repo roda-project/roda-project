@@ -85,6 +85,8 @@ module Roda
           "#{@dir}#{@context.project_name}/app/#{@context.project_name}.rb",
           context: @context
         )
+
+        TTY::File.chmod("#{@dir}#{@context.project_name}/bin/roda", "+x")
       end
 
       def add_front_end
