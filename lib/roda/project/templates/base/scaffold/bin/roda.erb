@@ -6,9 +6,7 @@ class Db < Thor
   desc "migrate", "Migrate the database. Optional: provide target version, e.g., 'roda db:migrate 1'"
   option :target, type: :numeric, aliases: "-t", desc: "provide target version"
   def migrate
-    require_relative "../boot"
-    require "sequel"
-    require "sequel/extensions/migration"
+    require_deps
 
     Sequel.extension :migration
     db = Providers::DB::Conn.get
@@ -19,8 +17,51 @@ class Db < Thor
     end
     puts "* database migration complete."
   end
+
+  [:drop, :create].each do |action|
+    desc action.to_s, "#{action.capitalize} the database"
+    define_method(action) do
+      require_deps<% if context.postgresql? %>
+      db_config =
+        PG::Connection
+        .conninfo_parse(Config.get[:db][:url])
+        .each_with_object({}) { |h, o|
+          o[h[:keyword].to_sym] = h[:val] if h[:val]
+        }
+      ok = system("PGPASSWORD='#{db_config[:password]}' #{action}db -h #{db_config[:host]} -p #{db_config[:port]} -U #{db_confi
+      g[:user]} #{db_config[:dbname]}")<% end %><% if context.mysql? %>
+      uri = URI.parse(Config.get[:db][:url])
+      db_config = {
+        host: uri.host,
+        port: uri.port,
+        user: uri.user,
+        password: uri.password,
+        dbname: uri.path.tr('/', '') # removes leading slash
+      }
+      sql_cmd = action == :create ? "CREATE DATABASE IF NOT EXISTS \`#{db_config[:dbname]}\`;" : "DROP DATABASE IF EXISTS \`#{db_config[:dbname]}\`;"
+      flags = []
+      flags << "-h#{db_config[:host]}" if db_config[:host]
+      flags << "-P#{db_config[:port]}" if db_config[:port]
+      flags << "-u#{db_config[:user]}" if db_config[:user]
+      env = {}
+      env["MYSQL_PWD"] = db_config[:password] if db_config[:password]
+      ok = system(env, "mysql #{flags.join(' ')} -e \"#{sql_cmd}\"")<% end %>
+      puts "#{action} database #{db_config[:dbname]} ✓" if ok
+    end
+  end
+
+  private
+
+  def require_deps
+    require_relative "../boot"
+    require "sequel"
+    require "sequel/extensions/migration"
+    require "<%= context.db_gem %>"<% if context.mysql? %>
+    require "uri"<% end %>
+  end
 end
 <% end %>
+
 class CLI < Thor
   desc "console", "Open a console with application context, alias: roda c"
   def console
