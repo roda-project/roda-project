@@ -1,17 +1,6 @@
 # frozen_string_literal: true
 
-require "tty-file"
-require "fileutils"
-require "tty-reader"
-require "pastel"
-require_relative "project/version"
-require_relative "project/helpers/ids"
-require_relative "project/context"
-require_relative "project/helpers/input"
-require_relative "project/helpers/template"
-require_relative "project/cli"
-
-module Roda
+class Roda
   module Project
     class Error < StandardError; end
 
@@ -55,3 +44,25 @@ module Roda
     end
   end
 end
+
+# Dependences
+require "tty-file"
+require "fileutils"
+require "tty-reader"
+require "pastel"
+require "thor"
+# Helpers
+require_relative "project/helpers/ids"
+require_relative "project/helpers/interactive_input"
+require_relative "project/helpers/template"
+# Base
+require_relative "project/main_context"
+require_relative "project/generator"
+require_relative "project/cli"
+# Generators
+require_relative "project/bin/generator"
+require_relative "project/bin/generators/migration"
+require_relative "project/bin/generators/routes"
+require_relative "project/bin/generators"
+# Version
+require_relative "project/version"

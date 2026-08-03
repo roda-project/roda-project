@@ -1,5 +1,14 @@
 ## [Unreleased]
 
+## [0.1.7] - 2026-06-14
+- Remove Rakefile and to use thor and bin/roda
+- Move generators to the gem internals
+- Remove html_slice dependency
+- Add roda-assets_manifest as a default
+- Bugfixes: Esbuild var scope
+- Improve files content of files generated
+- Code refactor
+
 ## [0.1.6] - 2026-06-14
 
 - Minor improvements on files generated

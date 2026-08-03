@@ -1,25 +1,17 @@
 # frozen_string_literal: true
 
-module Roda
+class Roda
   module Project
-    class CLI
-      include Helpers::Template
-      include Helpers::Input
-      include Helpers::Ids
-
-      def initialize(context: Context.new, pastel: Pastel.new, dir: nil)
-        @context = context
-        @pastel = pastel
-        @dir = dir
-      end
+    class CLI < Generator
+      include Helpers::InteractiveInput
 
       def call
-        puts @pastel.bright_black("[roda-project v#{Roda::Project::VERSION}]\n")
-        puts @pastel.italic("#{Roda::Project.messages.sample.first}\n")
+        puts pastel.bright_black("[roda-project v#{Roda::Project::VERSION}]\n")
+        puts pastel.italic("#{Roda::Project.messages.sample.first}\n")
 
         get_user_context
 
-        puts @pastel.bright_black("\n[project: #{@context.project_name}]\n")
+        puts pastel.bright_black("\n[project: #{@context.project_name}]\n")
 
         create_base_project
         add_front_end
@@ -34,15 +26,15 @@ module Roda
             puts "\n* put your dev database credentials in app/config/config.rb\n"
           end
           puts "\nmigrate the database (use RACK_ENV to migrate 'test' or 'production' environments):\n\n"
-          puts "$ rake db:migrate"
+          puts "$ bin/roda db migrate"
         end
         puts "\nrun and watch the project in dev mode:\n"
-        puts "\n$ rake dev"
+        puts "\n$ bin/roda dev"
         if @context.fullstack?
           puts "\ncompile and watch assets:\n"
-          puts "\n$ rake dev:assets"
+          puts "\n$ bin/roda assets:dev"
         end
-        puts "\nrun 'rake' inside #{@context.project_name} to see all available tasks\n\n"
+        puts "\nrun 'bin/roda' inside #{@context.project_name} to see all available tasks\n\n"
       rescue TTY::Reader::InputInterrupt
         puts "\n\nGoodbye"
       end
@@ -70,19 +62,11 @@ module Roda
         end
       end
 
-      def retry_on_error
-        yield
-      rescue Roda::Project::Context::InvalidValue => e
-        puts "\n #{@pastel.red(e.message)} \n\n"
-
-        yield
-      end
-
       def create_base_project
         puts "* creating base project"
         if @context.minimal?
           TTY::File.copy_directory(
-            File.expand_path("../templates/base/minimal", __dir__),
+            File.expand_path("templates/base/minimal", __dir__),
             "#{@dir}#{@context.project_name}",
             context: @context
           )
@@ -91,16 +75,18 @@ module Roda
         end
 
         TTY::File.copy_directory(
-          File.expand_path("../templates/base/scaffold", __dir__),
+          File.expand_path("templates/base/scaffold", __dir__),
           "#{@dir}#{@context.project_name}",
           context: @context
         )
 
         TTY::File.copy_file(
-          File.expand_path("../templates/base/app/app.rb.erb", __dir__),
+          File.expand_path("templates/base/app/app.rb.erb", __dir__),
           "#{@dir}#{@context.project_name}/app/#{@context.project_name}.rb",
           context: @context
         )
+
+        TTY::File.chmod("#{@dir}#{@context.project_name}/bin/roda", "+x")
       end
 
       def add_front_end
@@ -109,7 +95,6 @@ module Roda
           erb_cp_dir("front-end", "app/assets")
           erb_cp_file("front-end", "esbuild.js")
           erb_cp_file("front-end", "package.json")
-          cp_dir("front-end", "app/views")
           cp_dir("front-end", "app/views")
           cp_dir("front-end", "public/assets")
           cp_dir("front-end", "public/images")

@@ -11,6 +11,7 @@ class FullstackSqliteRodauthProject < Roda
   plugin :render, layout: "./layout"
   plugin :content_for, append: false
   plugin :flash
+  plugin :assets_manifest
   
   # Request / Response
   plugin :halt
@@ -56,7 +57,6 @@ class FullstackSqliteRodauthProject < Roda
   end
 
   def config = @config ||= Config.get
-  def html = @html ||= Views::Html.new(t)
 
   route do |r|
     r.hash_branches
@@ -72,7 +72,10 @@ class FullstackSqliteRodauthProject < Roda
   end
 
   error do |e|
-    next exception_page(e, css_file: "/public/exception_page.css") if Config.not_production?
+    if Config.not_production?
+      puts e
+      next exception_page(e, css_file: "/public/exception_page.css")
+    end
   end
 
   not_found do

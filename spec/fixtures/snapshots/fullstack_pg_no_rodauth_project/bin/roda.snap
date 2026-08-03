@@ -1,0 +1,94 @@
+#!/usr/bin/env ruby
+require "thor"
+require "roda/project/bin/generators"
+
+class Db < Thor
+  desc "migrate", "Migrate the database. Optional: provide target version, e.g., 'roda db:migrate 1'"
+  option :target, type: :numeric, aliases: "-t", desc: "provide target version"
+  def migrate
+    require_relative "../boot"
+    require "sequel"
+    require "sequel/extensions/migration"
+
+    Sequel.extension :migration
+    db = Providers::DB::Conn.get
+    if options[:target]
+      Sequel::Migrator.run(db, "db/migrations", target: options[:target].to_i)
+    else
+      Sequel::Migrator.run(db, "db/migrations")
+    end
+    puts "* database migration complete."
+  end
+end
+
+class CLI < Thor
+  desc "console", "Open a console with application context, alias: roda c"
+  def console
+    system("irb -r ./boot.rb")
+  end
+  map "c" => "console"
+
+  desc "lint", "Run lint"
+  option :fix, type: :boolean, aliases: "-w", desc: "Auto fix lint warnings"
+  def lint
+    if options[:fix]
+      system("bundle exec standardrb --fix")
+    else
+      system("bundle exec standardrb")
+    end
+  end
+
+  desc "test", "Run tests"
+  def test
+    system("RACK_ENV=test bundle exec rspec")
+  end
+
+  desc "dev", "Exec development server watching for changes"
+  def dev
+    system("RACK_ENV=development bundle exec guard")
+  end
+  
+  desc "assets", "Compile assets (use -w flag to watch for changes)"
+  option :watch, type: :boolean, aliases: "-w", desc: "Watch for changes"
+  def assets
+    if options[:watch]
+      system("npm i && npm run build:watch")
+    else
+      system("npm i && npm run build")
+    end
+  end
+
+  desc "server", "Runs the project, alias roda s"
+  def server
+    if ENV["RACK_ENV"] == "production"
+      if ENV["DATABASE_URL"].nil?
+        puts("DATABASE_URL is empty")
+        exit 1
+      end
+      if ENV["SESSION_SECRET"].nil?
+        puts("SESSION_SECRET is empty")
+        exit 1
+      end
+      system("RUBYOPT=--yjit RUBY_YJIT_ENABLE=1 RACK_ENV=production bundle exec puma --port 4000")
+    else
+      system("RACK_ENV=development bundle exec puma --port 4000")
+    end
+  end
+  map "s" => "server"
+  
+  desc "db", "Database functions"
+  subcommand "db", Db
+  
+  desc "generate", "Commands to generate code"
+  option :main_context, type: :hash, default: {
+    project_name: "fullstack_pg_no_rodauth_project",
+    base: Roda::Project::FULLSTACK,
+    rodauth: false,
+    tests: Roda::Project::RSPEC,
+    database: true,
+    database_type: Roda::Project::POSTGRESQL,
+    }
+  subcommand "generate", Roda::Project::Bin::Generators
+end
+
+CLI.start(ARGV)

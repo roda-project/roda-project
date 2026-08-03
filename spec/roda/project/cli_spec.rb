@@ -26,14 +26,14 @@ RSpec.describe Roda::Project::CLI do
   BASE_MINIMAL_FILES_WITH_LOGIC =
     [
       "Gemfile",
-      "Rakefile"
+      "bin/roda"
     ]
 
   BASE_SCAFFOLD_FILES_WITH_LOGIC =
     [
       "Gemfile",
       "boot.rb",
-      "Rakefile",
+      "bin/roda",
       "app/routes/foo.rb",
       "app/config/config.rb",
       "spec/app/app_spec.rb",
@@ -59,8 +59,6 @@ RSpec.describe Roda::Project::CLI do
   FRONT_FILES =
     [
       "app/views/foo/bar.erb",
-      "app/views/foo/html.rb",
-      "app/views/html.rb",
       "app/views/layout.erb",
       "esbuild.js",
       "package.json"
