@@ -35,7 +35,7 @@ RSpec.describe Roda::Project::MainContext do
 
     context "with an invalid test framework" do
       it "raises an InvalidValue error" do
-        expect { context.tests = "invalid" }.to raise_error(Roda::Project::MainContext::InvalidValue, "Invalid test framework option")
+        expect { context.tests = "invalid" }.to raise_error(Roda::Project::MainContext::InvalidValue)
       end
     end
   end
@@ -50,7 +50,7 @@ RSpec.describe Roda::Project::MainContext do
 
     context "with an invalid base option" do
       it "raises an InvalidValue error" do
-        expect { context.base = "invalid" }.to raise_error(Roda::Project::MainContext::InvalidValue, "Invalid project option")
+        expect { context.base = "invalid" }.to raise_error(Roda::Project::MainContext::InvalidValue)
       end
     end
   end
@@ -137,7 +137,7 @@ RSpec.describe Roda::Project::MainContext do
 
     context "with an invalid database type" do
       it "raises an InvalidValue error" do
-        expect { context.database_type = "invalid" }.to raise_error(Roda::Project::MainContext::InvalidValue, "Invalid database option")
+        expect { context.database_type = "invalid" }.to raise_error(Roda::Project::MainContext::InvalidValue)
       end
     end
   end

@@ -34,7 +34,7 @@ class Roda
 
       def tests=(val)
         if ![minitest_id, rspec_id].include?(val)
-          raise InvalidValue, "Invalid test framework option"
+          raise InvalidValue, "Invalid test framework option: #{val}"
         end
 
         @tests = val
@@ -42,7 +42,7 @@ class Roda
 
       def base=(val)
         if ![fullstack_id, api_id, minimal_id].include?(val)
-          raise InvalidValue, "Invalid project option"
+          raise InvalidValue, "Invalid project base option: #{val}"
         end
 
         @base = val
@@ -63,7 +63,7 @@ class Roda
       # rubocop:disable Lint/InterpolationCheck
       def database_type=(val)
         if ![mysql_id, postgresql_id, sqlite_id].include?(val)
-          raise InvalidValue, "Invalid database option"
+          raise InvalidValue, "Invalid database type option: #{val}"
         end
 
         @database_type = val

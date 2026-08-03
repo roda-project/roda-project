@@ -14,8 +14,6 @@ class Roda
           Routes.new(context:, args:).call
         end
 
-        private
-
         def context
           return @context if @context
 
@@ -25,7 +23,7 @@ class Roda
           @context.database = options[:main_context][:database]
           @context.database_type = options[:main_context][:database_type]
           @context.rodauth = options[:main_context][:rodauth]
-          @context.tests = options[:main_context][:test]
+          @context.tests = options[:main_context][:tests]
 
           @context
         end
