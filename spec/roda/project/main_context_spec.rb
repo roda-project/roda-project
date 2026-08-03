@@ -370,13 +370,13 @@ RSpec.describe Roda::Project::MainContext do
     it "returns the string representation of the context" do
       result = context.to_thor_option
 
-      expect(result).to match('option :main_context, type: :hash, default: {')
+      expect(result).to match("option :main_context, type: :hash, default: {")
       expect(result).to match('project_name: "test_project",')
-      expect(result).to match('base: Roda::Project::FULLSTACK,')
-      expect(result).to match('rodauth: true,')
-      expect(result).to match('tests: Roda::Project::RSPEC,')
-      expect(result).to match('database: true,')
-      expect(result).to match('database_type: Roda::Project::POSTGRESQL,')
+      expect(result).to match("base: Roda::Project::FULLSTACK,")
+      expect(result).to match("rodauth: true,")
+      expect(result).to match("tests: Roda::Project::RSPEC,")
+      expect(result).to match("database: true,")
+      expect(result).to match("database_type: Roda::Project::POSTGRESQL,")
     end
   end
 end

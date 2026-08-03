@@ -1,3 +1,4 @@
+# rubocop:disable Layout/HeredocIndentation
 class Roda
   module Project
     module Bin
@@ -47,3 +48,4 @@ class Roda
     end
   end
 end
+# rubocop:enable Layout/HeredocIndentation

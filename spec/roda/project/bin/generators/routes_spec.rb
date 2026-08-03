@@ -8,7 +8,7 @@ require "fileutils"
 RSpec.describe Roda::Project::Bin::Generators::Routes do
   let(:context) { double("MainContext", const_project_name: "TestProject") }
   let(:args) { ["users", "index", "create:post"] }
-  let(:options) { { views: false } }
+  let(:options) { {views: false} }
   let(:generator) do
     described_class.new(context: context, args: args, options: options)
   end
@@ -93,7 +93,7 @@ RSpec.describe Roda::Project::Bin::Generators::Routes do
       end
 
       context "when views option is true" do
-        let(:options) { { views: true } }
+        let(:options) { {views: true} }
 
         context "and app/views directory exists" do
           before do

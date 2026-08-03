@@ -1,3 +1,4 @@
+# rubocop:disable Layout/HeredocIndentation
 class Roda
   module Project
     module Bin
@@ -92,7 +93,7 @@ class Roda
           end
 
           def routes_list
-            @routes_list ||= @args[1..-1]
+            @routes_list ||= @args[1..]
           end
 
           def branch_name
@@ -103,3 +104,4 @@ class Roda
     end
   end
 end
+# rubocop:enable Layout/HeredocIndentation
