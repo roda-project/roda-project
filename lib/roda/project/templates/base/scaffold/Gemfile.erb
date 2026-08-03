@@ -10,17 +10,20 @@ gem "zeitwerk"
 # Authentication
 gem "rodauth"
 gem "jwt"
-<% end %>
+<% end %><% if context.database? %>
 # Database
 gem "sequel"
-<%= "gem \"#{context.db_gem}\"" if context.database? %>
-
+<%= "gem \"#{context.db_gem}\"" %>
+<% end %>
 # Web Server
 gem "puma"
 # gem "falcon"
 # gem 'iodine'
-# gem 'thin'
+# gem 'thin'<% if context.fullstack? %>
 
+# Views
+gem 'roda-assets_manifest'
+<% end %>
 # Performance
 gem "oj"
 # gem 'async'
@@ -33,7 +36,6 @@ gem "html_slice"
 gem "mail"
 gem "bcrypt"
 gem "logger"
-
 group :development do
   gem "guard-puma"
   gem "guard-livereload"

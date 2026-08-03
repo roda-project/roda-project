@@ -21,6 +21,9 @@ gem "puma"
 # gem 'iodine'
 # gem 'thin'
 
+# Views
+gem 'roda-assets_manifest'
+
 # Performance
 gem "oj"
 # gem 'async'
@@ -33,7 +36,6 @@ gem "html_slice"
 gem "mail"
 gem "bcrypt"
 gem "logger"
-
 group :development do
   gem "guard-puma"
   gem "guard-livereload"
