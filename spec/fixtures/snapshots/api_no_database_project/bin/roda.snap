@@ -3,7 +3,6 @@ require "thor"
 
 require_relative "../../lib/roda/project/bin/generators"
 
-
 class CLI < Thor
   desc "console", "Open a console with application context, alias: roda c"
   def console

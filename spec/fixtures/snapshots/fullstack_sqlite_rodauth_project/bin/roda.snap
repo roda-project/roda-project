@@ -3,7 +3,6 @@ require "thor"
 
 require_relative "../../lib/roda/project/bin/generators"
 
-
 class Db < Thor
   desc "migrate", "Migrate the database. Optional: provide target version, e.g., 'roda db:migrate 1'"
   option :target, type: :numeric, aliases: "-t", desc: "provide target version"

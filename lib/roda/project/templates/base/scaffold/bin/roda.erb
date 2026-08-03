@@ -2,7 +2,6 @@
 require "thor"
 <%# FIXME: trocar para require "roda/project/bin/generators" %>
 require_relative "../../lib/roda/project/bin/generators"
-
 <% if context.database? %>
 class Db < Thor
   desc "migrate", "Migrate the database. Optional: provide target version, e.g., 'roda db:migrate 1'"

@@ -26,15 +26,15 @@ module Roda
             puts "\n* put your dev database credentials in app/config/config.rb\n"
           end
           puts "\nmigrate the database (use RACK_ENV to migrate 'test' or 'production' environments):\n\n"
-          puts "$ rake db:migrate"
+          puts "$ bin/roda db migrate"
         end
         puts "\nrun and watch the project in dev mode:\n"
-        puts "\n$ rake dev"
+        puts "\n$ bin/roda dev"
         if @context.fullstack?
           puts "\ncompile and watch assets:\n"
-          puts "\n$ rake dev:assets"
+          puts "\n$ bin/roda assets:dev"
         end
-        puts "\nrun 'rake' inside #{@context.project_name} to see all available tasks\n\n"
+        puts "\nrun 'bin/roda' inside #{@context.project_name} to see all available tasks\n\n"
       rescue TTY::Reader::InputInterrupt
         puts "\n\nGoodbye"
       end
