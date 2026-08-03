@@ -47,7 +47,7 @@ namespace :g do
       end
     RUBY
     File.write(filename, content)
-    puts "Created routes file: #{filename}"
+    puts "* created routes file: #{filename}"
 
     # Generate views
     if must_generate_views
@@ -58,7 +58,7 @@ namespace :g do
         if method == "get"
           view_filename = File.join(branch_views_dir, "#{name}.erb")
           File.write(view_filename, "")
-          puts "Created view file: #{view_filename}"
+          puts "* created view file: #{view_filename}"
         end
       end
     end
@@ -84,6 +84,7 @@ namespace :g do
       end
     RUBY
     File.write(test_filename, test_content)
-    puts "Created test file: #{test_filename}"
+    puts "* created test file: #{test_filename}"
   end
 end
+

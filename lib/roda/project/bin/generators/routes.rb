@@ -17,7 +17,7 @@ class Roda
           private
 
           def generate_routes
-            filename = File.join(ensure_and_get_path("./app/routes"), "#{branch_name}.rb")
+            filename = File.join(ensure_and_get_path("app/routes"), "#{branch_name}.rb")
             route_definitions = routes_list.map do |route_str|
               method, name = parse_route_string(route_str)
               view_line = (method == "get" && must_generate_views?) ? "\n      view('#{name}')" : ""
@@ -32,26 +32,26 @@ class Roda
       end
             RUBY
             File.write(filename, content)
-            puts "Created routes file: #{filename}"
+            puts "* created routes file: #{filename}"
           end
 
           def generate_views
             if must_generate_views?
-              branch_views_dir = File.join("./app/views", branch_name)
+              branch_views_dir = File.join("app/views", branch_name)
               FileUtils.mkdir_p(branch_views_dir)
               routes_list.each do |route_str|
                 method, name = parse_route_string(route_str)
                 if method == "get"
                   view_filename = File.join(branch_views_dir, "#{name}.erb")
                   File.write(view_filename, "")
-                  puts "Created view file: #{view_filename}"
+                  puts "* created view file: #{view_filename}"
                 end
               end
             end
           end
 
           def generate_tests
-            test_filename = File.join(ensure_and_get_path("./spec/app/routes"), "#{branch_name}_spec.rb")
+            test_filename = File.join(ensure_and_get_path("spec/app/routes"), "#{branch_name}_spec.rb")
             nesting_level = branch_name.count("/")
             relative_spec_helper_path = "../" * (2 + nesting_level) + "spec_helper"
 
@@ -71,11 +71,11 @@ class Roda
       end
             RUBY
             File.write(test_filename, test_content)
-            puts "Created test file: #{test_filename}"
+            puts "* created test file: #{test_filename}"
           end
 
           def must_generate_views?
-            Dir.exist?("app/views")
+            @options[:views] && Dir.exist?("app/views")
           end
 
           def parse_route_string(route_str)

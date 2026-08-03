@@ -6,13 +6,16 @@ class Roda
       class Generators < ::Thor
         desc "migration", "Create a database migration"
         def migration(*args)
-          Migration.new(context:, args:).call
+          Migration.new(context:, args:, options:).call
         end
 
         desc "routes", "Create routes inside hash_branches, views and tests"
+        option :views, type: :boolean, default: true
         def routes(*args)
-          Routes.new(context:, args:).call
+          Routes.new(context:, args:, options:).call
         end
+
+        private
 
         def context
           return @context if @context

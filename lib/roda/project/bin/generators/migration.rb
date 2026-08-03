@@ -32,7 +32,7 @@ class Roda
             RUBY
 
             File.write(filename, content)
-            puts "Created migration: #{filename}"
+            puts "* created migration: #{filename}"
           end
 
           def migrations_path

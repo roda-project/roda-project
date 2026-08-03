@@ -4,9 +4,10 @@ class Roda
       include Helpers::Template
       include Helpers::Ids
 
-      def initialize(context: MainContext.new, args: [], dir: nil)
+      def initialize(context: MainContext.new, args: [], options: {}, dir: nil)
         @context = context
         @args = args
+        @options = options
         @dir = dir
       end
 

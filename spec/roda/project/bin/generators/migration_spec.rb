@@ -51,12 +51,12 @@ RSpec.describe Roda::Project::Bin::Generators::Migration do
 
         it "creates the directory" do
           expect(File.directory?(tmp_dir)).to be false
-          expect { generator.call }.to output(/Created migration/).to_stdout
+          expect { generator.call }.to output(/created migration/).to_stdout
           expect(File.directory?(tmp_dir)).to be true
         end
 
         it "creates the first migration file with correct content" do
-          expect { generator.call }.to output(/Created migration/).to_stdout
+          expect { generator.call }.to output(/created migration/).to_stdout
 
           files = Dir.glob(File.join(tmp_dir, "*.rb"))
           expect(files.size).to eq(1)
@@ -76,7 +76,7 @@ RSpec.describe Roda::Project::Bin::Generators::Migration do
         end
 
         it "creates the migration with the next sequence number" do
-          expect { generator.call }.to output(/Created migration/).to_stdout
+          expect { generator.call }.to output(/created migration/).to_stdout
 
           files = Dir.glob(File.join(tmp_dir, "*.rb")).sort
           expect(files.size).to eq(3)
@@ -90,7 +90,7 @@ RSpec.describe Roda::Project::Bin::Generators::Migration do
         end
 
         it "creates the migration with the max number + 1" do
-          expect { generator.call }.to output(/Created migration/).to_stdout
+          expect { generator.call }.to output(/created migration/).to_stdout
 
           files = Dir.glob(File.join(tmp_dir, "*.rb")).sort
           expect(files.size).to eq(2)
