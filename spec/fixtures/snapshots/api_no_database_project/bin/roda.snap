@@ -1,6 +1,9 @@
 #!/usr/bin/env ruby
 require "thor"
 
+require_relative "../../lib/roda/project/bin/generators"
+
+
 class CLI < Thor
   desc "console", "Open a console with application context, alias: roda c"
   def console
@@ -41,6 +44,17 @@ class CLI < Thor
     end
   end
   map "s" => "server"
+  
+  desc "generate", "Commands to generate code"
+  option :main_context, type: hash, default: {
+    project_name: "api_no_database_project",
+    base: Roda::Project::API,
+    rodauth: ,
+    tests: Roda::Project::RSPEC,
+    database: false,
+
+}
+  subcommand "generate", Roda::Project::Bin::Generators
 end
 
 CLI.start(ARGV)

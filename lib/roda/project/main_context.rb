@@ -18,16 +18,18 @@ module Roda
       )
 
       def to_thor_option
-        <<~RUBY
+        option = <<~RUBY
   option :main_context, type: hash, default: {
-    project_name: "#{project_name}",
-    base: #{id_to_string(base, :base)},
-    database: #{database},
-    database_type: #{id_to_string(database_type, :database)},
-    rodauth: #{rodauth},
-    tests: #{id_to_string(tests, :tests)},
-  }
+      project_name: "#{project_name}",
+      base: #{id_to_string(base, :base)},
+      rodauth: #{rodauth},
+      tests: #{id_to_string(tests, :tests)},
+      database: #{database},
         RUBY
+        if database?
+          option << "    database_type: #{id_to_string(database_type, :database)},"
+        end
+        option << "\n}"
       end
 
       def tests=(val)

@@ -1,6 +1,9 @@
 #!/usr/bin/env ruby
 require "thor"
 
+require_relative "../../lib/roda/project/bin/generators"
+
+
 class Db < Thor
   desc "migrate", "Migrate the database. Optional: provide target version, e.g., 'roda db:migrate 1'"
   option :target, type: :numeric, aliases: "-t", desc: "provide target version"
@@ -21,9 +24,6 @@ class Db < Thor
 end
 
 class CLI < Thor
-  desc "db", "Database functions"
-  subcommand "db", Db
-
   desc "console", "Open a console with application context, alias: roda c"
   def console
     system("irb -r ./boot.rb")
@@ -67,6 +67,20 @@ class CLI < Thor
     end
   end
   map "s" => "server"
+  
+  desc "db", "Database functions"
+  subcommand "db", Db
+  
+  desc "generate", "Commands to generate code"
+  option :main_context, type: hash, default: {
+    project_name: "api_rodauth",
+    base: Roda::Project::API,
+    rodauth: true,
+    tests: Roda::Project::RSPEC,
+    database: true,
+    database_type: Roda::Project::POSTGRESQL,
+}
+  subcommand "generate", Roda::Project::Bin::Generators
 end
 
 CLI.start(ARGV)
