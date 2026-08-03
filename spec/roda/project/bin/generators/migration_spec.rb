@@ -23,7 +23,7 @@ RSpec.describe Roda::Project::Bin::Generators::Migration do
       let(:args) { [] }
 
       it "prints usage and exits with status 1" do
-        expect { generator.call }.to output(/Usage: bin\/roda generate migration your_migration_name/).to_stdout
+        expect { generator.call }.to output(/Usage: bin\/roda g migration your_migration_name/).to_stdout
           .and raise_error(SystemExit) do |error|
             expect(error.status).to eq(1)
           end
@@ -34,7 +34,7 @@ RSpec.describe Roda::Project::Bin::Generators::Migration do
       let(:args) { [""] }
 
       it "prints usage and exits with status 1" do
-        expect { generator.call }.to output(/Usage: bin\/roda generate migration your_migration_name/).to_stdout
+        expect { generator.call }.to output(/Usage: bin\/roda g migration your_migration_name/).to_stdout
           .and raise_error(SystemExit) do |error|
             expect(error.status).to eq(1)
           end
