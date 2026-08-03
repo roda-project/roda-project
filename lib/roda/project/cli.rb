@@ -22,8 +22,9 @@ class Roda
         puts "$ cd #{@context.project_name} && bundle"
         if @context.database?
           unless @context.sqlite?
-            puts "\n* create your database\n"
             puts "\n* put your dev database credentials in app/config/config.rb\n"
+            puts "\n* create your database\n"
+            puts "$ bin/roda db create"
           end
           puts "\nmigrate the database (use RACK_ENV to migrate 'test' or 'production' environments):\n\n"
           puts "$ bin/roda db migrate"

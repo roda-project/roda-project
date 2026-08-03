@@ -17,7 +17,24 @@ class Db < Thor
     end
     puts "* database migration complete."
   end
+  <% if context.sqlite? %>
+  desc "create", "Create the database"
+  def create
+    require_deps
+    path = parse_sqlite_path(Config.get[:db][:url])
+    FileUtils.mkdir_p(File.dirname(path))
+    Sequel.connect("sqlite://#{path}") rescue nil
+    puts "* create database #{path} ✓"
+  end
 
+  desc "drop", "Drop the database"
+  def drop
+    require_deps
+    path = parse_sqlite_path(Config.get[:db][:url])
+    File.delete(path) if File.exist?(path)
+    puts "* drop database #{path} ✓"
+  end
+  <% else %>
   [:drop, :create].each do |action|
     desc action.to_s, "#{action.capitalize} the database"
     define_method(action) do
@@ -46,12 +63,17 @@ class Db < Thor
       env = {}
       env["MYSQL_PWD"] = db_config[:password] if db_config[:password]
       ok = system(env, "mysql #{flags.join(' ')} -e \"#{sql_cmd}\"")<% end %>
-      puts "#{action} database #{db_config[:dbname]} ✓" if ok
+      puts "* #{action} database #{db_config[:dbname]} ✓" if ok
     end
   end
-
+  <% end %>
   private
-
+  <% if context.sqlite? %>
+  def parse_sqlite_path(url)
+    uri = URI.parse(url)
+    File.expand_path(uri.host ? File.join(uri.host, uri.path) : uri.path, Dir.pwd)
+  end
+  <% end %>
   def require_deps
     require_relative "../boot"
     require "sequel"
@@ -61,7 +83,6 @@ class Db < Thor
   end
 end
 <% end %>
-
 class CLI < Thor
   desc "console", "Open a console with application context, alias: roda c"
   def console
