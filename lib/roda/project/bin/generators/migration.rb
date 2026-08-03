@@ -5,7 +5,7 @@ class Roda
         class Migration < Roda::Project::Bin::Generator
           def call
             if migration_name.nil? || migration_name.empty?
-              puts "Usage: bin/roda generate migration your_migration_name"
+              puts "Usage: bin/roda g migration your_migration_name"
               exit 1
             end
 

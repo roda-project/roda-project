@@ -62,6 +62,7 @@ require_relative "project/cli"
 # Generators
 require_relative "project/bin/generator"
 require_relative 'project/bin/generators/migration'
+require_relative 'project/bin/generators/routes'
 require_relative "project/bin/generators"
 # Version
 require_relative "project/version"
