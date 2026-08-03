@@ -1,4 +1,4 @@
-module Roda
+class Roda
   module Project
     class MainContext
       include Helpers::Ids

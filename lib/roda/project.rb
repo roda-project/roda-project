@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Roda
+class Roda
   module Project
     class Error < StandardError; end
 

@@ -1,6 +1,6 @@
 require_relative "../../project"
 
-module Roda
+class Roda
   module Project
     module Bin
       class Generators < ::Thor

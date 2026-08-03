@@ -1,4 +1,4 @@
-module Roda
+class Roda
   module Project
     class Generator
       include Helpers::Template

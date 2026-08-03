@@ -1,4 +1,4 @@
-module Roda
+class Roda
   module Project
     module Bin
       class Generator < Roda::Project::Generator

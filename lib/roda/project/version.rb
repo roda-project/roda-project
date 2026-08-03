@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-module Roda
+class Roda
   module Project
     VERSION = "0.1.6"
   end
