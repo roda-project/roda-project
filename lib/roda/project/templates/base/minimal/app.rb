@@ -19,7 +19,10 @@ class App < Roda
   end
 
   error do |e|
-    next exception_page(e, css_file: "/public/exception_page.css") if NOT_PRODUCTION
+    if NOT_PRODUCTION
+      puts e
+      next exception_page(e, css_file: "/public/exception_page.css")
+    end
   end
 
   not_found do

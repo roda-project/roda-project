@@ -54,7 +54,10 @@ class FullstackPgNoRodauthProject < Roda
   end
 
   error do |e|
-    next exception_page(e, css_file: "/public/exception_page.css") if Config.not_production?
+    if Config.not_production?
+      puts e
+      next exception_page(e, css_file: "/public/exception_page.css")
+    end
   end
 
   not_found do

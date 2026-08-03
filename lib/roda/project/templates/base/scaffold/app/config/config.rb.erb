@@ -12,22 +12,11 @@ module Config
         }<% end %><% if context.database? %>,
         db: {
           url: not_production? ? <%= context.default_db_url %> : ENV["DATABASE_URL"]
-        }<% end %><% if context.fullstack? %>,
-        assets: {
-          host: '/public/assets',
-          manifest:
         }<% end %>
       }
     end
 
-    def not_production? = environment != "production"<% if context.fullstack? %>
-    def manifest
-      manifest_path = File.expand_path("../../public/assets/manifest.json", __dir__)
-      return JSON.parse(File.read(manifest_path)) if File.exist?(manifest_path)
-
-      {}
-    end
-    <% end %>
+    def not_production? = environment != "production"
     def environment
       ENV["RACK_ENV"] || "development"
     end
