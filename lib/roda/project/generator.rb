@@ -4,8 +4,9 @@ module Roda
       include Helpers::Template
       include Helpers::Ids
 
-      def initialize(context: MainContext.new, dir: nil)
+      def initialize(context: MainContext.new, args: [], dir: nil)
         @context = context
+        @args = args
         @dir = dir
       end
 

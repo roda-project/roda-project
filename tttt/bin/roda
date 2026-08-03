@@ -1,9 +1,7 @@
 #!/usr/bin/env ruby
 require "thor"
-<%# FIXME: trocar para require "roda/project/bin/generators" %>
 require_relative "../../lib/roda/project/bin/generators"
 
-<% if context.database? %>
 class Db < Thor
   desc "migrate", "Migrate the database. Optional: provide target version, e.g., 'roda db:migrate 1'"
   option :target, type: :numeric, aliases: "-t", desc: "provide target version"
@@ -22,7 +20,7 @@ class Db < Thor
     puts "Database migration complete."
   end
 end
-<% end %>
+
 class CLI < Thor
   desc "console", "Open a console with application context, alias: roda c"
   def console
@@ -41,16 +39,15 @@ class CLI < Thor
   end
 
   desc "test", "Run tests"
-  def test<% if context.rspec? %>
-    system("RACK_ENV=test bundle exec rspec")<% else %>
-    system("RACK_ENV=test bundle exec minitest spec/")<% end %>
+  def test
+    system("RACK_ENV=test bundle exec rspec")
   end
 
   desc "dev", "Exec development server watching for changes"
   def dev
     system("RACK_ENV=development bundle exec guard")
   end
-  <% if context.fullstack? %>
+
   desc "assets", "Compile assets"
   option :watch, type: :boolean, aliases: "-w", desc: "Watch for changes"
   def assets
@@ -60,14 +57,14 @@ class CLI < Thor
       system("npm i && npm run build")
     end
   end
-<% end %>
+
   desc "server", "Runs the project, alias roda s"
   def server
-    if ENV["RACK_ENV"] == "production"<% if context.database? %>
+    if ENV["RACK_ENV"] == "production"
       if ENV["DATABASE_URL"].nil?
         puts("DATABASE_URL is empty")
         exit 1
-      end<% end %>
+      end
       if ENV["SESSION_SECRET"].nil?
         puts("SESSION_SECRET is empty")
         exit 1
@@ -78,12 +75,16 @@ class CLI < Thor
     end
   end
   map "s" => "server"
-  <% if context.database? %>
-  desc "db", "Database functions"
+
+  desc "db", "Database commands"
   subcommand "db", Db
-  <% end %>
+
   desc "generate", "Commands to generate code"
-  <%= context.to_thor_option %>
+  option :main_context, type: :hash, default: {
+    project_name: "Test",
+    base: 2,
+    database: true
+  }
   subcommand "generate", Roda::Project::Bin::Generators
 end
 

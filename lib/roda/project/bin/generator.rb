@@ -3,7 +3,7 @@ module Roda
     module Bin
       class Generator < Roda::Project::Generator
         def templates_root
-          @templates_root ||= "../rake/generators/templates"
+          @templates_root ||= "../bin/generators/templates"
         end
       end
     end

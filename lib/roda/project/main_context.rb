@@ -17,15 +17,16 @@ module Roda
         :base
       )
 
-      def to_ruby_code
+      def to_thor_option
         <<~RUBY
-context = Roda::Project::MainContext.new
-context.project_name = "#{project_name}"
-context.base = #{id_to_string(base, :base)}
-context.database = #{database}
-context.database_type = #{id_to_string(database_type, :database)}
-context.rodauth = #{rodauth}
-context.tests = #{id_to_string(tests, :tests)}
+  option :main_context, type: hash, default: {
+    project_name: "#{project_name}",
+    base: #{id_to_string(base, :base)},
+    database: #{database},
+    database_type: #{id_to_string(database_type, :database)},
+    rodauth: #{rodauth},
+    tests: #{id_to_string(tests, :tests)},
+  }
         RUBY
       end
 

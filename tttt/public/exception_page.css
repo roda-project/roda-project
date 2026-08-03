@@ -1,0 +1,16 @@
+body {
+  background-color: #191b1c;
+  color: white;
+  padding: 1em;
+  font-family: monospace;
+}
+
+a {
+  color: #ef4348;
+}
+
+.context {
+  background-color: #212121;
+  padding: 0.5em;
+  margin: 0.5em 0em 0.5em;
+}

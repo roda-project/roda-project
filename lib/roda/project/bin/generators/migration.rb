@@ -1,13 +1,11 @@
 module Roda
   module Project
     module Bin
-      module Generators
+      class Generators < ::Thor
         class Migration < Roda::Project::Bin::Generator
-          class Context
-          end
-
           def call
-            retry_on_error { @context = read_input('Enter the migration name') }
+            puts @args
+            puts @context
           end
         end
       end

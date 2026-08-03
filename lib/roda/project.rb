@@ -45,16 +45,23 @@ module Roda
   end
 end
 
+# Dependences
 require "tty-file"
 require "fileutils"
 require "tty-reader"
 require "pastel"
 require "thor"
-require_relative "project/version"
+# Helpers
 require_relative "project/helpers/ids"
-require_relative "project/main_context"
 require_relative "project/helpers/interactive_input"
 require_relative "project/helpers/template"
+# Base
+require_relative "project/main_context"
 require_relative "project/generator"
 require_relative "project/cli"
+# Generators
+require_relative "project/bin/generator"
+require_relative 'project/bin/generators/migration'
 require_relative "project/bin/generators"
+# Version
+require_relative "project/version"

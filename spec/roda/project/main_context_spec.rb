@@ -357,7 +357,7 @@ RSpec.describe Roda::Project::MainContext do
     end
   end
 
-  describe "#to_ruby_code" do
+  describe "#to_thor_option" do
     before do
       context.project_name = "test_project"
       context.base = Roda::Project::FULLSTACK
@@ -369,16 +369,17 @@ RSpec.describe Roda::Project::MainContext do
 
     it "returns the string representation of the context" do
       expected_output = <<~RUBY
-context = Roda::Project::MainContext.new
-context.project_name = "test_project"
-context.base = Roda::Project::FULLSTACK
-context.database = true
-context.database_type = Roda::Project::POSTGRESQL
-context.rodauth = true
-context.tests = Roda::Project::RSPEC
+  option :main_context, type: hash, default: {
+    project_name: "test_project",
+    base: Roda::Project::FULLSTACK,
+    database: true,
+    database_type: Roda::Project::POSTGRESQL,
+    rodauth: true,
+    tests: Roda::Project::RSPEC,
+  }
       RUBY
 
-      expect(context.to_ruby_code).to eq(expected_output)
+      expect(context.to_thor_option).to eq(expected_output)
     end
   end
 end
