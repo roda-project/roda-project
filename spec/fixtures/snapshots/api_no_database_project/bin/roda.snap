@@ -46,14 +46,14 @@ class CLI < Thor
   map "s" => "server"
   
   desc "generate", "Commands to generate code"
-  option :main_context, type: hash, default: {
+  option :main_context, type: :hash, default: {
     project_name: "api_no_database_project",
     base: Roda::Project::API,
     rodauth: ,
     tests: Roda::Project::RSPEC,
     database: false,
 
-}
+    }
   subcommand "generate", Roda::Project::Bin::Generators
 end
 

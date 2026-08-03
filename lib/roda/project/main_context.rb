@@ -19,7 +19,7 @@ module Roda
 
       def to_thor_option
         option = <<~RUBY
-  option :main_context, type: hash, default: {
+  option :main_context, type: :hash, default: {
       project_name: "#{project_name}",
       base: #{id_to_string(base, :base)},
       rodauth: #{rodauth},
@@ -29,7 +29,7 @@ module Roda
         if database?
           option << "    database_type: #{id_to_string(database_type, :database)},"
         end
-        option << "\n}"
+        option << "\n    }"
       end
 
       def tests=(val)

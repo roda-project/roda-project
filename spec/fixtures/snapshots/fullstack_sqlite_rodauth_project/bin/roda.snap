@@ -82,14 +82,14 @@ class CLI < Thor
   subcommand "db", Db
   
   desc "generate", "Commands to generate code"
-  option :main_context, type: hash, default: {
+  option :main_context, type: :hash, default: {
     project_name: "fullstack_sqlite_rodauth_project",
     base: Roda::Project::FULLSTACK,
     rodauth: true,
     tests: Roda::Project::MINITEST,
     database: true,
     database_type: Roda::Project::SQLITE,
-}
+    }
   subcommand "generate", Roda::Project::Bin::Generators
 end
 
