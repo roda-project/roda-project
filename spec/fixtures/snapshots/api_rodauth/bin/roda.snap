@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 require "thor"
-
-require_relative "../../lib/roda/project/bin/generators"
+require "roda/project/bin/generators"
 
 class Db < Thor
   desc "migrate", "Migrate the database. Optional: provide target version, e.g., 'roda db:migrate 1'"
@@ -18,7 +17,7 @@ class Db < Thor
     else
       Sequel::Migrator.run(db, "db/migrations")
     end
-    puts "Database migration complete."
+    puts "* database migration complete."
   end
 end
 

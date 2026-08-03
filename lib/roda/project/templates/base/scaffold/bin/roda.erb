@@ -49,7 +49,7 @@ class CLI < Thor
     system("RACK_ENV=development bundle exec guard")
   end
   <% if context.fullstack? %>
-  desc "assets", "Compile assets"
+  desc "assets", "Compile assets (use -w flag to watch for changes)"
   option :watch, type: :boolean, aliases: "-w", desc: "Watch for changes"
   def assets
     if options[:watch]
