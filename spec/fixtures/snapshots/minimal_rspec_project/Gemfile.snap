@@ -23,6 +23,7 @@ gem "oj"
 gem "bcrypt"
 
 group :development do
+  gem "thor"
   gem "guard-puma"
   gem "rack-test"
   gem "debug"

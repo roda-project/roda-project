@@ -59,8 +59,6 @@ RSpec.describe Roda::Project::CLI do
   FRONT_FILES =
     [
       "app/views/foo/bar.erb",
-      "app/views/foo/html.rb",
-      "app/views/html.rb",
       "app/views/layout.erb",
       "esbuild.js",
       "package.json"

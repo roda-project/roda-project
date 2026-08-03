@@ -23,6 +23,7 @@ gem "oj"
 gem "bcrypt"
 
 group :development do
+  gem "thor"
   gem "guard-puma"
   gem "rack-test"
   gem "debug"
@@ -30,7 +31,6 @@ group :development do
   gem "standard"<% if context.minitest? %>
   gem "minitest"
   gem "minitest-hooks"
-  gem "rake"
 <% else %>
   gem "rspec"<% end %>
 end

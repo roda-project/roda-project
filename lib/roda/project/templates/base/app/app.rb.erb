@@ -11,6 +11,7 @@ class <%= context.const_project_name %> < Roda
   plugin :render, layout: "./layout"
   plugin :content_for, append: false
   plugin :flash
+  plugin :assets_manifest
   <% end %>
   # Request / Response
   plugin :halt
@@ -60,8 +61,7 @@ class <%= context.const_project_name %> < Roda
     hmac_secret Config.get[:hmac_secret]
   end
 <% end %>
-  def config = @config ||= Config.get<% if context.fullstack? %>
-  def html = @html ||= Views::Html.new(t)<% end %>
+  def config = @config ||= Config.get
 
   route do |r|
     r.hash_branches<% if context.fullstack? %>

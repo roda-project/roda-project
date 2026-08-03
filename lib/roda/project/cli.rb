@@ -96,7 +96,6 @@ class Roda
           erb_cp_file("front-end", "esbuild.js")
           erb_cp_file("front-end", "package.json")
           cp_dir("front-end", "app/views")
-          cp_dir("front-end", "app/views")
           cp_dir("front-end", "public/assets")
           cp_dir("front-end", "public/images")
         end

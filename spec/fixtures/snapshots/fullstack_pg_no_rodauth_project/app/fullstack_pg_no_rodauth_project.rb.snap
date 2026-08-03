@@ -11,6 +11,7 @@ class FullstackPgNoRodauthProject < Roda
   plugin :render, layout: "./layout"
   plugin :content_for, append: false
   plugin :flash
+  plugin :assets_manifest
   
   # Request / Response
   plugin :halt
@@ -41,7 +42,6 @@ class FullstackPgNoRodauthProject < Roda
   plugin :i18n, **Config.get[:i18n]
 
   def config = @config ||= Config.get
-  def html = @html ||= Views::Html.new(t)
 
   route do |r|
     r.hash_branches

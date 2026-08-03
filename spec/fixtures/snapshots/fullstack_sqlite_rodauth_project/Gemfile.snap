@@ -32,11 +32,11 @@ gem "oj"
 # gem "rack-attack"
 
 # Misc
-gem "html_slice"
 gem "mail"
 gem "bcrypt"
 gem "logger"
 group :development do
+  gem "thor"
   gem "guard-puma"
   gem "guard-livereload"
   gem "rack-livereload"
@@ -46,6 +46,5 @@ group :development do
   gem "standard"
   gem "minitest"
   gem "minitest-hooks"
-  gem "rake"
 
 end

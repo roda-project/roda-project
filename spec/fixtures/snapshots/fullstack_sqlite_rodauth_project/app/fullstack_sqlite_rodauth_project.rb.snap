@@ -11,6 +11,7 @@ class FullstackSqliteRodauthProject < Roda
   plugin :render, layout: "./layout"
   plugin :content_for, append: false
   plugin :flash
+  plugin :assets_manifest
   
   # Request / Response
   plugin :halt
@@ -56,7 +57,6 @@ class FullstackSqliteRodauthProject < Roda
   end
 
   def config = @config ||= Config.get
-  def html = @html ||= Views::Html.new(t)
 
   route do |r|
     r.hash_branches
