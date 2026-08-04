@@ -6,7 +6,8 @@ class Db < Thor
   desc "migrate", "Migrate the database. Optional: provide target version, e.g., 'roda db:migrate 1'"
   option :target, type: :numeric, aliases: "-t", desc: "provide target version"
   def migrate
-    require_deps
+    require_db_deps
+    require_relative "../boot"
 
     Sequel.extension :migration
     db = Providers::DB::Conn.get
@@ -21,7 +22,8 @@ class Db < Thor
   [:drop, :create].each do |action|
     desc action.to_s, "#{action.capitalize} the database"
     define_method(action) do
-      require_deps
+      require_db_deps
+      require_relative "../app/config/config"
       db_config =
         PG::Connection
         .conninfo_parse(Config.get[:db][:url])
@@ -36,7 +38,7 @@ class Db < Thor
   
   private
   
-  def require_deps
+  def require_db_deps
     require_relative "../boot"
     require "sequel"
     require "sequel/extensions/migration"

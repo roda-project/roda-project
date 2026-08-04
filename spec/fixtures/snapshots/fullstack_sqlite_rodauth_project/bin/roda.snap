@@ -6,7 +6,8 @@ class Db < Thor
   desc "migrate", "Migrate the database. Optional: provide target version, e.g., 'roda db:migrate 1'"
   option :target, type: :numeric, aliases: "-t", desc: "provide target version"
   def migrate
-    require_deps
+    require_db_deps
+    require_relative "../boot"
 
     Sequel.extension :migration
     db = Providers::DB::Conn.get
@@ -20,7 +21,7 @@ class Db < Thor
   
   desc "create", "Create the database"
   def create
-    require_deps
+    require_db_deps
     path = parse_sqlite_path(Config.get[:db][:url])
     FileUtils.mkdir_p(File.dirname(path))
     Sequel.connect("sqlite://#{path}") rescue nil
@@ -42,7 +43,7 @@ class Db < Thor
     File.expand_path(uri.host ? File.join(uri.host, uri.path) : uri.path, Dir.pwd)
   end
   
-  def require_deps
+  def require_db_deps
     require_relative "../boot"
     require "sequel"
     require "sequel/extensions/migration"
