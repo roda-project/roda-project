@@ -13,6 +13,7 @@ class Roda
             generate_routes
             generate_views
             generate_tests
+            print_nested_branch_reminder
           end
 
           private
@@ -25,9 +26,18 @@ class Roda
               "    r.#{method} \"#{name}\" do#{view_line}\n    end"
             end.join("\n\n")
 
+            hash_branch_header = if branch_name.include?("/")
+              parts = branch_name.split("/")
+              namespace = parts[0..-2].join("_")
+              branch_segment = parts.last
+              "hash_branch :#{namespace}, \"#{branch_segment}\" do |r|"
+            else
+              "hash_branch \"#{branch_name}\" do |r|"
+            end
+
             content = <<~RUBY
       class #{@context.const_project_name}
-        hash_branch "#{branch_name}" do |r|
+        #{hash_branch_header}
       #{route_definitions}
         end
       end
@@ -98,6 +108,20 @@ class Roda
 
           def branch_name
             @branch_name ||= @args[0]
+          end
+
+          def print_nested_branch_reminder
+            return unless branch_name.include?("/")
+
+            parts = branch_name.split("/")
+            namespace = parts[0..-2].join("_")
+            sub_path = parts[0..-2].join("/")
+
+            puts "\ndont forget to add:\n\n" \
+                 "autoload_hash_branch_dir(:#{namespace}, \"./app/routes/#{sub_path}\")\n\n" \
+                 "route do |r|\n" \
+                 " r.on(\"#{sub_path}\") { r.hash_branches(:#{namespace}) }\n" \
+                 "end\n"
           end
         end
       end

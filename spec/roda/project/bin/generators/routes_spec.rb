@@ -79,16 +79,55 @@ RSpec.describe Roda::Project::Bin::Generators::Routes do
       end
 
       context "with nested branch_name" do
-        let(:args) { ["admin/users", "list:get"] }
+        context "with single sublevel (e.g. a/b)" do
+          let(:args) { ["admin/users", "list:get"] }
 
-        it "creates nested directories and correct spec helper path" do
-          generator.call
+          it "creates nested directories, correct hash_branch format, and outputs reminder" do
+            expect { generator.call }.to output(
+              include("dont forget to add:")
+                .and(include("autoload_hash_branch_dir(:admin, \"./app/routes/admin\")"))
+                .and(include("r.on(\"admin\") { r.hash_branches(:admin) }"))
+            ).to_stdout
 
-          expect(File.exist?("app/routes/admin/users.rb")).to be true
-          expect(File.exist?("spec/app/routes/admin/users_spec.rb")).to be true
+            expect(File.exist?("app/routes/admin/users.rb")).to be true
+            expect(File.exist?("spec/app/routes/admin/users_spec.rb")).to be true
 
-          content = File.read("spec/app/routes/admin/users_spec.rb")
-          expect(content).to include("require_relative \"../../../spec_helper\"")
+            routes_content = File.read("app/routes/admin/users.rb")
+            expect(routes_content).to include("hash_branch :admin, \"users\" do |r|")
+
+            content = File.read("spec/app/routes/admin/users_spec.rb")
+            expect(content).to include("require_relative \"../../../spec_helper\"")
+          end
+        end
+
+        context "with multiple sublevels (e.g. a/b/c)" do
+          let(:args) { ["a/b/c", "show:get"] }
+
+          it "creates correct hash_branch format and outputs reminder for deep nesting" do
+            expect { generator.call }.to output(
+              include("dont forget to add:")
+                .and(include("autoload_hash_branch_dir(:a_b, \"./app/routes/a/b\")"))
+                .and(include("r.on(\"a/b\") { r.hash_branches(:a_b) }"))
+            ).to_stdout
+
+            routes_content = File.read("app/routes/a/b/c.rb")
+            expect(routes_content).to include("hash_branch :a_b, \"c\" do |r|")
+          end
+        end
+
+        context "with four sublevels (e.g. a/b/c/d)" do
+          let(:args) { ["a/b/c/d", "show:get"] }
+
+          it "creates correct hash_branch format and outputs reminder for four sublevels" do
+            expect { generator.call }.to output(
+              include("dont forget to add:")
+                .and(include("autoload_hash_branch_dir(:a_b_c, \"./app/routes/a/b/c\")"))
+                .and(include("r.on(\"a/b/c\") { r.hash_branches(:a_b_c) }"))
+            ).to_stdout
+
+            routes_content = File.read("app/routes/a/b/c/d.rb")
+            expect(routes_content).to include("hash_branch :a_b_c, \"d\" do |r|")
+          end
         end
       end
 
