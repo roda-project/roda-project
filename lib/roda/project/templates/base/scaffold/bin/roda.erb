@@ -6,9 +6,8 @@ class Db < Thor
   desc "migrate", "Migrate the database. Optional: provide target version, e.g., 'roda db:migrate 1'"
   option :target, type: :numeric, aliases: "-t", desc: "provide target version"
   def migrate
+    require_db_deps
     require_relative "../boot"
-    require "sequel"
-    require "sequel/extensions/migration"
 
     Sequel.extension :migration
     db = Providers::DB::Conn.get
@@ -18,6 +17,72 @@ class Db < Thor
       Sequel::Migrator.run(db, "db/migrations")
     end
     puts "* database migration complete."
+  end
+  <% if context.sqlite? %>
+  desc "create", "Create the database"
+  def create
+    require_db_deps
+    path = parse_sqlite_path(Config.get[:db][:url])
+    FileUtils.mkdir_p(File.dirname(path))
+    Sequel.connect("sqlite://#{path}") rescue nil
+    puts "* create database #{path} ✓"
+  end
+
+  desc "drop", "Drop the database"
+  def drop
+    require_db_deps
+    path = parse_sqlite_path(Config.get[:db][:url])
+    File.delete(path) if File.exist?(path)
+    puts "* drop database #{path} ✓"
+  end
+  <% else %>
+  [:drop, :create].each do |action|
+    desc action.to_s, "#{action.capitalize} the database"
+    define_method(action) do
+      require_db_deps
+      require_relative "../app/config/config"<% if context.postgresql? %>
+      db_config =
+        PG::Connection
+        .conninfo_parse(Config.get[:db][:url])
+        .each_with_object({}) { |h, o|
+          o[h[:keyword].to_sym] = h[:val] if h[:val]
+        }
+      ok = system("PGPASSWORD='#{db_config[:password]}' #{action}db -h #{db_config[:host]} -p #{db_config[:port]} -U #{db_confi
+      g[:user]} #{db_config[:dbname]}")<% end %><% if context.mysql? %>
+      uri = URI.parse(Config.get[:db][:url])
+      db_config = {
+        host: uri.host,
+        port: uri.port,
+        user: uri.user,
+        password: uri.password,
+        dbname: uri.path.tr('/', '') # removes leading slash
+      }
+      sql = action == :create ?
+      "CREATE DATABASE IF NOT EXISTS `#{db_config[:dbname]}`;" :
+      "DROP DATABASE IF EXISTS `#{db_config[:dbname]}`;"
+      flags = []
+      flags << "-h#{db_config[:host]}" if db_config[:host]
+      flags << "-P#{db_config[:port]}" if db_config[:port]
+      flags << "-u#{db_config[:user]}" if db_config[:user]
+      env = { "MYSQL_PWD" => db_config[:password] }.compact
+      ok = system(env, "mysql", *flags, "-e", sql)<% end %>
+      puts "* #{action} database #{db_config[:dbname]} ✓" if ok
+    end
+  end
+  <% end %>
+  private
+  <% if context.sqlite? %>
+  def parse_sqlite_path(url)
+    uri = URI.parse(url)
+    File.expand_path(uri.host ? File.join(uri.host, uri.path) : uri.path, Dir.pwd)
+  end
+  <% end %>
+  def require_db_deps
+    require_relative "../boot"
+    require "sequel"
+    require "sequel/extensions/migration"
+    require "<%= context.db_gem %>"<% if context.mysql? %>
+    require "uri"<% end %>
   end
 end
 <% end %>

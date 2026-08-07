@@ -1,6 +1,10 @@
 ## [Unreleased]
 
-## [0.1.7] - 2026-06-14
+## [0.1.8] - 2026-08-07
+- Add bin/roda db create for all databases
+- Add bin/roda db migrate for all databases
+
+## [0.1.7] - 2026-08-03
 - Remove Rakefile and to use thor and bin/roda
 - Move generators to the gem internals
 - Remove html_slice dependency
@@ -9,7 +13,7 @@
 - Improve files content of files generated
 - Code refactor
 
-## [0.1.6] - 2026-06-14
+## [0.1.6] - 2026-07-31
 
 - Minor improvements on files generated
 
