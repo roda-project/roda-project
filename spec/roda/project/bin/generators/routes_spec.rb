@@ -106,12 +106,12 @@ RSpec.describe Roda::Project::Bin::Generators::Routes do
           it "creates correct hash_branch format and outputs reminder for deep nesting" do
             expect { generator.call }.to output(
               include("dont forget to add:")
-                .and(include("autoload_hash_branch_dir(:a_b, \"./app/routes/a/b\")"))
-                .and(include("r.on(\"a/b\") { r.hash_branches(:a_b) }"))
+                .and(include("autoload_hash_branch_dir(:\"a/b\", \"./app/routes/a/b\")"))
+                .and(include("r.on(\"a/b\") { r.hash_branches(:\"a/b\") }"))
             ).to_stdout
 
             routes_content = File.read("app/routes/a/b/c.rb")
-            expect(routes_content).to include("hash_branch :a_b, \"c\" do |r|")
+            expect(routes_content).to include("hash_branch :\"a/b\", \"c\" do |r|")
           end
         end
 
@@ -121,12 +121,12 @@ RSpec.describe Roda::Project::Bin::Generators::Routes do
           it "creates correct hash_branch format and outputs reminder for four sublevels" do
             expect { generator.call }.to output(
               include("dont forget to add:")
-                .and(include("autoload_hash_branch_dir(:a_b_c, \"./app/routes/a/b/c\")"))
-                .and(include("r.on(\"a/b/c\") { r.hash_branches(:a_b_c) }"))
+                .and(include("autoload_hash_branch_dir(:\"a/b/c\", \"./app/routes/a/b/c\")"))
+                .and(include("r.on(\"a/b/c\") { r.hash_branches(:\"a/b/c\") }"))
             ).to_stdout
 
             routes_content = File.read("app/routes/a/b/c/d.rb")
-            expect(routes_content).to include("hash_branch :a_b_c, \"d\" do |r|")
+            expect(routes_content).to include("hash_branch :\"a/b/c\", \"d\" do |r|")
           end
         end
       end

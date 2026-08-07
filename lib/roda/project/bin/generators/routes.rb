@@ -28,9 +28,10 @@ class Roda
 
             hash_branch_header = if branch_name.include?("/")
               parts = branch_name.split("/")
-              namespace = parts[0..-2].join("_")
+              sub_path = parts[0..-2].join("/")
+              namespace = sub_path.include?("/") ? ":\"#{sub_path}\"" : ":#{sub_path}"
               branch_segment = parts.last
-              "hash_branch :#{namespace}, \"#{branch_segment}\" do |r|"
+              "hash_branch #{namespace}, \"#{branch_segment}\" do |r|"
             else
               "hash_branch \"#{branch_name}\" do |r|"
             end
@@ -114,13 +115,13 @@ class Roda
             return unless branch_name.include?("/")
 
             parts = branch_name.split("/")
-            namespace = parts[0..-2].join("_")
             sub_path = parts[0..-2].join("/")
+            namespace = sub_path.include?("/") ? ":\"#{sub_path}\"" : ":#{sub_path}"
 
             puts "\ndont forget to add:\n\n" \
-                 "autoload_hash_branch_dir(:#{namespace}, \"./app/routes/#{sub_path}\")\n\n" \
+                 "autoload_hash_branch_dir(#{namespace}, \"./app/routes/#{sub_path}\")\n\n" \
                  "route do |r|\n" \
-                 " r.on(\"#{sub_path}\") { r.hash_branches(:#{namespace}) }\n" \
+                 " r.on(\"#{sub_path}\") { r.hash_branches(#{namespace}) }\n" \
                  "end\n"
           end
         end

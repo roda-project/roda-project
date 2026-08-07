@@ -2,8 +2,10 @@ class Awd < Roda
   # Routing
   plugin :hash_branch_view_namespace
   plugin :autoload_hash_branches
+
   autoload_hash_branch_dir("./app/routes")
   autoload_hash_branch_dir(:"users/balls", "./app/routes/users/balls")
+
   plugin :all_verbs
   plugin :not_found
 
