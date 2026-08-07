@@ -1,4 +1,4 @@
-![](https://github.com/roda-project/roda-project/blob/main/lib/roda/templates/front-end/public/images/roda-project.png)
+![](https://github.com/roda-project/roda-project/blob/main/lib/roda/project/templates/front-end/public/images/roda-project.png)
 
 [![Gem Version](https://badge.fury.io/rb/roda-project.svg)](https://badge.fury.io/rb/roda-project)
 [![CI](https://github.com/roda-project/roda-project/actions/workflows/main.yml/badge.svg)](https://github.com/roda-project/roda-project/actions/workflows/main.yml)
