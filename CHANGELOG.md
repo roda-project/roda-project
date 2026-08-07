@@ -2,7 +2,7 @@
 
 ## [0.1.8] - 2026-08-07
 - Add bin/roda db create for all databases
-- Add bin/roda db migrate for all databases
+- Add bin/roda db drop for all databases
 
 ## [0.1.7] - 2026-08-03
 - Remove Rakefile and to use thor and bin/roda
