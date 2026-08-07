@@ -30,7 +30,7 @@ class Db < Thor
 
   desc "drop", "Drop the database"
   def drop
-    require_deps
+    require_db_deps
     path = parse_sqlite_path(Config.get[:db][:url])
     File.delete(path) if File.exist?(path)
     puts "* drop database #{path} ✓"
