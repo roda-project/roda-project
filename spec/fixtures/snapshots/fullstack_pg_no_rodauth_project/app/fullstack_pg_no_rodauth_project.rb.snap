@@ -1,6 +1,6 @@
 class FullstackPgNoRodauthProject < Roda
   # Routing
-  plugin :hash_branch_view_subdir
+  plugin :hash_branch_view_namespace
   plugin :autoload_hash_branches
   autoload_hash_branch_dir("./app/routes")
   plugin :all_verbs
