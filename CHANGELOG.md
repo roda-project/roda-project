@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+## [0.1.9] - 2026-08-09
+- Add hash_branch_view_namespace to default
+
 ## [0.1.8] - 2026-08-07
 - Add bin/roda db create for all databases
 - Add bin/roda db drop for all databases
