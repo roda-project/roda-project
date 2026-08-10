@@ -42,6 +42,14 @@ class Roda
             str
           end
         end
+
+	def singular?(str)
+          str == singularize(str)
+        end
+
+        def plural?(str)
+          str == pluralize(str)
+        end
       end
     end
   end
