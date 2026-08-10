@@ -55,6 +55,7 @@ require "thor"
 require_relative "project/helpers/ids"
 require_relative "project/helpers/interactive_input"
 require_relative "project/helpers/template"
+require_relative "project/helpers/inflections"
 # Base
 require_relative "project/main_context"
 require_relative "project/generator"
