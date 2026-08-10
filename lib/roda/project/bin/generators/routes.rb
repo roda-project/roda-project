@@ -19,7 +19,7 @@ class Roda
           private
 
           def generate_routes
-            filename = File.join(ensure_and_get_path("app/routes"), "#{branch_name}.rb")
+            filename = File.join(ensure_and_get_path("app/routes", branch_name), "#{branch_name}.rb")
             route_definitions = routes_list.map do |route_str|
               method, name = parse_route_string(route_str)
               view_line = (method == "get" && must_generate_views?) ? "\n      view('#{name}')" : ""
@@ -63,7 +63,7 @@ class Roda
           end
 
           def generate_tests
-            test_filename = File.join(ensure_and_get_path("spec/app/routes"), "#{branch_name}_spec.rb")
+            test_filename = File.join(ensure_and_get_path("spec/app/routes", branch_name), "#{branch_name}_spec.rb")
             nesting_level = branch_name.count("/")
             relative_spec_helper_path = "../" * (2 + nesting_level) + "spec_helper"
 

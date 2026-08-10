@@ -10,6 +10,8 @@ class Roda
               puts "Usage: bin/roda g migration your_migration_name"
               exit 1
             end
+            puts field_args.inspect
+            puts migration_name.inspect
 
             FileUtils.mkdir_p(migrations_path) unless File.directory?(migrations_path)
 

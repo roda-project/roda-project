@@ -34,8 +34,8 @@ class Roda
           )
         end
 
-        def ensure_and_get_path(path)
-          full_path_dir = File.join(path, File.dirname(branch_name))
+        def ensure_and_get_path(path, name)
+          full_path_dir = File.join(path, File.dirname(name))
           FileUtils.mkdir_p(full_path_dir) unless File.directory?(full_path_dir)
 
           path

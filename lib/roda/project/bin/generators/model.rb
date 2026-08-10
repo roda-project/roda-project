@@ -1,5 +1,3 @@
-# frozen_string_literal: true
-
 class Roda
   module Project
     module Bin
@@ -8,10 +6,20 @@ class Roda
           include Roda::Project::Helpers::Inflections
 
           def call
-            filename = File.join(ensure_and_get_path("app/models"), "#{underscore(model_name)}.rb")
-            File.write(filename, content)
+            if model_name.nil? || field_args == []
+              puts "Usage: bin/roda g model name field1 field2"
+              exit 1
+            end
+
+            if model_name.include?("/")
+              puts "'/' (nested) in model name is not supported"
+              exit 1
+            end
+
+            filename = File.join(ensure_and_get_path("app/models", underscore(model_name)), "#{underscore(model_name)}.rb")
+            File.write(filename, code)
             puts "* created model file: #{filename}"
-            Migration.new(args: ([migration_name] << field_args))
+            Migration.new(args: ([migration_name].concat(field_args))).call
           end
 
           def code
