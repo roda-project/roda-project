@@ -59,10 +59,16 @@ require_relative "project/helpers/template"
 require_relative "project/main_context"
 require_relative "project/generator"
 require_relative "project/cli"
-# Generators
+# Generators/base
 require_relative "project/bin/generator"
+# Generators/migration
 require_relative "project/bin/generators/migration"
+require_relative "project/bin/generators/migration/action_detector"
+require_relative "project/bin/generators/migration/field_parser"
+require_relative "project/bin/generators/migration/code_builder"
+# Generators/routes
 require_relative "project/bin/generators/routes"
+# Generators/base
 require_relative "project/bin/generators"
 # Version
 require_relative "project/version"
