@@ -96,13 +96,6 @@ class Roda
             [method, name]
           end
 
-          def ensure_and_get_path(path)
-            full_path_dir = File.join(path, File.dirname(branch_name))
-            FileUtils.mkdir_p(full_path_dir) unless File.directory?(full_path_dir)
-
-            path
-          end
-
           def routes_list
             @routes_list ||= @args[1..]
           end
