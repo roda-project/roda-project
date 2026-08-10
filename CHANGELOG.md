@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+## [0.1.10] - 2026-08-10
+- Improve bin/roda g migration to match rails migration generator interface
+
 ## [0.1.9] - 2026-08-09
 - Add hash_branch_view_namespace to default
 
