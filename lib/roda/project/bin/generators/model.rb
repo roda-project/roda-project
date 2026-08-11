@@ -16,10 +16,30 @@ class Roda
               exit 1
             end
 
+            create_model
+            create_model_test
+            Migration.new(args: ([migration_name].concat(field_args))).call
+          end
+
+          def create_model_test
+            filename = File.join(ensure_and_get_path("spec/app/models", underscore(model_name)), "#{underscore(model_name)}_spec.rb")
+            File.write(filename, spec_code)
+            puts "* created model spec file: #{filename}"
+          end
+
+          def create_model
             filename = File.join(ensure_and_get_path("app/models", underscore(model_name)), "#{underscore(model_name)}.rb")
             File.write(filename, code)
             puts "* created model file: #{filename}"
-            Migration.new(args: ([migration_name].concat(field_args))).call
+          end
+
+          def spec_code
+            <<~RUBY
+                require_relative "../spec_helper"
+
+                describe #{model_name} do
+                end
+            RUBY
           end
 
           def code
