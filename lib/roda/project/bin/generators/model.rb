@@ -35,7 +35,7 @@ class Roda
 
           def spec_code
             <<~RUBY
-                require_relative "../spec_helper"
+                require_relative "../../spec_helper"
 
                 describe #{model_name} do
                 end

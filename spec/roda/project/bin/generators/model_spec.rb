@@ -70,7 +70,7 @@ RSpec.describe Roda::Project::Bin::Generators::Model do
         expect(File.read("app/models/user.rb")).to eq("class User\nend\n")
 
         expect(File.exist?("spec/app/models/user_spec.rb")).to be true
-        expect(File.read("spec/app/models/user_spec.rb")).to eq("require_relative \"../spec_helper\"\n\ndescribe User do\nend\n")
+        expect(File.read("spec/app/models/user_spec.rb")).to eq("require_relative \"../../spec_helper\"\n\ndescribe User do\nend\n")
 
         expect(Roda::Project::Bin::Generators::Migration).to have_received(:new).with(
           args: ["CreateUsers", "name:string", "email:string"]
