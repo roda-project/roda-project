@@ -15,6 +15,11 @@ class Roda
           Routes.new(context:, args:, options:).call
         end
 
+        desc "model", "Create model and migrations"
+        def model(*args)
+          Model.new(context:, args:, options:).call
+        end
+
         private
 
         def context

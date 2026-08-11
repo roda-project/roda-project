@@ -7,16 +7,16 @@ class Roda
         module_function
 
         def camelize(str)
-          return str if str =~ /[A-Z]/
+          return str if /[A-Z]/.match?(str)
 
           str.split("_").map(&:capitalize).join
         end
 
         def underscore(str)
           str.gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
-             .gsub(/([a-z\d])([A-Z])/, '\1_\2')
-             .tr("-", "_")
-             .downcase
+            .gsub(/([a-z\d])([A-Z])/, '\1_\2')
+            .tr("-", "_")
+            .downcase
         end
 
         def pluralize(str)
@@ -41,6 +41,14 @@ class Roda
           else
             str
           end
+        end
+
+        def singular?(str)
+          str == singularize(str)
+        end
+
+        def plural?(str)
+          str == pluralize(str)
         end
       end
     end

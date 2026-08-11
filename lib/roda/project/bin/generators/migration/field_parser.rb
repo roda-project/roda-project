@@ -6,6 +6,8 @@ class Roda
       class Generators
         class Migration
           class FieldParser
+            include Roda::Project::Helpers::Inflections
+
             TYPE_MAP = {
               "string" => "String",
               "text" => "String",
@@ -80,7 +82,7 @@ class Roda
                     if modifier.include?(".")
                       prec, scale = modifier.split(".").map(&:to_i)
                       options[:size] = [prec, scale]
-                    elsif modifier =~ /^\d+$/
+                    elsif /^\d+$/.match?(modifier)
                       options[:size] = modifier.to_i
                     end
                   end
@@ -117,30 +119,6 @@ class Roda
                 true
               else
                 false
-              end
-            end
-
-            def singularize(str)
-              if str.end_with?("ies")
-                "#{str[0..-4]}y"
-              elsif str.end_with?("es") && !str.end_with?("ques")
-                str[0..-3]
-              elsif str.end_with?("s") && !str.end_with?("ss")
-                str[0..-2]
-              else
-                str
-              end
-            end
-
-            def pluralize(str)
-              return str if str.end_with?("s")
-
-              if str.end_with?("y") && !str.end_with?("ay", "ey", "oy", "uy")
-                "#{str[0..-2]}ies"
-              elsif str.end_with?("s", "x", "z", "ch", "sh")
-                "#{str}es"
-              else
-                "#{str}s"
               end
             end
           end

@@ -166,13 +166,13 @@ class Roda
 
               formatted = opts.map do |k, v|
                 val_str = case v
-                          when Array
-                            "[#{v.join(', ')}]"
-                          when Symbol
-                            ":#{v}"
-                          else
-                            v.inspect
-                          end
+                when Array
+                  "[#{v.join(", ")}]"
+                when Symbol
+                  ":#{v}"
+                else
+                  v.inspect
+                end
                 "#{k}: #{val_str}"
               end.join(", ")
 

@@ -10,6 +10,7 @@ class Roda
               exit 1
             end
 
+            puts "* creating routes"
             generate_routes
             generate_views
             generate_tests
@@ -19,7 +20,7 @@ class Roda
           private
 
           def generate_routes
-            filename = File.join(ensure_and_get_path("app/routes"), "#{branch_name}.rb")
+            filename = File.join(ensure_and_get_path("app/routes", branch_name), "#{branch_name}.rb")
             route_definitions = routes_list.map do |route_str|
               method, name = parse_route_string(route_str)
               view_line = (method == "get" && must_generate_views?) ? "\n      view('#{name}')" : ""
@@ -44,7 +45,7 @@ class Roda
       end
             RUBY
             File.write(filename, content)
-            puts "* created routes file: #{filename}"
+            puts_create_message(filename)
           end
 
           def generate_views
@@ -56,14 +57,14 @@ class Roda
                 if method == "get"
                   view_filename = File.join(branch_views_dir, "#{name}.erb")
                   File.write(view_filename, "")
-                  puts "* created view file: #{view_filename}"
+                  puts_create_message(view_filename)
                 end
               end
             end
           end
 
           def generate_tests
-            test_filename = File.join(ensure_and_get_path("spec/app/routes"), "#{branch_name}_spec.rb")
+            test_filename = File.join(ensure_and_get_path("spec/app/routes", branch_name), "#{branch_name}_spec.rb")
             nesting_level = branch_name.count("/")
             relative_spec_helper_path = "../" * (2 + nesting_level) + "spec_helper"
 
@@ -83,7 +84,7 @@ class Roda
       end
             RUBY
             File.write(test_filename, test_content)
-            puts "* created test file: #{test_filename}"
+            puts_create_message(test_filename)
           end
 
           def must_generate_views?
@@ -94,13 +95,6 @@ class Roda
             name, method = route_str.split(":", 2)
             method ||= "get"
             [method, name]
-          end
-
-          def ensure_and_get_path(path)
-            full_path_dir = File.join(path, File.dirname(branch_name))
-            FileUtils.mkdir_p(full_path_dir) unless File.directory?(full_path_dir)
-
-            path
           end
 
           def routes_list

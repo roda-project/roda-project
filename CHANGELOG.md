@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.1.11] - 2026-08-11
+- Add bin/roda g model
+- Improve output messages
+
 ## [0.1.10] - 2026-08-10
 - Improve bin/roda g migration to match rails migration generator interface
 

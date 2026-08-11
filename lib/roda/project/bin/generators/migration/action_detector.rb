@@ -19,18 +19,18 @@ class Roda
               camel_name = camelize(name)
 
               if (m = camel_name.match(/^CreateJoinTable(?<t1>[A-Z][a-zA-Z0-9]*?)(?<t2>[A-Z][a-zA-Z0-9]*)$/)) ||
-                 (m = camel_name.match(/JoinTable(?<t1>[A-Z][a-zA-Z0-9]*?)(?<t2>[A-Z][a-zA-Z0-9]*)$/)) ||
-                 camel_name.start_with?("CreateJoinTable") || camel_name.include?("JoinTable")
+                  (m = camel_name.match(/JoinTable(?<t1>[A-Z][a-zA-Z0-9]*?)(?<t2>[A-Z][a-zA-Z0-9]*)$/)) ||
+                  camel_name.start_with?("CreateJoinTable") || camel_name.include?("JoinTable")
                 tables = parse_join_tables(m)
-                { action: :create_join_table, tables: tables }
+                {action: :create_join_table, tables: tables}
               elsif (m = camel_name.match(/^Create(?<table_name>[A-Z0-9].*)$/))
-                { action: :create_table, table_name: pluralize(underscore(m[:table_name])) }
+                {action: :create_table, table_name: pluralize(underscore(m[:table_name]))}
               elsif (m = camel_name.match(/^Add.+To(?<table_name>[A-Z0-9].*)$/))
-                { action: :add_columns, table_name: pluralize(underscore(m[:table_name])) }
+                {action: :add_columns, table_name: pluralize(underscore(m[:table_name]))}
               elsif (m = camel_name.match(/^Remove.+From(?<table_name>[A-Z0-9].*)$/))
-                { action: :drop_columns, table_name: pluralize(underscore(m[:table_name])) }
+                {action: :drop_columns, table_name: pluralize(underscore(m[:table_name]))}
               else
-                { action: :generic, table_name: nil }
+                {action: :generic, table_name: nil}
               end
             end
 

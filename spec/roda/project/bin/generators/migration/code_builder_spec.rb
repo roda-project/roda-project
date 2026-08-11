@@ -7,10 +7,10 @@ RSpec.describe Roda::Project::Bin::Generators::Migration::CodeBuilder do
   describe "#build" do
     context "when action is :create_table" do
       it "generates create_table migration with primary key and timestamps" do
-        detection = { action: :create_table, table_name: "products" }
+        detection = {action: :create_table, table_name: "products"}
         fields = [
-          { name: "name", type: "String", options: {}, index: false },
-          { name: "price", type: "BigDecimal", options: { size: [10, 2] }, index: false }
+          {name: "name", type: "String", options: {}, index: false},
+          {name: "price", type: "BigDecimal", options: {size: [10, 2]}, index: false}
         ]
 
         code = described_class.new(detection: detection, fields: fields).build
@@ -25,10 +25,10 @@ RSpec.describe Roda::Project::Bin::Generators::Migration::CodeBuilder do
       end
 
       it "includes unique and standard index declarations inside create_table" do
-        detection = { action: :create_table, table_name: "accounts" }
+        detection = {action: :create_table, table_name: "accounts"}
         fields = [
-          { name: "email", type: "String", options: {}, index: :unique },
-          { name: "status", type: "String", options: {}, index: true }
+          {name: "email", type: "String", options: {}, index: :unique},
+          {name: "status", type: "String", options: {}, index: true}
         ]
 
         code = described_class.new(detection: detection, fields: fields).build
@@ -39,10 +39,10 @@ RSpec.describe Roda::Project::Bin::Generators::Migration::CodeBuilder do
 
     context "when action is :add_columns" do
       it "generates alter_table migration with add_column and add_foreign_key" do
-        detection = { action: :add_columns, table_name: "products" }
+        detection = {action: :add_columns, table_name: "products"}
         fields = [
-          { name: "category_id", is_reference: true, target_table: "categories", index: true, options: {} },
-          { name: "views_count", type: "Integer", options: {}, index: true }
+          {name: "category_id", is_reference: true, target_table: "categories", index: true, options: {}},
+          {name: "views_count", type: "Integer", options: {}, index: true}
         ]
 
         code = described_class.new(detection: detection, fields: fields).build
@@ -53,10 +53,10 @@ RSpec.describe Roda::Project::Bin::Generators::Migration::CodeBuilder do
       end
 
       it "handles polymorphic references in alter_table" do
-        detection = { action: :add_columns, table_name: "photos" }
+        detection = {action: :add_columns, table_name: "photos"}
         fields = [
-          { name: "imageable_id", type: "Bignum", options: {}, index: false, composite_index: ["imageable_type", "imageable_id"] },
-          { name: "imageable_type", type: "String", options: {}, index: false }
+          {name: "imageable_id", type: "Bignum", options: {}, index: false, composite_index: ["imageable_type", "imageable_id"]},
+          {name: "imageable_type", type: "String", options: {}, index: false}
         ]
 
         code = described_class.new(detection: detection, fields: fields).build
@@ -68,10 +68,10 @@ RSpec.describe Roda::Project::Bin::Generators::Migration::CodeBuilder do
 
     context "when action is :drop_columns" do
       it "generates alter_table migration with drop_column" do
-        detection = { action: :drop_columns, table_name: "products" }
+        detection = {action: :drop_columns, table_name: "products"}
         fields = [
-          { name: "legacy_code", type: "String", options: {}, index: false },
-          { name: "details", type: "String", options: { text: true }, index: false }
+          {name: "legacy_code", type: "String", options: {}, index: false},
+          {name: "details", type: "String", options: {text: true}, index: false}
         ]
 
         code = described_class.new(detection: detection, fields: fields).build
@@ -95,7 +95,7 @@ RSpec.describe Roda::Project::Bin::Generators::Migration::CodeBuilder do
 
     context "when action is :generic" do
       it "generates generic up and down blocks" do
-        detection = { action: :generic, table_name: nil }
+        detection = {action: :generic, table_name: nil}
 
         code = described_class.new(detection: detection, fields: []).build
         expect(code).to include("up do")

@@ -11,6 +11,7 @@ class Roda
               exit 1
             end
 
+            puts "* creating migration"
             FileUtils.mkdir_p(migrations_path) unless File.directory?(migrations_path)
 
             existing_migrations = Dir.glob(File.join(migrations_path, "*.rb"))
@@ -27,7 +28,8 @@ class Roda
             content = CodeBuilder.new(detection: detection, fields: fields).build
 
             File.write(filename, content)
-            puts "* created migration: #{filename}"
+
+            puts_create_message(filename)
           end
 
           def migrations_path
@@ -39,16 +41,16 @@ class Roda
           end
 
           def field_args
-            @field_args ||= (@args[1..] || [])
+            @field_args ||= @args[1..] || []
           end
 
           private
 
           def underscore(str)
             str.to_s.gsub(/([A-Z]+)([A-Z][a-z])/, '\1_\2')
-               .gsub(/([a-z\d])([A-Z])/, '\1_\2')
-               .tr("-", "_")
-               .downcase
+              .gsub(/([a-z\d])([A-Z])/, '\1_\2')
+              .tr("-", "_")
+              .downcase
           end
         end
       end

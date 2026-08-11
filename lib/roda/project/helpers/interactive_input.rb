@@ -22,10 +22,6 @@ class Roda
 
           yield
         end
-
-        def pastel
-          @pastel ||= Pastel.new
-        end
       end
     end
   end

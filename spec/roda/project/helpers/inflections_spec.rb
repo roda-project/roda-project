@@ -65,4 +65,32 @@ RSpec.describe Roda::Project::Helpers::Inflections do
       expect(described_class.singularize("product")).to eq("product")
     end
   end
+
+  describe ".singular?" do
+    it "returns true for singular words" do
+      expect(described_class.singular?("product")).to be true
+      expect(described_class.singular?("category")).to be true
+      expect(described_class.singular?("box")).to be true
+    end
+
+    it "returns false for plural words" do
+      expect(described_class.singular?("products")).to be false
+      expect(described_class.singular?("categories")).to be false
+      expect(described_class.singular?("boxes")).to be false
+    end
+  end
+
+  describe ".plural?" do
+    it "returns true for plural words" do
+      expect(described_class.plural?("products")).to be true
+      expect(described_class.plural?("categories")).to be true
+      expect(described_class.plural?("boxes")).to be true
+    end
+
+    it "returns false for singular words" do
+      expect(described_class.plural?("product")).to be false
+      expect(described_class.plural?("category")).to be false
+      expect(described_class.plural?("box")).to be false
+    end
+  end
 end

@@ -97,8 +97,11 @@ class Roda
           erb_cp_file("front-end", "esbuild.js")
           erb_cp_file("front-end", "package.json")
           cp_dir("front-end", "app/views")
+          puts_create_message("app/views")
           cp_dir("front-end", "public/assets")
+          puts_create_message("public/assets")
           cp_dir("front-end", "public/images")
+          puts_create_message("public/images")
         end
       end
 
@@ -118,6 +121,7 @@ class Roda
           erb_cp_file("rodauth", "db/migrations/001_add_rodauth.rb")
           if @context.fullstack?
             cp_file("rodauth", "app/views/create-account.erb")
+            puts_create_message("app/views/create-account.erb")
           end
         end
       end
