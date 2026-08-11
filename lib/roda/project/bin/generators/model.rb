@@ -12,7 +12,7 @@ class Roda
             end
 
             if model_name.include?("/")
-              puts "'/' (nested) in model name is not supported"
+              puts "'/' nested models not supported"
               exit 1
             end
 
