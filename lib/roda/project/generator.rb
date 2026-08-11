@@ -21,7 +21,7 @@ class Roda
       protected
 
       def puts_create_message(path)
-        puts(pastel.green("      create ") + path)
+        puts(pastel.green("      create  ") + path)
       end
     end
   end
