@@ -11,7 +11,7 @@ Gem::Specification.new do |spec|
   spec.summary = "A command-line interface (CLI) tool that helps you quickly scaffold new Roda web applications "
   spec.homepage = "https://github.com/roda-project"
   spec.license = "MIT"
-  spec.required_ruby_version = ">= 3.2.0"
+  spec.required_ruby_version = ">= 3.0.0"
 
   spec.metadata["homepage_uri"] = spec.homepage
   spec.metadata["source_code_uri"] = "https://github.com/roda-project/roda-project"
