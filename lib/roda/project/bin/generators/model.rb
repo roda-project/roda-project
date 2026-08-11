@@ -13,7 +13,7 @@ class Roda
 
             create_model
             create_model_test
-            Migration.new(args: ([migration_name].concat(field_args))).call
+            Migration.new(args: [migration_name].concat(field_args)).call
           end
 
           def create_model_test
@@ -92,10 +92,10 @@ class Roda
 
           def model_relative_path
             @model_relative_path ||= if name_segments.length > 1
-                                       File.join(*name_segments[0..-2], model_file_basename)
-                                     else
-                                       model_file_basename
-                                     end
+              File.join(*name_segments[0..-2], model_file_basename)
+            else
+              model_file_basename
+            end
           end
 
           def model_file_basename
@@ -107,7 +107,7 @@ class Roda
           end
 
           def field_args
-            @field_args ||= (@args[1..] || [])
+            @field_args ||= @args[1..] || []
           end
         end
       end

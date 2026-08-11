@@ -82,7 +82,7 @@ class Roda
                     if modifier.include?(".")
                       prec, scale = modifier.split(".").map(&:to_i)
                       options[:size] = [prec, scale]
-                    elsif modifier =~ /^\d+$/
+                    elsif /^\d+$/.match?(modifier)
                       options[:size] = modifier.to_i
                     end
                   end
