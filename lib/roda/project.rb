@@ -60,7 +60,6 @@ require_relative "project/helpers/inflections"
 require_relative "project/main_context"
 require_relative "project/generator"
 require_relative "project/cli"
-# Generators
 require_relative "project/bin/generator"
 # Generators/migration
 require_relative "project/bin/generators/migration"

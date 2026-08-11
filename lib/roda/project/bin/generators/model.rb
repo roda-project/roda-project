@@ -57,7 +57,7 @@ class Roda
 
               name_segments[0..-2].map { |s| camelize(s) }.reverse.each_with_index do |mod, idx|
                 mod_indent = "  " * (depth - 1 - idx)
-                lines = ["#{mod_indent}module #{mod}"] + lines + ["#{mod_indent}end"]
+                lines = ["#{mod_indent}class #{mod}"] + lines + ["#{mod_indent}end"]
               end
 
               lines.join("\n") + "\n"

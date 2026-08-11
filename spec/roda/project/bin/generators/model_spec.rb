@@ -79,7 +79,7 @@ RSpec.describe Roda::Project::Bin::Generators::Model do
         allow(migration_instance).to receive(:call)
       end
 
-      it "creates nested model file with wrapped module" do
+      it "creates nested model file with wrapped class" do
         expect { generator.call }.to output(
           include("* created model file: app/models/admin/user.rb")
             .and(include("* created model spec file: spec/app/models/admin/user_spec.rb"))
@@ -88,7 +88,7 @@ RSpec.describe Roda::Project::Bin::Generators::Model do
         expect(File.exist?("app/models/admin/user.rb")).to be true
 
         model_content = File.read("app/models/admin/user.rb")
-        expect(model_content).to include("module Admin")
+        expect(model_content).to include("class Admin")
         expect(model_content).to include("class User < Sequel::Model(:admin_users)")
         expect(model_content).to include("end")
       end
@@ -129,8 +129,8 @@ RSpec.describe Roda::Project::Bin::Generators::Model do
         expect(File.exist?("app/models/one/two/three.rb")).to be true
 
         model_content = File.read("app/models/one/two/three.rb")
-        expect(model_content).to include("module One")
-        expect(model_content).to include("module Two")
+        expect(model_content).to include("class One")
+        expect(model_content).to include("class Two")
         expect(model_content).to include("class Three < Sequel::Model(:one_two_threes)")
       end
 
@@ -166,7 +166,7 @@ RSpec.describe Roda::Project::Bin::Generators::Model do
         generator.call
 
         model_content = File.read("app/models/admin/user_profile.rb")
-        expect(model_content).to include("module Admin")
+        expect(model_content).to include("class Admin")
         expect(model_content).to include("class UserProfile < Sequel::Model(:admin_user_profiles)")
       end
 
@@ -308,9 +308,9 @@ RSpec.describe Roda::Project::Bin::Generators::Model do
     context "with one namespace level (admin/user)" do
       let(:args) { ["admin/user"] }
 
-      it "wraps class in a module and passes table name to Sequel::Model" do
+      it "wraps class in a class and passes table name to Sequel::Model" do
         code = generator.code
-        expect(code).to include("module Admin")
+        expect(code).to include("class Admin")
         expect(code).to include("class User < Sequel::Model(:admin_users)")
         expect(code.scan("end").length).to eq(2)
       end
@@ -319,17 +319,17 @@ RSpec.describe Roda::Project::Bin::Generators::Model do
     context "with two namespace levels (one/two/three)" do
       let(:args) { ["one/two/three"] }
 
-      it "wraps class in two nested modules" do
+      it "wraps class in two nested classes" do
         code = generator.code
-        expect(code).to include("module One")
-        expect(code).to include("module Two")
+        expect(code).to include("class One")
+        expect(code).to include("class Two")
         expect(code).to include("class Three < Sequel::Model(:one_two_threes)")
         expect(code.scan("end").length).to eq(3)
       end
 
       it "has correct two-space indentation" do
         code = generator.code
-        expect(code).to include("  module Two")
+        expect(code).to include("  class Two")
         expect(code).to include("    class Three")
       end
     end
@@ -386,7 +386,7 @@ RSpec.describe Roda::Project::Bin::Generators::Model do
 
     it "generates model code with correct table name and two-space indentation" do
       code = generator.code
-      expect(code).to eq("module A\n  module B\n    class Cu < Sequel::Model(:a_b_cus)\n    end\n  end\nend\n")
+      expect(code).to eq("class A\n  class B\n    class Cu < Sequel::Model(:a_b_cus)\n    end\n  end\nend\n")
     end
 
     it "calls Migration with the correct args" do
