@@ -10,6 +10,7 @@ class Roda
               exit 1
             end
 
+            puts "* creating routes"
             generate_routes
             generate_views
             generate_tests
@@ -44,7 +45,7 @@ class Roda
       end
             RUBY
             File.write(filename, content)
-            puts "* created routes file: #{filename}"
+            puts_create_message(filename)
           end
 
           def generate_views
@@ -56,7 +57,7 @@ class Roda
                 if method == "get"
                   view_filename = File.join(branch_views_dir, "#{name}.erb")
                   File.write(view_filename, "")
-                  puts "* created view file: #{view_filename}"
+                  puts_create_message(view_filename)
                 end
               end
             end
@@ -83,7 +84,7 @@ class Roda
       end
             RUBY
             File.write(test_filename, test_content)
-            puts "* created test file: #{test_filename}"
+            puts_create_message(test_filename)
           end
 
           def must_generate_views?

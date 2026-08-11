@@ -11,6 +11,7 @@ class Roda
               exit 1
             end
 
+            puts "* creating model"
             create_model
             create_model_test
             Migration.new(args: [migration_name].concat(field_args)).call
@@ -20,14 +21,16 @@ class Roda
             ensure_and_get_path("spec/app/models", model_relative_path)
             filename = File.join("spec/app/models", *name_segments[0..-2], "#{model_file_basename}_spec.rb")
             File.write(filename, spec_code)
-            puts "* created model spec file: #{filename}"
+
+            puts_create_message(filename)
           end
 
           def create_model
             ensure_and_get_path("app/models", model_relative_path)
             filename = File.join("app/models", *name_segments[0..-2], "#{model_file_basename}.rb")
             File.write(filename, code)
-            puts "* created model file: #{filename}"
+
+            puts_create_message(filename)
           end
 
           def spec_code

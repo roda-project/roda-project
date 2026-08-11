@@ -51,8 +51,8 @@ RSpec.describe Roda::Project::Bin::Generators::Model do
 
       it "creates model file and test file, and calls Migration generator" do
         expect { generator.call }.to output(
-          include("* created model file: app/models/user.rb")
-            .and(include("* created model spec file: spec/app/models/user_spec.rb"))
+          include("app/models/user.rb")
+            .and(include("spec/app/models/user_spec.rb"))
         ).to_stdout
 
         expect(File.exist?("app/models/user.rb")).to be true
@@ -81,8 +81,8 @@ RSpec.describe Roda::Project::Bin::Generators::Model do
 
       it "creates nested model file with wrapped class" do
         expect { generator.call }.to output(
-          include("* created model file: app/models/admin/user.rb")
-            .and(include("* created model spec file: spec/app/models/admin/user_spec.rb"))
+          include("app/models/admin/user.rb")
+            .and(include("spec/app/models/admin/user_spec.rb"))
         ).to_stdout
 
         expect(File.exist?("app/models/admin/user.rb")).to be true
@@ -123,7 +123,7 @@ RSpec.describe Roda::Project::Bin::Generators::Model do
 
       it "creates doubly-nested model file" do
         expect { generator.call }.to output(
-          include("* created model file: app/models/one/two/three.rb")
+          include("app/models/one/two/three.rb")
         ).to_stdout
 
         expect(File.exist?("app/models/one/two/three.rb")).to be true

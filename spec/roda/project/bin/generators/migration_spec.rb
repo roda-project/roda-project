@@ -46,7 +46,7 @@ RSpec.describe Roda::Project::Bin::Generators::Migration do
         let(:args) { ["custom_migration"] }
 
         it "creates generic migration file with up and down blocks" do
-          expect { generator.call }.to output(/created migration/).to_stdout
+          expect { generator.call }.to output(/creating migration/).to_stdout
 
           files = Dir.glob(File.join(tmp_dir, "*.rb"))
           expect(files.size).to eq(1)
@@ -63,7 +63,7 @@ RSpec.describe Roda::Project::Bin::Generators::Migration do
         let(:args) { ["CreateProducts", "name:string", "price:decimal{10.2}"] }
 
         it "generates create_table migration DSL" do
-          expect { generator.call }.to output(/created migration/).to_stdout
+          expect { generator.call }.to output(/creating migration/).to_stdout
 
           files = Dir.glob(File.join(tmp_dir, "*.rb"))
           expect(File.basename(files.first)).to eq("001_create_products.rb")
@@ -82,7 +82,7 @@ RSpec.describe Roda::Project::Bin::Generators::Migration do
         let(:args) { ["AddCategoryToProducts", "category:references", "views_count:integer:index"] }
 
         it "generates alter_table migration DSL with add_foreign_key, add_column, add_index" do
-          expect { generator.call }.to output(/created migration/).to_stdout
+          expect { generator.call }.to output(/creating migration/).to_stdout
 
           files = Dir.glob(File.join(tmp_dir, "*.rb"))
           expect(File.basename(files.first)).to eq("001_add_category_to_products.rb")
@@ -99,7 +99,7 @@ RSpec.describe Roda::Project::Bin::Generators::Migration do
         let(:args) { ["RemoveUnusedFieldsFromProducts", "legacy_code:string", "details:text"] }
 
         it "generates alter_table migration DSL with drop_column" do
-          expect { generator.call }.to output(/created migration/).to_stdout
+          expect { generator.call }.to output(/creating migration/).to_stdout
 
           files = Dir.glob(File.join(tmp_dir, "*.rb"))
           expect(File.basename(files.first)).to eq("001_remove_unused_fields_from_products.rb")
@@ -115,7 +115,7 @@ RSpec.describe Roda::Project::Bin::Generators::Migration do
         let(:args) { ["CreateJoinTableUsersProperties", "user", "property"] }
 
         it "generates create_join_table migration DSL" do
-          expect { generator.call }.to output(/created migration/).to_stdout
+          expect { generator.call }.to output(/creating migration/).to_stdout
 
           files = Dir.glob(File.join(tmp_dir, "*.rb"))
           expect(File.basename(files.first)).to eq("001_create_join_table_users_properties.rb")
@@ -132,7 +132,7 @@ RSpec.describe Roda::Project::Bin::Generators::Migration do
         end
 
         it "creates the migration with the next sequence number" do
-          expect { generator.call }.to output(/created migration/).to_stdout
+          expect { generator.call }.to output(/creating migration/).to_stdout
 
           files = Dir.glob(File.join(tmp_dir, "*.rb")).sort
           expect(files.size).to eq(3)

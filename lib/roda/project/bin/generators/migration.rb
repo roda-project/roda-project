@@ -10,9 +10,8 @@ class Roda
               puts "Usage: bin/roda g migration your_migration_name"
               exit 1
             end
-            puts field_args.inspect
-            puts migration_name.inspect
 
+            puts "* creating migration"
             FileUtils.mkdir_p(migrations_path) unless File.directory?(migrations_path)
 
             existing_migrations = Dir.glob(File.join(migrations_path, "*.rb"))
@@ -29,7 +28,8 @@ class Roda
             content = CodeBuilder.new(detection: detection, fields: fields).build
 
             File.write(filename, content)
-            puts "* created migration: #{filename}"
+
+            puts_create_message(filename)
           end
 
           def migrations_path
