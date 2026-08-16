@@ -23,9 +23,9 @@ class Roda
   option :main_context, type: :hash, default: {
       project_name: "#{project_name}",
       base: #{id_to_string(base, :base)},
-      rodauth: #{rodauth},
+      rodauth: #{rodauth || false},
       tests: #{id_to_string(tests, :tests)},
-      database: #{database},
+      database: #{database || false},
         RUBY
         if database?
           option << "    database_type: #{id_to_string(database_type, :database)},"

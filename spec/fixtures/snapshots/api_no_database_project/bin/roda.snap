@@ -47,7 +47,7 @@ class CLI < Thor
   option :main_context, type: :hash, default: {
     project_name: "api_no_database_project",
     base: Roda::Project::API,
-    rodauth: ,
+    rodauth: false,
     tests: Roda::Project::RSPEC,
     database: false,
 
