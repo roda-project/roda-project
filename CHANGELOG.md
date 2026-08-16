@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+## [0.1.12] - 2026-08-16
+- add --jeremy flag to create projects with roda-sequel-stack templates
+- add empty route names in route generator
+- fix route generator bug
+
 ## [0.1.11] - 2026-08-11
 - Add bin/roda g model
 - Improve output messages
