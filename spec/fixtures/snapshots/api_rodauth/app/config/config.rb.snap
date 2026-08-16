@@ -9,6 +9,7 @@ module Config
         db: {
           url: not_production? ? "postgres://user:password@localhost:5432/app_#{environment}" : ENV["DATABASE_URL"]
         }
+        }
       }
     end
 

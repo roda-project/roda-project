@@ -4,6 +4,7 @@
 - add --jeremy flag to create projects with roda-sequel-stack templates
 - add empty route names in route generator
 - fix route generator bug
+- add jeremy render plugin configs recomendations
 
 ## [0.1.11] - 2026-08-11
 - Add bin/roda g model
