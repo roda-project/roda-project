@@ -22,7 +22,7 @@ class Roda
             filename = File.join("spec/app/models", *name_segments[0..-2], "#{model_file_basename}_spec.rb")
             File.write(filename, spec_code)
 
-            puts_create_message(filename)
+            action_success_message(filename)
           end
 
           def create_model
@@ -30,7 +30,7 @@ class Roda
             filename = File.join("app/models", *name_segments[0..-2], "#{model_file_basename}.rb")
             File.write(filename, code)
 
-            puts_create_message(filename)
+            action_success_message(filename)
           end
 
           def spec_code
