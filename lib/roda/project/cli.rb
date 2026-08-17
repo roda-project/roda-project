@@ -26,8 +26,10 @@ class Roda
             puts "\n* create your database\n"
             puts "$ bin/roda db create"
           end
-          puts "\nmigrate the database (use RACK_ENV to migrate 'test' or 'production' environments):\n\n"
-          puts "$ bin/roda db migrate"
+          if @context.rodauth?
+            puts "\nmigrate the database (use RACK_ENV to migrate 'test' or 'production' environments):\n\n"
+            puts "$ bin/roda db migrate"
+          end
         end
         puts "\nrun and watch the project in dev mode:\n"
         puts "\n$ bin/roda dev"
