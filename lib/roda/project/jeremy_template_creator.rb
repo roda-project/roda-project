@@ -1,4 +1,4 @@
-require 'fileutils'
+require "fileutils"
 
 class Roda
   module Project
@@ -12,7 +12,7 @@ class Roda
         success = system("git clone --depth 1 #{repo_url} #{@context.project_name}")
         abort("\nCould not download the template.") unless success
 
-        git_dir = File.join(@context.project_name, '.git')
+        git_dir = File.join(@context.project_name, ".git")
         if Dir.exist?(git_dir)
           FileUtils.rm_rf(git_dir)
           puts "\n* Cleaned up template git history.\n\n"
@@ -30,4 +30,3 @@ class Roda
     end
   end
 end
-

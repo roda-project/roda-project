@@ -20,6 +20,11 @@ class Roda
           Model.new(context:, args:, options:).call
         end
 
+        desc "service", "Create service module or class and test scaffold"
+        def service(*args)
+          Service.new(context:, args:, options:).call
+        end
+
         private
 
         def context
