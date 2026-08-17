@@ -5,10 +5,9 @@ module Config
         secret: ENV["SESSION_SECRET"] || 'DEV-ONLY-8<FQF8HiF)>l0hbPk£vBQ#IrYsoO}14k\l+-/gIU[j}l0hbPk£vBQ#IrY',
         environment:,
         hmac_secret: ENV["RODAUTH_HMAC_SECRET"] || 'DEV-ONLY',
-        jwt_secret: ENV["JWT_SECRET"] || 'DEV-ONLY',,
+        jwt_secret: ENV["JWT_SECRET"] || 'DEV-ONLY',
         db: {
           url: not_production? ? "postgres://user:password@localhost:5432/app_#{environment}" : ENV["DATABASE_URL"]
-        }
         }
       }
     end
