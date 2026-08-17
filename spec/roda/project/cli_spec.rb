@@ -33,6 +33,7 @@ RSpec.describe Roda::Project::CLI do
     [
       "Gemfile",
       "boot.rb",
+      "AGENTS.md",
       "bin/roda",
       "app/routes/foo.rb",
       "app/config/config.rb",

@@ -1,0 +1,39 @@
+# Project Code Generation Rules
+
+## Core Stack
+- **Web Framework**: Roda (STRICT: Do NOT use Rails, ActionController, or Sinatra conventions).
+- **ORM**: Sequel (STRICT: Do NOT use ActiveRecord. Use Sequel Models, Datasets, and Migrations).
+- **Autoloader**: Zeitwerk (Do NOT manually `require` files located in the `app/` directory. Only require standard libraries or gems).
+
+## Code Style & Conventions
+
+### 1. Routing (Roda)
+- The main app resides in `app/[project_name].rb`.
+- Sub-routes MUST be implemented using Roda **Hash Branches** (`hash_branches` plugin) and placed in `app/routes/`.
+- Do not create deep routing blocks. Use Roda's tree routing efficiently (`r.on`, `r.is`, `r.get`, `r.post`).
+
+### 2. Database & Models (Sequel)
+- Models reside in `app/models/`.
+- Migrations reside in `db/migrations/` and MUST use sequential numbering (e.g., `001_...`).
+- When writing database queries, use Sequel's dataset methods (e.g., `where`, `select`, `exclude`, `join`). Do not use string interpolation for SQL queries.
+
+### 4. Testing
+- Specs reside in `spec/app/`.
+- Use `rack-test` for route testing.
+- Ensure database transactions are rolled back after each test block.
+- Mirror the file structure of `app/` inside `spec/app/` (e.g., `app/models/user.rb` -> `spec/app/models/user_spec.rb`).
+
+### 5. Boot Sequence & Initialization
+- **`boot.rb`**: The absolute starting point. It sets up `Bundler`, boots `Zeitwerk` for autoloading the `app/` directory, and loads service providers from `app/config/providers/`.
+- **`config.ru`**: The Rack entrypoint. It defines middleware (like `Rack::LiveReload` in development) and mounts the primary Roda application class defined in `app/[project_name].rb`.
+
+### 6. Tooling
+- Do NOT run `bundle exec rake` for scaffolding/servers. The project uses a custom CLI: `bin/roda`. Suggest commands using `bin/roda` (e.g., generators, running the server).
+
+#### Generators
+- To maintain consistency and avoid manual boilerplate, the project uses custom generators for scaffolding new features. These automatically hook into Zeitwerk's expectations, Sequel's DSL, and Roda's Hash Branches.
+- **`bin/roda g routes <branch> [options]`**: Scaffolds a Roda hash branch file in `app/routes/`, matching spec files, and ERB views (for GET routes). Supports nested paths (e.g., `api/v1`) and bare verbs (e.g., `books :get :post`).
+- **`bin/roda g model <name> [fields]`**: Generates a Sequel ORM model class, a matching model spec, and a timestamped Sequel migration. Supports namespacing (`Admin/User`) and auto-pluralizes table names.
+- **`bin/roda g migration <name> [fields]`**: Creates a timestamped Sequel migration. It automatically detects intent from the name (e.g., `add_status_to_users` generates the `alter_table` block) and maps Rails-like field types (e.g., `user:references`, `body:text`) to Sequel schema methods.
+- **`bin/roda g service <type> <name>`**: Scaffolds a class or module service in `app/services/` and a matching spec. Defaults to `class` if type is omitted.
+

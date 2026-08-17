@@ -1,9 +1,14 @@
-Act as a Ruby specialist.
+# Project Code Generation Rules
 
-This is a web application written using the Roda web framework
+## Core Stack
+- **Web Framework**: Roda (STRICT: Do NOT use Rails, ActionController, or Sinatra conventions).
+- **Autoloader**: Zeitwerk (Do NOT manually `require` files located in the `app/` directory. Only require standard libraries or gems).
 
-## Project guidelines
+## Code Style & Conventions
 
-- **Never** deliver code without tests validating the code (execute with `rake test`)
-- **Never** write long comments in the code
-- **Always** use clean code
+### 1. Routing (Roda)
+- Do not create deep routing blocks. Use Roda's tree routing efficiently (`r.on`, `r.is`, `r.get`, `r.post`).
+
+### 5. Boot Sequence & Initialization
+- **`boot.rb`**: The absolute starting point. It sets up `Bundler` and boots `Zeitwerk`.
+- **`config.ru`**: The Rack entrypoint. It defines middleware and mounts the primary Roda application class defined in `app.rb`.
