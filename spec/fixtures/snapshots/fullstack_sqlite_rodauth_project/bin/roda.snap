@@ -119,6 +119,10 @@ class CLI < Thor
     database_type: Roda::Project::SQLITE,
     }
   subcommand "generate", Roda::Project::Bin::Generators
+
+  def self.exit_on_failure?
+    true
+  end
 end
 
 CLI.start(ARGV)

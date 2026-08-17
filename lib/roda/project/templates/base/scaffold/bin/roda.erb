@@ -148,6 +148,10 @@ class CLI < Thor
   desc "generate", "Commands to generate code"
   <%= context.to_thor_option %>
   subcommand "generate", Roda::Project::Bin::Generators
+
+  def self.exit_on_failure?
+    true
+  end
 end
 
 CLI.start(ARGV)

@@ -25,6 +25,10 @@ class Roda
           Service.new(context:, args:, options:).call
         end
 
+        def self.exit_on_failure?
+          true
+        end
+
         private
 
         def context
