@@ -35,7 +35,7 @@ class Roda
         puts "\n$ bin/roda dev"
         if @context.fullstack?
           puts "\ncompile and watch assets:\n"
-          puts "\n$ bin/roda assets:dev"
+          puts "\n$ bin/roda assets -w"
         end
         puts "\nrun 'bin/roda' inside #{@context.project_name} to see all available tasks\n\n"
       rescue TTY::Reader::InputInterrupt
