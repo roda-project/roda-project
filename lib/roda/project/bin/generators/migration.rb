@@ -29,7 +29,7 @@ class Roda
 
             File.write(filename, content)
 
-            puts_create_message(filename)
+            action_success_message(filename)
           end
 
           def migrations_path

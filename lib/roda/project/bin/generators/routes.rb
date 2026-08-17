@@ -23,8 +23,15 @@ class Roda
             filename = File.join(ensure_and_get_path("app/routes", branch_name), "#{branch_name}.rb")
             route_definitions = routes_list.map do |route_str|
               method, name = parse_route_string(route_str)
-              view_line = (method == "get" && must_generate_views?) ? "\n      view('#{name}')" : ""
-              "    r.#{method} \"#{name}\" do#{view_line}\n    end"
+              view_name = name
+              view_name = "index" if view_name == ""
+              view_line = (method == "get" && must_generate_views?) ? "\n      view('#{view_name}')" : ""
+
+              if name != ""
+                "    r.#{method} \"#{name}\" do#{view_line}\n    end"
+              else
+                "    r.#{method} do#{view_line}\n    end"
+              end
             end.join("\n\n")
 
             hash_branch_header = if branch_name.include?("/")
@@ -45,7 +52,7 @@ class Roda
       end
             RUBY
             File.write(filename, content)
-            puts_create_message(filename)
+            action_success_message(filename)
           end
 
           def generate_views
@@ -55,9 +62,10 @@ class Roda
               routes_list.each do |route_str|
                 method, name = parse_route_string(route_str)
                 if method == "get"
+                  name = "index" if name == ""
                   view_filename = File.join(branch_views_dir, "#{name}.erb")
                   File.write(view_filename, "")
-                  puts_create_message(view_filename)
+                  action_success_message(view_filename)
                 end
               end
             end
@@ -70,10 +78,18 @@ class Roda
 
             test_route_definitions = routes_list.map do |route_str|
               method, name = parse_route_string(route_str)
-              "  it \"responds to #{method.upcase} /#{branch_name}/#{name}\" do\n" \
-                "    #{method} \"/#{branch_name}/#{name}\"\n" \
-                "    expect(last_response.status).to eq(200)\n" \
-                "  end"
+
+              if name != ""
+                "  it \"responds to #{method.upcase} /#{branch_name}/#{name}\" do\n" \
+                  "    #{method} \"/#{branch_name}/#{name}\"\n" \
+                  "    expect(last_response.status).to eq(200)\n" \
+                  "  end"
+              else
+                "  it \"responds to #{method.upcase} /#{branch_name} do\n" \
+                  "    #{method} \"/#{branch_name}\n" \
+                  "    expect(last_response.status).to eq(200)\n" \
+                  "  end"
+              end
             end.join("\n")
 
             test_content = <<~RUBY
@@ -84,7 +100,7 @@ class Roda
       end
             RUBY
             File.write(test_filename, test_content)
-            puts_create_message(test_filename)
+            action_success_message(test_filename)
           end
 
           def must_generate_views?

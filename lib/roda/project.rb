@@ -59,6 +59,7 @@ require_relative "project/helpers/inflections"
 # Base
 require_relative "project/main_context"
 require_relative "project/generator"
+require_relative "project/jeremy_template_creator"
 require_relative "project/cli"
 require_relative "project/bin/generator"
 # Generators/migration

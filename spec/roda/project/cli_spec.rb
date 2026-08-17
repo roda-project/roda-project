@@ -188,5 +188,30 @@ RSpec.describe Roda::Project::CLI do
       end
     end
   end
+
+  context "when --jeremy option is passed" do
+    let(:app_name) { "jeremy_project" }
+    let(:jeremy_creator) { instance_double(Roda::Project::JeremyTemplateCreator) }
+
+    before do
+      stub_const("ARGV", ["--jeremy"])
+      allow_any_instance_of(Roda::Project::CLI).to receive(:read_line).and_return(app_name)
+      allow(Roda::Project::JeremyTemplateCreator).to receive(:new).and_return(jeremy_creator)
+      allow(jeremy_creator).to receive(:call)
+    end
+
+    it "invokes JeremyTemplateCreator and returns early without prompting further (lines 14 & 47)" do
+      cli = described_class.new(dir: dir)
+
+      expect(Roda::Project::JeremyTemplateCreator).to receive(:new).with(
+        context: an_instance_of(Roda::Project::MainContext)
+      ).and_return(jeremy_creator)
+      expect(jeremy_creator).to receive(:call)
+
+      cli.call
+
+      expect(cli.send(:jeremy?)).to be(true)
+    end
+  end
 end
 # rubocop:enable Lint/ConstantDefinitionInBlock

@@ -10,8 +10,8 @@ class Roda
         puts pastel.italic("#{Roda::Project.messages.sample.first}\n")
 
         get_user_context
-
         puts pastel.bright_black("\n[project: #{@context.project_name}]\n")
+        return JeremyTemplateCreator.new(context: @context).call if jeremy?
 
         create_base_project
         add_front_end
@@ -44,6 +44,8 @@ class Roda
 
       def get_user_context
         retry_on_error { @context.project_name = read_line("Project name › ", "project") }
+        return if jeremy?
+
         retry_on_error { @context.base = read_line("(#{fullstack_id}) Fullstack (#{api_id}) API (#{minimal_id}) Minimal › ", fullstack_id).to_i }
         retry_on_error { @context.tests = read_line("(#{rspec_id}) RSpec (#{minitest_id}) Minitest › ", rspec_id).to_i }
 
@@ -61,6 +63,10 @@ class Roda
             retry_on_error { @context.rodauth = read_line("Rodauth? (authentication) (Y/n) › ", true) }
           end
         end
+      end
+
+      def jeremy?
+        @jeremy ||= ARGV[0] == "--jeremy"
       end
 
       def create_base_project
@@ -97,11 +103,11 @@ class Roda
           erb_cp_file("front-end", "esbuild.js")
           erb_cp_file("front-end", "package.json")
           cp_dir("front-end", "app/views")
-          puts_create_message("app/views")
+          action_success_message("app/views")
           cp_dir("front-end", "public/assets")
-          puts_create_message("public/assets")
+          action_success_message("public/assets")
           cp_dir("front-end", "public/images")
-          puts_create_message("public/images")
+          action_success_message("public/images")
         end
       end
 
@@ -121,7 +127,7 @@ class Roda
           erb_cp_file("rodauth", "db/migrations/001_add_rodauth.rb")
           if @context.fullstack?
             cp_file("rodauth", "app/views/create-account.erb")
-            puts_create_message("app/views/create-account.erb")
+            action_success_message("app/views/create-account.erb")
           end
         end
       end

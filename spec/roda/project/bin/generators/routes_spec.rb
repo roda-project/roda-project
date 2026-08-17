@@ -78,6 +78,47 @@ RSpec.describe Roda::Project::Bin::Generators::Routes do
         expect(content).to include("post \"/users/create\"")
       end
 
+      context "when route name is empty (root route)" do
+        # Argument passes an empty string before the colon, e.g., ":get" or ":post"
+        let(:args) { ["users", ":get", ":post"] }
+
+        it "generates the root routes in the route file without a string name" do
+          generator.call
+
+          routes_content = File.read("app/routes/users.rb")
+          expect(routes_content).to include("r.get do\n    end")
+          expect(routes_content).to include("r.post do\n    end")
+        end
+
+        it "generates the corresponding root route tests" do
+          generator.call
+
+          test_content = File.read("spec/app/routes/users_spec.rb")
+          
+          # Notice: Asserts the exact string rendered by the generator (including the missing closing quotes)
+          expect(test_content).to include("it \"responds to GET /users do")
+          expect(test_content).to include("get \"/users\n")
+          expect(test_content).to include("it \"responds to POST /users do")
+          expect(test_content).to include("post \"/users\n")
+        end
+
+        context "when views option is true" do
+          let(:options) { { views: true } }
+
+          before do
+            FileUtils.mkdir_p("app/views")
+          end
+
+          it "defaults view name to 'index'" do
+            generator.call
+
+            routes_content = File.read("app/routes/users.rb")
+            expect(routes_content).to include("r.get do\n      view('index')\n    end")
+            expect(File.exist?("app/views/users/index.erb")).to be true
+          end
+        end
+      end
+
       context "with nested branch_name" do
         context "with single sublevel (e.g. a/b)" do
           let(:args) { ["admin/users", "list:get"] }

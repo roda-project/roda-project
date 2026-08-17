@@ -12,7 +12,20 @@ module Config
         }<% end %><% if context.database? %>,
         db: {
           url: not_production? ? <%= context.default_db_url %> : ENV["DATABASE_URL"]
-        }<% end %>
+        }<% end %><% if context.fullstack? %>,
+        render: {
+          layout: "./layout",
+          assume_fixed_locals: true,    # Optimize plugin by assuming all templates use fixed locals
+          template_opts: {
+            scope_class: self,          # Always uses current class as scope class for compiled templates
+            freeze: true,               # Freeze string literals in templates
+            extract_fixed_locals: true, # Support fixed locals in templates
+            default_fixed_locals: '()', # Default to templates not supporting local variables
+            escape: true,               # For Erubi templates, escapes %= by default (use %== for unescaped
+            chain_appends: true,        # For Erubi templates, improves performance
+            skip_compiled_encoding_detection: true, # Unless you need encodings explicitly specified
+          }<% end %>
+        }
       }
     end
 

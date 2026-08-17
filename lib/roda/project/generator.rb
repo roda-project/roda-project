@@ -20,8 +20,8 @@ class Roda
 
       protected
 
-      def puts_create_message(path)
-        puts(pastel.green("      create  ") + path)
+      def action_success_message(path, action = "create")
+        puts(pastel.green("      #{action}  ") + path)
       end
     end
   end

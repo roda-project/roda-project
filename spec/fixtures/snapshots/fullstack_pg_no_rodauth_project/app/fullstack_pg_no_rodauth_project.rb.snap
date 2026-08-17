@@ -8,7 +8,7 @@ class FullstackPgNoRodauthProject < Roda
   
   # Views
   plugin :partials, views: "app/views"
-  plugin :render, layout: "./layout"
+  plugin :render, **Config.get[:render]
   plugin :content_for, append: false
   plugin :flash
   plugin :assets_manifest
