@@ -2,6 +2,7 @@
 
 ## [0.1.13] - 2026-08-16
 - new service generator
+- improve AGENTS.md
 - bug fixes
 
 ## [0.1.12] - 2026-08-16
