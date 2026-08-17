@@ -19,7 +19,6 @@ RSpec.describe Roda::Project::JeremyTemplateCreator do
       allow(Dir).to receive(:exist?).with(git_dir).and_return(true)
       allow(FileUtils).to receive(:rm_rf).with(git_dir)
       allow(creator).to receive(:action_success_message)
-      allow(creator).to receive(:repo).and_return(repo_url)
     end
 
     it "clones the repository with git" do

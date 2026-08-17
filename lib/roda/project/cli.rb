@@ -26,14 +26,16 @@ class Roda
             puts "\n* create your database\n"
             puts "$ bin/roda db create"
           end
-          puts "\nmigrate the database (use RACK_ENV to migrate 'test' or 'production' environments):\n\n"
-          puts "$ bin/roda db migrate"
+          if @context.rodauth?
+            puts "\nmigrate the database (use RACK_ENV to migrate 'test' or 'production' environments):\n\n"
+            puts "$ bin/roda db migrate"
+          end
         end
         puts "\nrun and watch the project in dev mode:\n"
         puts "\n$ bin/roda dev"
         if @context.fullstack?
           puts "\ncompile and watch assets:\n"
-          puts "\n$ bin/roda assets:dev"
+          puts "\n$ bin/roda assets -w"
         end
         puts "\nrun 'bin/roda' inside #{@context.project_name} to see all available tasks\n\n"
       rescue TTY::Reader::InputInterrupt
@@ -102,6 +104,8 @@ class Roda
           erb_cp_dir("front-end", "app/assets")
           erb_cp_file("front-end", "esbuild.js")
           erb_cp_file("front-end", "package.json")
+          cp_dir("front-end", "app/config/locales")
+          action_success_message("app/config/locales")
           cp_dir("front-end", "app/views")
           action_success_message("app/views")
           cp_dir("front-end", "public/assets")

@@ -42,6 +42,10 @@ class CLI < Thor
     end
   end
   map "s" => "server"
+
+  def self.exit_on_failure?
+    true
+  end
 end
 
 CLI.start(ARGV)

@@ -32,4 +32,10 @@ Providers::Mailer.boot
 Providers::Logger.boot
 
 # Consts<% if context.database %>
-DB = Providers::DB::Conn.get<% end %>
+DB = Providers::DB::Conn.get
+
+# Automatic models annotations in dev environment
+if Config.not_production?
+  require 'sequel/annotate'
+  Sequel::Annotate.annotate(Dir['app/models/*.rb'], position: :before, border: true) rescue nil
+end<% end %>

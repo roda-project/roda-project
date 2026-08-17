@@ -3,7 +3,7 @@ require "thor"
 require "roda/project/bin/generators"
 
 class Db < Thor
-  desc "migrate", "Migrate the database. Optional: provide target version, e.g., 'roda db:migrate 1'"
+  desc "migrate", "Migrate the database (use RACK_ENV to migrate 'test' or 'production' environments). Optional: provide target version, e.g., 'roda db:migrate 1'"
   option :target, type: :numeric, aliases: "-t", desc: "provide target version"
   def migrate
     require_db_deps
@@ -119,6 +119,10 @@ class CLI < Thor
     database_type: Roda::Project::SQLITE,
     }
   subcommand "generate", Roda::Project::Bin::Generators
+
+  def self.exit_on_failure?
+    true
+  end
 end
 
 CLI.start(ARGV)

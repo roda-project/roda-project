@@ -41,4 +41,5 @@ group :development do
   gem "base64"
   gem "standard"
   gem "rspec"
+  gem "sequel-annotate"
 end

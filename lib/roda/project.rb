@@ -71,6 +71,8 @@ require_relative "project/bin/generators/migration/code_builder"
 require_relative "project/bin/generators/model"
 # Generators/routes
 require_relative "project/bin/generators/routes"
+# Generators/service
+require_relative "project/bin/generators/service"
 # Generators/base
 require_relative "project/bin/generators"
 # Version

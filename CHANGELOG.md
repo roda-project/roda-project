@@ -1,5 +1,11 @@
 ## [Unreleased]
 
+## [0.1.13] - 2026-08-16
+- new service generator
+- improve AGENTS.md
+- add sequel annotate as default
+- bug fixes
+
 ## [0.1.12] - 2026-08-16
 - add --jeremy flag to create projects with roda-sequel-stack templates
 - add empty route names in route generator

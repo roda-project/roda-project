@@ -3,7 +3,7 @@ module Config
     def get
       @config ||= {
         secret: ENV["SESSION_SECRET"] || 'DEV-ONLY-8<FQF8HiF)>l0hbPk£vBQ#IrYsoO}14k\l+-/gIU[j}l0hbPk£vBQ#IrY',
-        environment:,
+        environment:,,
         i18n: {
           translations: ["app/config/locales", "app/config/locales/foo"],
           locale: ["en", "pt-br"]

@@ -5,7 +5,7 @@ module Config
         secret: ENV["SESSION_SECRET"] || 'DEV-ONLY-8<FQF8HiF)>l0hbPk£vBQ#IrYsoO}14k\l+-/gIU[j}l0hbPk£vBQ#IrY',
         environment:,<% if context.rodauth? %>
         hmac_secret: ENV["RODAUTH_HMAC_SECRET"] || 'DEV-ONLY',
-        jwt_secret: ENV["JWT_SECRET"] || 'DEV-ONLY',<% end %><% if context.fullstack? %>
+        jwt_secret: ENV["JWT_SECRET"] || 'DEV-ONLY'<% end %><% if context.fullstack? %>,
         i18n: {
           translations: ["app/config/locales", "app/config/locales/foo"],
           locale: ["en", "pt-br"]
@@ -24,8 +24,8 @@ module Config
             escape: true,               # For Erubi templates, escapes %= by default (use %== for unescaped
             chain_appends: true,        # For Erubi templates, improves performance
             skip_compiled_encoding_detection: true, # Unless you need encodings explicitly specified
-          }<% end %>
-        }
+          }
+        }<% end %>
       }
     end
 

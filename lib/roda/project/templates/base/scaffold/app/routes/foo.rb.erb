@@ -1,5 +1,6 @@
 class <%= context.const_project_name %>
-  hash_branch "foo" do |r|
+  hash_branch "foo" do |r|<% if context.rodauth? %>
+    rodauth.require_authentication<% end  %>
     r.get "bar" do
       <%= context.foo_bar_example %>
     end
