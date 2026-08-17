@@ -24,8 +24,8 @@ class Roda
         system(setup_command)
 
         action_success_message(setup_command, "run")
-        puts "\n Setup is done! follow the link below to learn about this template:"
-        puts "\n #{repo_url}"
+        puts "\nSetup is done! follow the link below to learn about this template:"
+        puts "\n#{repo_url}"
       end
     end
   end
