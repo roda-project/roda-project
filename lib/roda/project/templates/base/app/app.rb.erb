@@ -69,7 +69,6 @@ class <%= context.const_project_name %> < Roda
     # r.i18n_set_locale_from(:session)<% end %>
     <% if context.rodauth? %>
     r.rodauth
-    rodauth.require_authentication
     <% end  %>
     r.root do
       <%= context.root_example %>

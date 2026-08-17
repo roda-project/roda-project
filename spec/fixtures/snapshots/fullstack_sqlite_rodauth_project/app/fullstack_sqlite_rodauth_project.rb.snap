@@ -64,7 +64,6 @@ class FullstackSqliteRodauthProject < Roda
     # r.i18n_set_locale_from(:session)
     
     r.rodauth
-    rodauth.require_authentication
     
     r.root do
       view("index")

@@ -273,7 +273,7 @@ RSpec.describe Roda::Project::MainContext do
     context "when fullstack? is false" do
       before { allow(context).to receive(:fullstack?).and_return(false) }
       it "returns the rodauth non-fullstack example" do
-        expect(context.root_example).to eq('{ message: "#{t.hello.message}" }')
+        expect(context.root_example).to eq('{ message: "hello world" }')
       end
     end
     # rubocop:enable Lint/InterpolationCheck

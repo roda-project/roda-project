@@ -1,5 +1,7 @@
 class FullstackPgNoRodauthProject
   hash_branch "foo" do |r|
+    rodauth.require_authentication
+
     r.get "bar" do
       view("bar")
     end

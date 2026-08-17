@@ -38,7 +38,7 @@ class ApiNoDatabaseProject < Roda
     r.hash_branches
     
     r.root do
-      { message: "#{t.hello.message}" }
+      { message: "hello world" }
     end
   end
 

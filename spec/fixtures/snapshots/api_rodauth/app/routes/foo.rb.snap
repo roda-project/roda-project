@@ -1,5 +1,7 @@
 class ApiRodauth
   hash_branch "foo" do |r|
+    rodauth.require_authentication
+
     r.get "bar" do
       { foo: "bar" }
     end

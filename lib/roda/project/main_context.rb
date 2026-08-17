@@ -108,7 +108,7 @@ class Roda
       def root_example
         return 'view("index")' if fullstack?
 
-        '{ message: "#{t.hello.message}" }'
+        '{ message: "hello world" }'
       end
       # rubocop:enable Lint/InterpolationCheck
 

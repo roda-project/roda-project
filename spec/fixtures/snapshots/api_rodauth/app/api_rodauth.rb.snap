@@ -54,10 +54,9 @@ class ApiRodauth < Roda
     r.hash_branches
     
     r.rodauth
-    rodauth.require_authentication
     
     r.root do
-      { message: "#{t.hello.message}" }
+      { message: "hello world" }
     end
   end
 
