@@ -18,8 +18,8 @@ RSpec.describe Roda::Project::Bin::Generators::Service do
   end
 
   describe "#call" do
-    context "when service_type is missing or invalid" do
-      let(:args) { ["invalid_type", "my_service"] }
+    context "when args are empty" do
+      let(:args) { [] }
 
       it "prints usage and exits with status 1" do
         expect { generator.call }.to output(/Usage: bin\/roda g service <module\|class> <name>/).to_stdout
@@ -128,6 +128,35 @@ RSpec.describe Roda::Project::Bin::Generators::Service do
           end
         RUBY
         expect(File.read("spec/app/services/my/service/one_spec.rb")).to eq(expected_spec_code)
+      end
+    end
+
+    context "when service type is omitted (defaults to class)" do
+      let(:args) { ["my/service"] }
+
+      it "defaults type to class and generates nested modules and leaf class" do
+        expect { generator.call }.to output(
+          include("app/services/my/service.rb")
+            .and(include("spec/app/services/my/service_spec.rb"))
+        ).to_stdout
+
+        expect(File.exist?("app/services/my/service.rb")).to be true
+        expected_code = <<~RUBY
+          module My
+            class Service
+            end
+          end
+        RUBY
+        expect(File.read("app/services/my/service.rb")).to eq(expected_code)
+
+        expect(File.exist?("spec/app/services/my/service_spec.rb")).to be true
+        expected_spec_code = <<~RUBY
+          require_relative "../../../spec_helper"
+
+          describe My::Service do
+          end
+        RUBY
+        expect(File.read("spec/app/services/my/service_spec.rb")).to eq(expected_spec_code)
       end
     end
   end

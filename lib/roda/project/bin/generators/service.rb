@@ -88,11 +88,21 @@ class Roda
           end
 
           def service_type
-            @service_type ||= @args[0].to_s.downcase
+            @service_type ||= parse_args[:type]
           end
 
           def service_name
-            @service_name ||= @args[1].to_s
+            @service_name ||= parse_args[:name]
+          end
+
+          def parse_args
+            @parse_args ||= begin
+              if %w[module class].include?(@args[0].to_s.downcase)
+                { type: @args[0].to_s.downcase, name: @args[1].to_s }
+              else
+                { type: "class", name: @args[0].to_s }
+              end
+            end
           end
 
           def valid_args?
