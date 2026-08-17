@@ -48,5 +48,6 @@ group :development do
   gem "minitest"
   gem "minitest-hooks"
 <% else %>
-  gem "rspec"<% end %>
+  gem "rspec"<% end %><% if context.database? %>
+  gem "sequel-annotate"<% end %>
 end

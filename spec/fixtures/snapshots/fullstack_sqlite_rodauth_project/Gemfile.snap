@@ -48,4 +48,5 @@ group :development do
   gem "minitest"
   gem "minitest-hooks"
 
+  gem "sequel-annotate"
 end
