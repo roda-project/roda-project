@@ -60,6 +60,10 @@ RSpec.describe Roda::Project::CLI do
     [
       "app/views/foo/bar.erb",
       "app/views/layout.erb",
+      "app/config/locales/en.yml",
+      "app/config/locales/pt-br.yml",
+      "app/config/locales/foo/en.yml",
+      "app/config/locales/foo/pt-br.yml",
       "esbuild.js",
       "package.json"
     ]

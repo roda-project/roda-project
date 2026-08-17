@@ -102,6 +102,8 @@ class Roda
           erb_cp_dir("front-end", "app/assets")
           erb_cp_file("front-end", "esbuild.js")
           erb_cp_file("front-end", "package.json")
+          cp_dir("front-end", "app/config/locales")
+          action_success_message("app/config/locales")
           cp_dir("front-end", "app/views")
           action_success_message("app/views")
           cp_dir("front-end", "public/assets")
