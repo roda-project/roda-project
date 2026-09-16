@@ -39,34 +39,29 @@ class Db < Thor
   [:drop, :create].each do |action|
     desc action.to_s, "#{action.capitalize} the database"
     define_method(action) do
-      require_db_deps
-      require_relative "../app/config/config"<% if context.postgresql? %>
-      db_config =
-        PG::Connection
-        .conninfo_parse(Config.get[:db][:url])
-        .each_with_object({}) { |h, o|
-          o[h[:keyword].to_sym] = h[:val] if h[:val]
-        }
-      ok = system("PGPASSWORD='#{db_config[:password]}' #{action}db -h #{db_config[:host]} -p #{db_config[:port]} -U #{db_confi
-      g[:user]} #{db_config[:dbname]}")<% end %><% if context.mysql? %>
+      require "<%= context.db_gem %>"
+      require "uri"
+      require_relative "../app/config/config"
       uri = URI.parse(Config.get[:db][:url])
-      db_config = {
-        host: uri.host,
-        port: uri.port,
-        user: uri.user,
-        password: uri.password,
-        dbname: uri.path.tr('/', '') # removes leading slash
-      }
+      dbname = uri.path.to_s.delete_prefix("/")<% if context.postgresql? %>
+      env = {}
+      env["PGPASSWORD"] = uri.password if uri.password
+      args = ["#{action}db"]
+      args.push("-h", uri.host) if uri.host
+      args.push("-p", uri.port.to_s) if uri.port
+      args.push("-U", uri.user) if uri.user
+      args << dbname
+      ok = system(env, *args)<% end %><% if context.mysql? %>
       sql = action == :create ?
-      "CREATE DATABASE IF NOT EXISTS `#{db_config[:dbname]}`;" :
-      "DROP DATABASE IF EXISTS `#{db_config[:dbname]}`;"
+        "CREATE DATABASE IF NOT EXISTS `#{dbname}`;" :
+        "DROP DATABASE IF EXISTS `#{dbname}`;"
       flags = []
-      flags << "-h#{db_config[:host]}" if db_config[:host]
-      flags << "-P#{db_config[:port]}" if db_config[:port]
-      flags << "-u#{db_config[:user]}" if db_config[:user]
-      env = { "MYSQL_PWD" => db_config[:password] }.compact
+      flags << "-h#{uri.host}" if uri.host
+      flags << "-P#{uri.port}" if uri.port
+      flags << "-u#{uri.user}" if uri.user
+      env = { "MYSQL_PWD" => uri.password }.compact
       ok = system(env, "mysql", *flags, "-e", sql)<% end %>
-      puts "* #{action} database #{db_config[:dbname]} ✓" if ok
+      puts "* #{action} database #{dbname} ✓" if ok
     end
   end
   <% end %>

@@ -5,14 +5,14 @@ module Config
         secret: ENV["SESSION_SECRET"] || 'DEV-ONLY-8<FQF8HiF)>l0hbPk£vBQ#IrYsoO}14k\l+-/gIU[j}l0hbPk£vBQ#IrY',
         environment:,<% if context.rodauth? %>
         hmac_secret: ENV["RODAUTH_HMAC_SECRET"] || 'DEV-ONLY',
-        jwt_secret: ENV["JWT_SECRET"] || 'DEV-ONLY'<% end %><% if context.fullstack? %>,
+        jwt_secret: ENV["JWT_SECRET"] || 'DEV-ONLY',<% end %><% if context.fullstack? %>
         i18n: {
-          translations: ["app/config/locales", "app/config/locales/foo"],
+          translations: [File.expand_path("locales", __dir__)],
           locale: ["en", "pt-br"]
-        }<% end %><% if context.database? %>,
+        },<% end %><% if context.database? %>
         db: {
           url: not_production? ? <%= context.default_db_url %> : ENV["DATABASE_URL"]
-        }<% end %><% if context.fullstack? %>,
+        },<% end %><% if context.fullstack? %>
         render: {
           layout: "./layout",
           assume_fixed_locals: true,    # Optimize plugin by assuming all templates use fixed locals

@@ -63,10 +63,9 @@ class <%= context.const_project_name %> < Roda
 <% end %>
   def config = @config ||= Config.get
 
-  route do |r|
-    r.hash_branches<% if context.fullstack? %>
-    # session[:locale] = 'pt-br'
-    # r.i18n_set_locale_from(:session)<% end %>
+  route do |r|<% if context.fullstack? %>
+    r.i18n_set_locale_from(:http)<% end %>
+    r.hash_branches
     <% if context.rodauth? %>
     r.rodauth
     <% end  %>

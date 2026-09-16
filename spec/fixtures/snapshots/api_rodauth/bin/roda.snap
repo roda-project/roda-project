@@ -22,17 +22,20 @@ class Db < Thor
   [:drop, :create].each do |action|
     desc action.to_s, "#{action.capitalize} the database"
     define_method(action) do
-      require_db_deps
+      require "pg"
+      require "uri"
       require_relative "../app/config/config"
-      db_config =
-        PG::Connection
-        .conninfo_parse(Config.get[:db][:url])
-        .each_with_object({}) { |h, o|
-          o[h[:keyword].to_sym] = h[:val] if h[:val]
-        }
-      ok = system("PGPASSWORD='#{db_config[:password]}' #{action}db -h #{db_config[:host]} -p #{db_config[:port]} -U #{db_confi
-      g[:user]} #{db_config[:dbname]}")
-      puts "* #{action} database #{db_config[:dbname]} ✓" if ok
+      uri = URI.parse(Config.get[:db][:url])
+      dbname = uri.path.to_s.delete_prefix("/")
+      env = {}
+      env["PGPASSWORD"] = uri.password if uri.password
+      args = ["#{action}db"]
+      args.push("-h", uri.host) if uri.host
+      args.push("-p", uri.port.to_s) if uri.port
+      args.push("-U", uri.user) if uri.user
+      args << dbname
+      ok = system(env, *args)
+      puts "* #{action} database #{dbname} ✓" if ok
     end
   end
   
