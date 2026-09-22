@@ -44,9 +44,8 @@ class FullstackPgNoRodauthProject < Roda
   def config = @config ||= Config.get
 
   route do |r|
+    r.i18n_set_locale_from(:http)
     r.hash_branches
-    # session[:locale] = 'pt-br'
-    # r.i18n_set_locale_from(:session)
     
     r.root do
       view("index")
