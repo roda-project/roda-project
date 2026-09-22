@@ -1,4 +1,6 @@
 ## [Unreleased]
+
+## [0.1.14] - 2026-09-22
 - Fix PostgreSQL `bin/roda db create/drop` (broken interpolation, booted the app before the DB existed)
 - Fix invalid `environment:,,` in generated config when Rodauth is off
 - Load i18n from an absolute path and set the locale from `Accept-Language` before routing
