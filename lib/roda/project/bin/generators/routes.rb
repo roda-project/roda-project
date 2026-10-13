@@ -24,10 +24,10 @@ class Roda
             route_definitions = routes_list.map do |route_str|
               method, name = parse_route_string(route_str)
               view_name = name
-              view_name = "index" if view_name == ""
+              view_name = "index" if view_name == nil
               view_line = (method == "get" && must_generate_views?) ? "\n      view('#{view_name}')" : ""
 
-              if name != ""
+              if name != nil
                 "    r.#{method} \"#{name}\" do#{view_line}\n    end"
               else
                 "    r.#{method} do#{view_line}\n    end"
@@ -61,7 +61,7 @@ class Roda
               routes_list.each do |route_str|
                 method, name = parse_route_string(route_str)
                 if method == "get"
-                  name = "index" if name == ""
+                  name = "index" if name == nil
                   view_filename = File.join(branch_views_dir, "#{name}.erb")
                   File.write(view_filename, "")
                   action_success_message(view_filename)
@@ -78,7 +78,7 @@ class Roda
             test_route_definitions = routes_list.map do |route_str|
               method, name = parse_route_string(route_str)
 
-              if name != ""
+              if name != nil
                 "  it \"responds to #{method.upcase} /#{branch_name}/#{name}\" do\n" \
                   "    #{method} \"/#{branch_name}/#{name}\"\n" \
                   "    expect(last_response.status).to eq(200)\n" \
@@ -158,8 +158,7 @@ class Roda
           end
 
           def parse_route_string(route_str)
-            name, method = route_str.split(":", 2)
-            method ||= "get"
+            method, name = route_str.split(":", 2)
             [method, name]
           end
 

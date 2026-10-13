@@ -1,5 +1,9 @@
 ## [Unreleased]
 
+## [0.1.17] - 2026-10-13
+- Change routes generator interface following padrino pattern: `bin/roda g routes :get` to `bin/roda g routes get` 
+- Improve AGENTS.md
+
 ## [0.1.16] - 2026-10-07
 - Programmatically loads the hash_branches 
 - Change hash_branch_view_namespace to hash_branch_view_subdir
