@@ -7,7 +7,7 @@ require "fileutils"
 
 RSpec.describe Roda::Project::Bin::Generators::Routes do
   let(:context) { double("MainContext", const_project_name: "TestProject") }
-  let(:args) { ["users", "index", "create:post"] }
+  let(:args) { ["users", "get:index", "post:create"] }
   let(:options) { {views: false} }
   let(:generator) do
     described_class.new(context: context, args: args, options: options)
@@ -79,8 +79,7 @@ RSpec.describe Roda::Project::Bin::Generators::Routes do
       end
 
       context "when route name is empty (root route)" do
-        # Argument passes an empty string before the colon, e.g., ":get" or ":post"
-        let(:args) { ["users", ":get", ":post"] }
+        let(:args) { ["users", "get", "post"] }
 
         it "generates the root routes in the route file without a string name" do
           generator.call
@@ -121,7 +120,7 @@ RSpec.describe Roda::Project::Bin::Generators::Routes do
 
       context "with nested branch_name" do
         context "with single sublevel (e.g. a/b)" do
-          let(:args) { ["admin/users", "list:get"] }
+          let(:args) { ["admin/users", "get:list"] }
 
           it "creates nested directories, correct hash_branch format" do
             generator.call
@@ -144,7 +143,7 @@ RSpec.describe Roda::Project::Bin::Generators::Routes do
         end
 
         context "with multiple sublevels (e.g. a/b/c)" do
-          let(:args) { ["a/b/c", "show:get"] }
+          let(:args) { ["a/b/c", "get:show"] }
 
           it "creates correct hash_branch format for deep nesting" do
             generator.call
@@ -167,7 +166,7 @@ RSpec.describe Roda::Project::Bin::Generators::Routes do
         end
 
         context "with four sublevels (e.g. a/b/c/d)" do
-          let(:args) { ["a/b/c/d", "show:get"] }
+          let(:args) { ["a/b/c/d", "get:show"] }
 
           it "creates correct hash_branch format for four sublevels" do
             generator.call
@@ -187,7 +186,7 @@ RSpec.describe Roda::Project::Bin::Generators::Routes do
         end
 
         context "when an intermediate branch file already exists" do
-          let(:args) { ["admin/users", "list:get"] }
+          let(:args) { ["admin/users", "get:list"] }
 
           before do
             FileUtils.mkdir_p("app/routes/admin")
