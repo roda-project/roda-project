@@ -1,47 +1,66 @@
 # Project Code Generation Rules
 
 ## Core Stack
+
 - **Web Framework**: Roda (STRICT: Do NOT use Rails, ActionController, or Sinatra conventions).
 - **No Rails Magic:** Do not use `ActiveSupport` methods (like `.present?` or `.blank?`) unless the gem is explicitly in the Gemfile.<% if context.database %>
 - **ORM**: Sequel (STRICT: Do NOT use ActiveRecord. Use Sequel Models, Datasets, and Migrations).<% end %>
 - **Autoloader**: Zeitwerk (Do NOT manually `require` files located in the `app/` directory. Only require standard libraries or gems).<% if context.fullstack? %>
 - **Frontend**: esbuild + ERB (Fullstack mode).<% end %>
 
-## Code Style & Conventions
+## Code Style & Conventions<%= i = 0 %>
 
-### 1. Types
+### <%= i=i+1 %>. Types
+
 - Rely on standard Ruby 3.x patterns. Use explicit YARD docs for method signatures.
 
-### 2. Routing (Roda)
+<% if context.fullstack? %>### <%= i=i+1 %>. Views & Presentation
+
+- ERB templates go in `app/views/`.
+- The `view` method inside a route block will match the hash branch to find the view path location:
+- For `hash_branch "foo/bar", "zas" do |r|`, calling `view('something')` will search an erb file in "views/foo/bar/zas/something.erb".
+- For `hash_branch "zas" do |r|`, calling `view('something')` will search an erb file in "views/zas/something.erb".
+
+<% end %>### <%= i=i+1 %>. Routing
+
 - The main app resides in `app/[project_name].rb`.
 - Sub-routes MUST be implemented using Roda **Hash Branches** (`hash_branches` plugin) and placed in `app/routes/`.
-- Do not create deep routing blocks. Use Roda's tree routing efficiently (`r.on`, `r.is`, `r.get`, `r.post`).<% if context.database %>
+- **Strict Segment Limit per Branch:** Each hash branch must contain only **one** additional route segment and only **one** CRUD. Do not create deep routing blocks, examples:
+- **Allowed** inside `hash_branch "foo" do |r|`: Handling `GET "foo/bar"`, `POST "foo/bar"`, `GET "foo/something"`, UPDATE `foo/[id]/bar`, GET `foo/[id]/bar` or `GET "foo"`.
+- **FORBIDDEN** inside `hash_branch "foo" do |r|`: Handling deeper segments like `GET "foo/bar/zas"` or `GET "foo/resource/[id]/edit"`.
+- **Solution for Deep Routes:** For deeper paths, you MUST create a new, nested hash branch (e.g., `hash_branch "foo", "bar" do |r|`), in a new nested directory like "app/routes/foo/bar" with views (if any) inside a new view directory like "views/foo/bar".
+- Use Roda's tree routing efficiently (`r.on`, `r.is`, `r.get`, `r.post`).
+- You **MUST** use the `bin/roda g routes` generator for create new route files, examples:
+- `bin/roda g routes branch/name get:foo post:bar` creates a file containing `GET "branch/name/foo"` and `POST "branch/name/bar"` routes.
+- `bin/roda g routes branch_name get post delete:foo` creates a file containing `GET "branch_name"`, `POST "branch_name"` and `DELETE "branch_name/foo"` routes.<% if context.database %>
 
-### 3. Database & Models (Sequel)
+### <%= i=i+1 %>. Database & Models (Sequel)
+
 - Models reside in `app/models/`.
 - Migrations reside in `db/migrations/` and MUST use sequential numbering (e.g., `001_...`).
+- Seeds reside in db/migrations/seeds.rb.
 - When writing database queries, use Sequel's dataset methods (e.g., `where`, `select`, `exclude`, `join`). Do not use string interpolation for SQL queries.
 
-<% end %><% if context.fullstack? %>### 4. Views & Presentation
-- ERB templates go in `app/views/`.
+<% end %>### <%= i=i+1 %>. Testing
 
-<% end %>### 5. Testing
 - Specs reside in `spec/app/`.
 - Use `rack-test` for route testing.
 - Ensure database transactions are rolled back after each test block.
 - Mirror the file structure of `app/` inside `spec/app/` (e.g., `app/models/user.rb` -> `spec/app/models/user_spec.rb`).
+- Each route **MUST** have tests for each behavior.
+- Each model custom public method **MUST** have tests.
 
-### 6. Boot Sequence & Initialization
-- **`boot.rb`**: The absolute starting point. It sets up `Bundler`, boots `Zeitwerk` for autoloading the `app/` directory, and loads service providers from `app/config/providers/`.
+### <%= i=i+1 %>. Config
+
+- **STRICT:** Config values and ENV **MUST** be centralized in `app/config/config.rb`.
+- External tools, gems or services that need a single initialization or/and specific configuration reside in `app/config/providers/*`.
+
+### <%= i=i+1 %>. Boot Sequence & Initialization
+
+- **`boot.rb`**: The absolute starting point. It sets up `Bundler`, global constants, boots `Zeitwerk` for autoloading the `app/` directory, and loads tools, gems or service providers from `app/config/providers/`.
 - **`config.ru`**: The Rack entrypoint. It defines middleware (like `Rack::LiveReload` in development) and mounts the primary Roda application class defined in `app/[project_name].rb`.
 
-### 7. Tooling
-- Do NOT run `bundle exec rake` for scaffolding/servers. The project uses a custom CLI: `bin/roda`. Suggest commands using `bin/roda` (e.g., generators, running the server).
+### <%= i=i+1 %>. Tooling
 
-#### Generators
+- Do NOT run `bundle exec rake` for scaffolding/servers. The project uses a custom CLI: `bin/roda`.
 - To maintain consistency and avoid manual boilerplate, the project uses custom generators for scaffolding new features. These automatically hook into Zeitwerk's expectations, Sequel's DSL, and Roda's Hash Branches.
-- **`bin/roda g routes <branch> [options]`**: Scaffolds a Roda hash branch file in `app/routes/`, matching spec files, and ERB views (for GET routes). Supports nested paths (e.g., `api/v1`) and bare verbs (e.g., `books :get :post`).<% if context.database %>
-- **`bin/roda g model <name> [fields]`**: Generates a Sequel ORM model class, a matching model spec, and a timestamped Sequel migration. Supports namespacing (`Admin/User`) and auto-pluralizes table names.
-- **`bin/roda g migration <name> [fields]`**: Creates a timestamped Sequel migration. It automatically detects intent from the name (e.g., `add_status_to_users` generates the `alter_table` block) and maps Rails-like field types (e.g., `user:references`, `body:text`) to Sequel schema methods.
-<% end %>- **`bin/roda g service <type> <name>`**: Scaffolds a class or module service in `app/services/` and a matching spec. Defaults to `class` if type is omitted.
-
