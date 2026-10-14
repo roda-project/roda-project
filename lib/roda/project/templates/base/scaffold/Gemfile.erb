@@ -22,8 +22,9 @@ gem "puma"
 # gem 'thin'<% if context.fullstack? %>
 
 # Views
-gem 'roda-assets_manifest'
-<% end %>
+gem 'roda-assets_manifest'<% if context.inertia? %>
+gem 'roda-inertia-lite'
+<% end %><% end %>
 # Performance
 gem "oj"
 # gem 'async'
