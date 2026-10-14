@@ -79,7 +79,7 @@ class Roda
         puts "* creating base project"
         if @context.minimal?
           TTY::File.copy_directory(
-            File.expand_path("templates/base/minimal", __dir__),
+            File.expand_path("templates/base-minimal", __dir__),
             "#{@dir}#{@context.project_name}",
             context: @context
           )
@@ -88,7 +88,7 @@ class Roda
         end
 
         TTY::File.copy_directory(
-          File.expand_path("templates/base/scaffold", __dir__),
+          File.expand_path("templates/base-scaffold", __dir__),
           "#{@dir}#{@context.project_name}",
           context: @context
         )
@@ -145,12 +145,12 @@ class Roda
 
       def add_test_files
         puts "* adding test files"
-        minimal_dir = @context.minimal? ? "minimal/" : ""
+        minimal_dir = @context.minimal? ? "minimal-" : ""
 
         if @context.rspec?
-          erb_cp_dir("tests/#{minimal_dir}rspec", "spec")
+          erb_cp_dir("tests-#{minimal_dir}rspec", "spec")
         else
-          erb_cp_dir("tests/#{minimal_dir}minitest", "spec")
+          erb_cp_dir("tests-#{minimal_dir}minitest", "spec")
         end
       end
     end
