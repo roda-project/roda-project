@@ -115,6 +115,7 @@ class Roda
       end
 
       def root_example
+        return 'inertia("Index")' if inertia?
         return 'view("index")' if fullstack?
 
         '{ message: "hello world" }'

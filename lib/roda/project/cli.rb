@@ -105,20 +105,20 @@ class Roda
       def add_front_end
         if @context.fullstack?
           puts "* adding front-end"
-          if @context.inertia?
-          else
-            erb_cp_dir("front-end", "app/assets")
-            erb_cp_file("front-end", "esbuild.js")
-            erb_cp_file("front-end", "package.json")
-            cp_dir("front-end", "app/config/locales")
-            action_success_message("app/config/locales")
-            cp_dir("front-end", "app/views")
-            action_success_message("app/views")
-            cp_dir("front-end", "public/assets")
-            action_success_message("public/assets")
-            cp_dir("front-end", "public/images")
-            action_success_message("public/images")
-          end
+          from_template = "front-end"
+          from_template = "front-end-inertia" if @context.inertia?
+
+          erb_cp_dir(from_template, "app/assets")
+          erb_cp_file(from_template, "esbuild.js")
+          erb_cp_file(from_template, "package.json")
+          cp_dir(from_template, "app/config/locales")
+          action_success_message("app/config/locales")
+          cp_dir(from_template, "app/views")
+          action_success_message("app/views")
+          cp_dir(from_template, "public/assets")
+          action_success_message("public/assets")
+          cp_dir(from_template, "public/images")
+          action_success_message("public/images")
         end
       end
 

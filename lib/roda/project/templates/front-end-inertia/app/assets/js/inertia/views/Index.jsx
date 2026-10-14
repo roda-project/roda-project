@@ -5,7 +5,7 @@ import Layout from '../components/Layout'
 const Index = props => {
   return (<Layout>
     <div>
-      Index
+      Hello from Inertia.js!
     </div>
   </Layout>)
 }

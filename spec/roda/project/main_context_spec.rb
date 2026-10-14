@@ -295,6 +295,13 @@ RSpec.describe Roda::Project::MainContext do
       end
     end
 
+    context "when inertia? is true" do
+      before { allow(context).to receive(:inertia?).and_return(true) }
+      it "returns the rodauth fullstack example" do
+        expect(context.root_example).to eq("inertia(\"Index\")")
+      end
+    end
+
     # rubocop:disable Lint/InterpolationCheck
     context "when fullstack? is false" do
       before { allow(context).to receive(:fullstack?).and_return(false) }
