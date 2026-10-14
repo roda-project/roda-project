@@ -9,6 +9,8 @@ RSpec.describe Roda::Project::MainContext do
     it { is_expected.to respond_to(:project_name=) }
     it { is_expected.to respond_to(:base) }
     it { is_expected.to respond_to(:base=) }
+    it { is_expected.to respond_to(:frontend) }
+    it { is_expected.to respond_to(:frontend=) }
     it { is_expected.to respond_to(:database) }
     it { is_expected.to respond_to(:database=) }
     it { is_expected.to respond_to(:rodauth) }
@@ -194,6 +196,30 @@ RSpec.describe Roda::Project::MainContext do
     context "when base is not FULLSTACK" do
       before { context.base = Roda::Project::API }
       it { is_expected.not_to be_fullstack }
+    end
+  end
+
+  describe "#inertia?" do
+    context "when frontend is INERTIA" do
+      before { context.frontend = Roda::Project::INERTIA }
+      it { is_expected.to be_inertia }
+    end
+
+    context "when frontend is not INERTIA" do
+      before { context.frontend = Roda::Project::ERB }
+      it { is_expected.not_to be_inertia }
+    end
+  end
+
+  describe "#erb?" do
+    context "when frontend is ERB" do
+      before { context.frontend = Roda::Project::ERB }
+      it { is_expected.to be_erb }
+    end
+
+    context "when frontend is not ERB" do
+      before { context.frontend = Roda::Project::INERTIA }
+      it { is_expected.not_to be_erb }
     end
   end
 

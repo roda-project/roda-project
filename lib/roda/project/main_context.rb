@@ -15,7 +15,8 @@ class Roda
         :default_db_url,
         :db_gem,
         :project_name,
-        :base
+        :base,
+        :frontend
       )
 
       def to_thor_option
@@ -47,6 +48,14 @@ class Roda
         end
 
         @base = val
+      end
+
+      def frontend=(val)
+        if ![erb_id, inertia_id].include?(val)
+          raise InvalidValue, "Invalid frontend option: #{val}"
+        end
+
+        @frontend = val
       end
 
       def rodauth=(val)
@@ -122,6 +131,14 @@ class Roda
 
       def minimal?
         base == minimal_id
+      end
+
+      def inertia?
+        frontend == inertia_id
+      end
+
+      def erb?
+        frontend == erb_id
       end
 
       def rodauth?

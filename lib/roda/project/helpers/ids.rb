@@ -3,6 +3,8 @@ class Roda
     module Helpers
       module Ids
         def fullstack_id = Roda::Project::FULLSTACK
+        def erb_id = Roda::Project::ERB
+        def inertia_id = Roda::Project::INERTIA
         def api_id = Roda::Project::API
         def minimal_id = Roda::Project::MINIMAL
         def mysql_id = Roda::Project::MYSQL

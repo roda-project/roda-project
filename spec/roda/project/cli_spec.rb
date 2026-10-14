@@ -5,6 +5,8 @@ require_relative "../../../lib/roda/project/cli"
 
 # rubocop:disable Lint/ConstantDefinitionInBlock
 RSpec.describe Roda::Project::CLI do
+  include Roda::Project::Helpers::Ids
+
   after { FileUtils.rm_rf(tmp_path) }
   let(:tmp_path) { File.expand_path("../../tmp", __dir__) }
   let(:dir) { "spec/tmp/" }
@@ -75,7 +77,7 @@ RSpec.describe Roda::Project::CLI do
     let(:app_name) { "fullstack_sqlite_rodauth_project" }
     before do
       allow_any_instance_of(Roda::Project::CLI).to receive(:read_line).and_return(
-        app_name, "1", "2", true, "1", true
+        app_name, fullstack_id, erb_id, minitest_id, true, sqlite_id, true
       )
 
       cli = described_class.new(dir:)
@@ -157,7 +159,7 @@ RSpec.describe Roda::Project::CLI do
     let(:app_name) { "fullstack_pg_no_rodauth_project" }
     before do
       allow_any_instance_of(Roda::Project::CLI).to receive(:read_line).and_return(
-        app_name, "1", "1", true, "2", false
+        app_name, "1", "1", "1", true, "2", false
       )
 
       cli = described_class.new(dir:)

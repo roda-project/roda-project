@@ -8,6 +8,9 @@ class Roda
     API = 2
     MINIMAL = 3
 
+    ERB = 1
+    INERTIA = 2
+
     SQLITE = 1
     POSTGRESQL = 2
     MYSQL = 3
