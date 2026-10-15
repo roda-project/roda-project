@@ -25,7 +25,15 @@ class Roda
               method, name = parse_route_string(route_str)
               view_name = name
               view_name = "index" if view_name == nil
-              view_line = (method == "get" && must_generate_views?) ? "\n      view('#{view_name}')" : ""
+              view_line = if method == "get" && must_generate_views?
+                if @context.inertia?
+                  "\n      inertia('#{inertia_view_path(name)}')"
+                else
+                  "\n      view('#{view_name}')"
+                end
+              else
+                ""
+              end
 
               if name != nil
                 "    r.#{method} \"#{name}\" do#{view_line}\n    end"
@@ -55,17 +63,40 @@ class Roda
           end
 
           def generate_views
-            if must_generate_views?
-              branch_views_dir = File.join("app/views", branch_name)
-              FileUtils.mkdir_p(branch_views_dir)
-              routes_list.each do |route_str|
-                method, name = parse_route_string(route_str)
-                if method == "get"
-                  name = "index" if name == nil
-                  view_filename = File.join(branch_views_dir, "#{name}.erb")
-                  File.write(view_filename, "")
-                  action_success_message(view_filename)
-                end
+            return unless must_generate_views?
+            if @context.inertia?
+              generate_inertia_views
+            else
+              generate_erb_views
+            end
+          end
+
+          def generate_erb_views
+            branch_views_dir = File.join("app/views", branch_name)
+            FileUtils.mkdir_p(branch_views_dir)
+            routes_list.each do |route_str|
+              method, name = parse_route_string(route_str)
+              if method == "get"
+                name = "index" if name == nil
+                view_filename = File.join(branch_views_dir, "#{name}.erb")
+                File.write(view_filename, "")
+                action_success_message(view_filename)
+              end
+            end
+          end
+
+          def generate_inertia_views
+            views_dir = "app/assets/js/inertia/views"
+            FileUtils.mkdir_p(views_dir)
+            routes_list.each do |route_str|
+              method, name = parse_route_string(route_str)
+              if method == "get"
+                component_name = inertia_component_name(name)
+                display_path = inertia_display_path(name)
+                view_filename = File.join(views_dir, "#{inertia_view_path(name)}.jsx")
+                FileUtils.mkdir_p(File.dirname(view_filename))
+                File.write(view_filename, inertia_component_content(component_name, display_path))
+                action_success_message(view_filename)
               end
             end
           end
@@ -154,7 +185,47 @@ class Roda
           end
 
           def must_generate_views?
-            @options[:views] && Dir.exist?("app/views")
+            return false unless @options[:views]
+
+            if @context.inertia?
+              Dir.exist?("app/assets/js/inertia/views")
+            else
+              Dir.exist?("app/views")
+            end
+          end
+
+          def inertia_view_path(name)
+            segments = branch_name.split("/")
+            segments << (name || "index")
+            segments.map(&:capitalize).join("/")
+          end
+
+          def inertia_component_name(name)
+            (name || "index").capitalize
+          end
+
+          def inertia_display_path(name)
+            segments = branch_name.split("/")
+            segments << (name || "index")
+            segments.join("/")
+          end
+
+          def inertia_component_content(component_name, display_path)
+            <<~JSX
+              import React from 'react'
+              import { Link } from '@inertiajs/react'
+              import Layout from '../components/Layout'
+
+              const #{component_name} = props => {
+                return (<Layout>
+                  <div>
+                    #{display_path}
+                  </div>
+                </Layout>)
+              }
+
+              export default #{component_name}
+            JSX
           end
 
           def parse_route_string(route_str)
