@@ -5,8 +5,9 @@
 - **Web Framework**: Roda (STRICT: Do NOT use Rails, ActionController, or Sinatra conventions).
 - **No Rails Magic:** Do not use `ActiveSupport` methods (like `.present?` or `.blank?`) unless the gem is explicitly in the Gemfile.<% if context.database %>
 - **ORM**: Sequel (STRICT: Do NOT use ActiveRecord. Use Sequel Models, Datasets, and Migrations).<% end %>
-- **Autoloader**: Zeitwerk (Do NOT manually `require` files located in the `app/` directory. Only require standard libraries or gems).<% if context.fullstack? %>
-- **Frontend**: esbuild + ERB (Fullstack mode).<% end %>
+- **Autoloader**: Zeitwerk (Do NOT manually `require` files located in the `app/` directory. Only require standard libraries or gems).<% if context.fullstack? && context.erb? %>
+- **Frontend**: esbuild + ERB (Fullstack mode).<% else %>
+- **Frontend**: esbuild + Inertia.js (Fullstack mode).<% end %>
 
 ## Code Style & Conventions<%= i = 0 %>
 
@@ -15,13 +16,17 @@
 - Rely on standard Ruby 3.x patterns. Use explicit YARD docs for method signatures.
 
 <% if context.fullstack? %>### <%= i=i+1 %>. Views & Presentation
-
+<% if context.erb? %>
 - ERB templates go in `app/views/`.
 - The `view` method inside a route block will match the hash branch to find the view path location:
 - For `hash_branch "foo/bar", "zas" do |r|`, calling `view('something')` will search an erb file in "views/foo/bar/zas/something.erb".
-- For `hash_branch "zas" do |r|`, calling `view('something')` will search an erb file in "views/zas/something.erb".
-
-<% end %>### <%= i=i+1 %>. Routing
+- For `hash_branch "zas" do |r|`, calling `view('something')` will search an erb file in "views/zas/something.erb".<% else %>
+- Inertia.js views go in `app/assets/js/inertia/views/`.
+- The `inertia` method inside a route block will find the inertia view location:
+- Calling `inertia('Something')` will search an inertia view file in "app/assets/js/inertia/views/Something.jsx".
+- Calling `inertia('Foo/Bar')` will search an inertia view file in "app/assets/js/inertia/views/Foo/Bar.jsx".<% end %>
+<% end %>
+### <%= i=i+1 %>. Routing
 
 - The main app resides in `app/[project_name].rb`.
 - Sub-routes MUST be implemented using Roda **Hash Branches** (`hash_branches` plugin) and placed in `app/routes/`.

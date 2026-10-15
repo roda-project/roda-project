@@ -6,7 +6,7 @@
 - **No Rails Magic:** Do not use `ActiveSupport` methods (like `.present?` or `.blank?`) unless the gem is explicitly in the Gemfile.
 - **ORM**: Sequel (STRICT: Do NOT use ActiveRecord. Use Sequel Models, Datasets, and Migrations).
 - **Autoloader**: Zeitwerk (Do NOT manually `require` files located in the `app/` directory. Only require standard libraries or gems).
-- **Frontend**: esbuild + ERB (Fullstack mode).
+- **Frontend**: esbuild + Inertia.js (Fullstack mode).
 
 ## Code Style & Conventions0
 
@@ -16,10 +16,10 @@
 
 ### 2. Views & Presentation
 
-- ERB templates go in `app/views/`.
-- The `view` method inside a route block will match the hash branch to find the view path location:
-- For `hash_branch "foo/bar", "zas" do |r|`, calling `view('something')` will search an erb file in "views/foo/bar/zas/something.erb".
-- For `hash_branch "zas" do |r|`, calling `view('something')` will search an erb file in "views/zas/something.erb".
+- Inertia.js views go in `app/assets/js/inertia/views/`.
+- The `inertia` method inside a route block will find the inertia view location:
+- Calling `inertia('Something')` will search an inertia view file in "app/assets/js/inertia/views/Something.jsx".
+- Calling `inertia('Foo/Bar')` will search an inertia view file in "app/assets/js/inertia/views/Foo/Bar.jsx".
 
 ### 3. Routing
 
