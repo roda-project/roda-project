@@ -37,6 +37,7 @@ class Roda
           @context = Roda::Project::MainContext.new
           @context.project_name = options[:main_context][:project_name]
           @context.base = options[:main_context][:base]
+          @context.frontend = options[:main_context][:frontend]
           @context.database = options[:main_context][:database]
           @context.database_type = options[:main_context][:database_type]
           @context.rodauth = options[:main_context][:rodauth]

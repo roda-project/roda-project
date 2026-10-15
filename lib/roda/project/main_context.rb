@@ -31,6 +31,9 @@ class Roda
         if database?
           option << "    database_type: #{id_to_string(database_type, :database)},"
         end
+        if fullstack?
+          option << "\n    frontend: #{id_to_string(frontend, :frontend)},"
+        end
         option << "\n    }"
       end
 

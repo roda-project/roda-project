@@ -117,6 +117,7 @@ class CLI < Thor
     tests: Roda::Project::MINITEST,
     database: true,
     database_type: Roda::Project::SQLITE,
+    frontend: Roda::Project::ERB,
     }
   subcommand "generate", Roda::Project::Bin::Generators
 

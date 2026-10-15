@@ -5,7 +5,7 @@
 - **Web Framework**: Roda (STRICT: Do NOT use Rails, ActionController, or Sinatra conventions).
 - **No Rails Magic:** Do not use `ActiveSupport` methods (like `.present?` or `.blank?`) unless the gem is explicitly in the Gemfile.
 - **Autoloader**: Zeitwerk (Do NOT manually `require` files located in the `app/` directory. Only require standard libraries or gems).
-- **Frontend**: esbuild + Inertia.js (Fullstack mode).
+- **Frontend**: esbuild + Inertia.js + React.js (Fullstack mode).
 
 ## Code Style & Conventions0
 

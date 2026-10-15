@@ -394,6 +394,7 @@ RSpec.describe Roda::Project::MainContext do
     before do
       context.project_name = "test_project"
       context.base = Roda::Project::FULLSTACK
+      context.frontend = Roda::Project::ERB
       context.database = true
       context.database_type = Roda::Project::POSTGRESQL
       context.rodauth = true

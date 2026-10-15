@@ -25,6 +25,13 @@ class Roda
               when minimal_id
                 "MINIMAL"
               end
+            when :frontend
+              case id
+              when erb_id
+                "ERB"
+              when inertia_id
+                "INERTIA"
+              end
             when :database
               case id
               when mysql_id
