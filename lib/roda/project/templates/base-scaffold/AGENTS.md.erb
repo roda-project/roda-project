@@ -7,7 +7,7 @@
 - **ORM**: Sequel (STRICT: Do NOT use ActiveRecord. Use Sequel Models, Datasets, and Migrations).<% end %>
 - **Autoloader**: Zeitwerk (Do NOT manually `require` files located in the `app/` directory. Only require standard libraries or gems).<% if context.fullstack? && context.erb? %>
 - **Frontend**: esbuild + ERB (Fullstack mode).<% else %>
-- **Frontend**: esbuild + Inertia.js (Fullstack mode).<% end %>
+- **Frontend**: esbuild + Inertia.js + React.js (Fullstack mode).<% end %>
 
 ## Code Style & Conventions<%= i = 0 %>
 
@@ -22,8 +22,9 @@
 - For `hash_branch "foo/bar", "zas" do |r|`, calling `view('something')` will search an erb file in "views/foo/bar/zas/something.erb".
 - For `hash_branch "zas" do |r|`, calling `view('something')` will search an erb file in "views/zas/something.erb".<% else %>
 - Inertia.js views go in `app/assets/js/inertia/views/`.
-- The `inertia` method inside a route block will find the inertia view location:
+- The `inertia` method inside a route block will find the inertia view location and pass the props to the component:
 - Calling `inertia('Something')` will search an inertia view file in "app/assets/js/inertia/views/Something.jsx".
+- Calling `inertia('Zoo', { name: "foo", age: 3 })` will search an inertia view file in "app/assets/js/inertia/views/Zoo.jsx" and set the props data in the React function component.
 - Calling `inertia('Foo/Bar')` will search an inertia view file in "app/assets/js/inertia/views/Foo/Bar.jsx".<% end %>
 <% end %>
 ### <%= i=i+1 %>. Routing
