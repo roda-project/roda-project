@@ -5,7 +5,7 @@ import Layout from '../components/Layout'
 const Index = props => {
   return (<Layout>
     <div>
-      Hello from Inertia.js!
+      Hello from Roda + Inertia.js!
     </div>
   </Layout>)
 }

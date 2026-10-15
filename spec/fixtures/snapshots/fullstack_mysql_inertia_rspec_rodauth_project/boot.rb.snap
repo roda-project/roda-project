@@ -1,0 +1,53 @@
+require "bundler/setup"
+Bundler.require
+
+# require 'byebug' if ENV['RACK_ENV'] != 'production'
+
+# Config file loads
+loader = Zeitwerk::Loader.new
+loader.push_dir("#{__dir__}/app")
+loader.collapse("#{__dir__}/lib")
+loader.collapse("#{__dir__}/app/services")
+loader.collapse("#{__dir__}/app/config")
+loader.inflector.inflect("db" => "DB")
+loader.collapse("#{__dir__}/app/models")
+
+# [
+# 'config',
+# 'models',
+# 'services',
+# 'callbacks',
+# 'actions'
+# ].each do |path|
+# loader.push_dir("#{__dir__}/app/#{path}")
+# end
+loader.setup
+
+Oj.mimic_JSON
+
+# Providers
+Providers::DB::Conn.boot
+Providers::Mailer.boot
+Providers::Logger.boot
+
+# Consts
+DB = Providers::DB::Conn.get
+ROUTES_DIR = "./app/routes"
+base_path = Pathname.new(ROUTES_DIR)
+HASH_BRANCHES = []
+HASH_BRANCHES << [base_path]
+Dir.glob(File.join(ROUTES_DIR, "**/*")).each do |dir_path|
+  next unless File.directory?(dir_path)
+
+  path = Pathname.new(dir_path)
+  relative_path = path.relative_path_from(base_path).to_s
+
+  HASH_BRANCHES << [relative_path.to_sym, path.to_s]
+end
+
+if Config.not_production?
+  require "debug"
+  # Automatic models annotations in dev environment
+  require 'sequel/annotate'
+  Sequel::Annotate.annotate(Dir['app/models/*.rb'], position: :before, border: true) rescue nil
+end
