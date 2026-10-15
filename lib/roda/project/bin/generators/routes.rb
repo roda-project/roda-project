@@ -228,9 +228,17 @@ class Roda
             JSX
           end
 
+          VALID_METHODS = %w[get post delete put patch].freeze
+
           def parse_route_string(route_str)
             method, name = route_str.split(":", 2)
-            [method, name]
+            if name && VALID_METHODS.include?(method)
+              [method, name]
+            elsif name.nil? && VALID_METHODS.include?(route_str)
+              [route_str, nil]
+            else
+              ["get", route_str]
+            end
           end
 
           def routes_list

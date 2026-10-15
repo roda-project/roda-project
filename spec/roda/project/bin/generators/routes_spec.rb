@@ -368,5 +368,31 @@ RSpec.describe Roda::Project::Bin::Generators::Routes do
         end
       end
     end
+
+    context "when route params omit a valid REST method" do
+      let(:context) { double("MainContext", const_project_name: "TestProject", inertia?: false) }
+      let(:args) { ["users", "foo", "bar"] }
+
+      it "converts bare route names to get routes" do
+        generator.call
+
+        routes_content = File.read("app/routes/users.rb")
+        expect(routes_content).to include('r.get "foo"')
+        expect(routes_content).to include('r.get "bar"')
+      end
+
+      context "with mixed valid and invalid methods" do
+        let(:args) { ["users", "get:foo", "bar", "post:zas"] }
+
+        it "converts invalid methods to get while preserving valid methods" do
+          generator.call
+
+          routes_content = File.read("app/routes/users.rb")
+          expect(routes_content).to include('r.get "foo"')
+          expect(routes_content).to include('r.get "bar"')
+          expect(routes_content).to include('r.post "zas"')
+        end
+      end
+    end
   end
 end
