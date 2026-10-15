@@ -263,20 +263,20 @@ RSpec.describe Roda::Project::Bin::Generators::Routes do
           generator.call
 
           routes_content = File.read("app/routes/users.rb")
-          expect(routes_content).to include("inertia('Users/Name')")
+          expect(routes_content).to include("inertia('users/Name')")
           expect(routes_content).not_to include("view('index')")
         end
 
         it "generates the inertia view file correctly" do
           generator.call
 
-          expect(File.exist?("app/assets/js/inertia/views/Users/Name.jsx")).to be true
+          expect(File.exist?("app/assets/js/inertia/views/users/Name.jsx")).to be true
         end
 
         it "generates the correct JSX content" do
           generator.call
 
-          content = File.read("app/assets/js/inertia/views/Users/Name.jsx")
+          content = File.read("app/assets/js/inertia/views/users/Name.jsx")
           expect(content).to include("import React from 'react'")
           expect(content).to include("import { Link } from '@inertiajs/react'")
           expect(content).to include("import Layout from '../components/Layout'")
@@ -298,15 +298,15 @@ RSpec.describe Roda::Project::Bin::Generators::Routes do
             generator.call
 
             routes_content = File.read("app/routes/users.rb")
-            expect(routes_content).to include("inertia('Users/Index')")
+            expect(routes_content).to include("inertia('users/Index')")
           end
 
           it "generates the inertia view file with Index component" do
             generator.call
 
-            expect(File.exist?("app/assets/js/inertia/views/Users/Index.jsx")).to be true
+            expect(File.exist?("app/assets/js/inertia/views/users/Index.jsx")).to be true
 
-            content = File.read("app/assets/js/inertia/views/Users/Index.jsx")
+            content = File.read("app/assets/js/inertia/views/users/Index.jsx")
             expect(content).to include("const Index = props => {")
             expect(content).to include("users/index")
             expect(content).to include("export default Index")
@@ -320,17 +320,39 @@ RSpec.describe Roda::Project::Bin::Generators::Routes do
             generator.call
 
             routes_content = File.read("app/routes/admin/users.rb")
-            expect(routes_content).to include("inertia('Admin/Users/List')")
+            expect(routes_content).to include("inertia('admin/users/List')")
           end
 
           it "generates the inertia view file in the correct nested path" do
             generator.call
 
-            expect(File.exist?("app/assets/js/inertia/views/Admin/Users/List.jsx")).to be true
+            expect(File.exist?("app/assets/js/inertia/views/admin/users/List.jsx")).to be true
 
-            content = File.read("app/assets/js/inertia/views/Admin/Users/List.jsx")
+            content = File.read("app/assets/js/inertia/views/admin/users/List.jsx")
             expect(content).to include("const List = props => {")
             expect(content).to include("admin/users/list")
+            expect(content).to include("export default List")
+          end
+        end
+
+        context "with deep nested branch_name" do
+          let(:args) { ["admin/users/a/b/c", "get:list"] }
+
+          it "generates correct inertia path for nested routes" do
+            generator.call
+
+            routes_content = File.read("app/routes/admin/users/a/b/c.rb")
+            expect(routes_content).to include("inertia('admin/users/a/b/c/List')")
+          end
+
+          it "generates the inertia view file in the correct nested path" do
+            generator.call
+
+            expect(File.exist?("app/assets/js/inertia/views/admin/users/a/b/c/List.jsx")).to be true
+
+            content = File.read("app/assets/js/inertia/views/admin/users/a/b/c/List.jsx")
+            expect(content).to include("const List = props => {")
+            expect(content).to include("admin/users/a/b/c/list")
             expect(content).to include("export default List")
           end
         end

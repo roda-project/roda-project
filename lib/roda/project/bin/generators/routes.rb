@@ -196,8 +196,8 @@ class Roda
 
           def inertia_view_path(name)
             segments = branch_name.split("/")
-            segments << (name || "index")
-            segments.map(&:capitalize).join("/")
+            segments << (name || "index").capitalize
+            segments.join("/")
           end
 
           def inertia_component_name(name)
