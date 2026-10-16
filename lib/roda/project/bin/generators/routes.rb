@@ -4,9 +4,12 @@ class Roda
     module Bin
       class Generators < ::Thor
         class Routes < Roda::Project::Bin::Generator
+          DEFAULT_VIEW_NAME = "index"
+          VALID_METHODS = %w[get post delete put patch].freeze
+
           def call
             if branch_name.nil? || branch_name.empty? || routes_list.nil? || routes_list.empty?
-              puts "Usage: bin/roda g routes branch_name route1 route2:method"
+              puts "Usage: bin/roda g routes branch_name route1 method:route2"
               exit 1
             end
 
@@ -21,52 +24,40 @@ class Roda
 
           def generate_routes
             filename = File.join(ensure_and_get_path("app/routes", branch_name), "#{branch_name}.rb")
-            route_definitions = routes_list.map do |route_str|
-              method, name = parse_route_string(route_str)
-              view_name = name
-              view_name = "index" if view_name == nil
-              view_line = (method == "get" && must_generate_views?) ? "\n      view('#{view_name}')" : ""
+            route_definitions = routes_list.map { |route_str| build_route_definition(route_str) }.join("\n\n")
 
-              if name != nil
-                "    r.#{method} \"#{name}\" do#{view_line}\n    end"
-              else
-                "    r.#{method} do#{view_line}\n    end"
-              end
-            end.join("\n\n")
-
-            hash_branch_header = if branch_name.include?("/")
-              parts = branch_name.split("/")
-              sub_path = parts[0..-2].join("/")
-              branch_segment = parts.last
-              "hash_branch #{namespace_for(sub_path)}, \"#{branch_segment}\" do |r|"
-            else
-              "hash_branch \"#{branch_name}\" do |r|"
-            end
-
-            content = <<~RUBY
-      class #{@context.const_project_name}
-        #{hash_branch_header}
-      #{route_definitions}
-        end
-      end
-            RUBY
-            File.write(filename, content)
-            action_success_message(filename)
+            write_file(filename, routes_file_content(route_definitions))
           end
 
           def generate_views
-            if must_generate_views?
-              branch_views_dir = File.join("app/views", branch_name)
-              FileUtils.mkdir_p(branch_views_dir)
-              routes_list.each do |route_str|
-                method, name = parse_route_string(route_str)
-                if method == "get"
-                  name = "index" if name == nil
-                  view_filename = File.join(branch_views_dir, "#{name}.erb")
-                  File.write(view_filename, "")
-                  action_success_message(view_filename)
-                end
-              end
+            return unless must_generate_views?
+
+            @context.inertia? ? generate_inertia_views : generate_erb_views
+          end
+
+          def generate_erb_views
+            branch_views_dir = File.join("app/views", branch_name)
+            FileUtils.mkdir_p(branch_views_dir)
+            routes_list.each do |route_str|
+              method, name = parse_route_string(route_str)
+              next unless method == "get"
+
+              name = DEFAULT_VIEW_NAME if name.nil?
+              write_file(File.join(branch_views_dir, "#{name}.erb"), "")
+            end
+          end
+
+          def generate_inertia_views
+            views_dir = "app/assets/js/inertia/views"
+            FileUtils.mkdir_p(views_dir)
+            routes_list.each do |route_str|
+              method, name = parse_route_string(route_str)
+              next unless method == "get"
+
+              path = InertiaPath.new(branch_name, name)
+              view_filename = File.join(views_dir, "#{path.view_path}.jsx")
+              FileUtils.mkdir_p(File.dirname(view_filename))
+              write_file(view_filename, inertia_component_content(path))
             end
           end
 
@@ -75,31 +66,16 @@ class Roda
             nesting_level = branch_name.count("/")
             relative_spec_helper_path = "../" * (2 + nesting_level) + "spec_helper"
 
-            test_route_definitions = routes_list.map do |route_str|
-              method, name = parse_route_string(route_str)
-
-              if name != nil
-                "  it \"responds to #{method.upcase} /#{branch_name}/#{name}\" do\n" \
-                  "    #{method} \"/#{branch_name}/#{name}\"\n" \
-                  "    expect(last_response.status).to eq(200)\n" \
-                  "  end"
-              else
-                "  it \"responds to #{method.upcase} /#{branch_name}\" do\n" \
-                  "    #{method} \"/#{branch_name}\"\n" \
-                  "    expect(last_response.status).to eq(200)\n" \
-                  "  end"
-              end
-            end.join("\n")
+            test_route_definitions = routes_list.map { |route_str| build_test_definition(route_str) }.join("\n")
 
             test_content = <<~RUBY
-      require_relative "#{relative_spec_helper_path}"
+              require_relative "#{relative_spec_helper_path}"
 
-      describe "Routes for #{branch_name}" do
-      #{test_route_definitions}
-      end
+              describe "Routes for #{branch_name}" do
+              #{test_route_definitions}
+              end
             RUBY
-            File.write(test_filename, test_content)
-            action_success_message(test_filename)
+            write_file(test_filename, test_content)
           end
 
           def generate_nested_branch_files
@@ -117,9 +93,59 @@ class Roda
 
               dir = File.dirname(filename)
               FileUtils.mkdir_p(dir) unless File.directory?(dir)
-              File.write(filename, nested_branch_file_content(prefix, index))
-              action_success_message(filename)
+              write_file(filename, nested_branch_file_content(prefix, index))
             end
+          end
+
+          def build_route_definition(route_str)
+            method, name = parse_route_string(route_str)
+            view_line = build_view_line(method, name)
+            route_block(method, name, view_line)
+          end
+
+          def build_view_line(method, name)
+            return "" unless method == "get" && must_generate_views?
+
+            if @context.inertia?
+              "\n      inertia('#{InertiaPath.new(branch_name, name).view_path}')"
+            else
+              "\n      view('#{name || DEFAULT_VIEW_NAME}')"
+            end
+          end
+
+          def route_block(method, name, view_line)
+            route_name = name ? " \"#{name}\"" : ""
+            "    r.#{method}#{route_name} do#{view_line}\n    end"
+          end
+
+          def build_test_definition(route_str)
+            method, name = parse_route_string(route_str)
+            test_name = name ? " /#{branch_name}/#{name}" : " /#{branch_name}"
+            test_path = name ? " \"/#{branch_name}/#{name}\"" : " \"/#{branch_name}\""
+
+            "  it \"responds to #{method.upcase}#{test_name}\" do\n" \
+              "    #{method}#{test_path}\n" \
+              "    expect(last_response.status).to eq(200)\n" \
+              "  end"
+          end
+
+          def routes_file_content(route_definitions)
+            <<~RUBY
+      class #{@context.const_project_name}
+        #{build_hash_branch_header}
+      #{route_definitions}
+        end
+      end
+            RUBY
+          end
+
+          def build_hash_branch_header
+            return "hash_branch \"#{branch_name}\" do |r|" unless branch_name.include?("/")
+
+            parts = branch_name.split("/")
+            sub_path = parts[0..-2].join("/")
+            branch_segment = parts.last
+            "hash_branch #{namespace_for(sub_path)}, \"#{branch_segment}\" do |r|"
           end
 
           def nested_branch_file_content(prefix, index)
@@ -133,11 +159,11 @@ class Roda
             end
 
             <<~RUBY
-              class #{@context.const_project_name}
-                #{header} # #{prefix} branch
-                  r.hash_branches(#{namespace_for(prefix)}) # #{prefix}/ +1 routes
-                end
-              end
+      class #{@context.const_project_name}
+        #{header} # #{prefix} branch
+          r.hash_branches(#{namespace_for(prefix)}) # #{prefix}/ +1 routes
+        end
+      end
             RUBY
           end
 
@@ -154,12 +180,47 @@ class Roda
           end
 
           def must_generate_views?
-            @options[:views] && Dir.exist?("app/views")
+            return false unless @options[:views]
+
+            if @context.inertia?
+              Dir.exist?("app/assets/js/inertia/views")
+            else
+              Dir.exist?("app/views")
+            end
+          end
+
+          def inertia_component_content(path)
+            <<~JSX
+              import React from 'react'
+              import { Link } from '@inertiajs/react'
+              import Layout from '../components/Layout'
+
+              const #{path.component_name} = props => {
+                return (<Layout>
+                  <div>
+                    #{path.display_path}
+                  </div>
+                </Layout>)
+              }
+
+              export default #{path.component_name}
+            JSX
           end
 
           def parse_route_string(route_str)
             method, name = route_str.split(":", 2)
-            [method, name]
+            if name && VALID_METHODS.include?(method)
+              [method, name]
+            elsif name.nil? && VALID_METHODS.include?(route_str)
+              [route_str, nil]
+            else
+              ["get", route_str]
+            end
+          end
+
+          def write_file(filename, content)
+            File.write(filename, content)
+            action_success_message(filename)
           end
 
           def routes_list
@@ -168,6 +229,34 @@ class Roda
 
           def branch_name
             @branch_name ||= @args[0]
+          end
+
+          class InertiaPath
+            attr_reader :view_path, :component_name, :display_path
+
+            def initialize(branch_name, name)
+              @view_path = build_view_path(branch_name, name)
+              @component_name = build_component_name(name)
+              @display_path = build_display_path(branch_name, name)
+            end
+
+            private
+
+            def build_view_path(branch_name, name)
+              segments = branch_name.split("/")
+              segments << (name || "index")
+              (segments[0..-2] + [segments.last.capitalize]).join("/")
+            end
+
+            def build_component_name(name)
+              (name || "index").capitalize
+            end
+
+            def build_display_path(branch_name, name)
+              segments = branch_name.split("/")
+              segments << (name || "index")
+              segments.join("/")
+            end
           end
         end
       end

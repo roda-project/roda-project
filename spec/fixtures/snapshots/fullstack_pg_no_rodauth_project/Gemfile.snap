@@ -19,7 +19,6 @@ gem "puma"
 
 # Views
 gem 'roda-assets_manifest'
-
 # Performance
 gem "oj"
 # gem 'async'

@@ -6,24 +6,25 @@ source "https://rubygems.org"
 gem "roda"
 gem "roda-i18n"
 gem "zeitwerk"
-<% if context.rodauth? %>
+
 # Authentication
 gem "rodauth"
 gem "jwt"
-<% end %><% if context.database? %>
+
 # Database
 gem "sequel"
-<%= "gem \"#{context.db_gem}\"" %>
-<% end %>
+gem "mysql2"
+
 # Web Server
 gem "puma"
 # gem "falcon"
 # gem 'iodine'
-# gem 'thin'<% if context.fullstack? %>
+# gem 'thin'
 
 # Views
 gem 'roda-assets_manifest'
-<% end %>
+gem 'roda-inertia-lite'
+
 # Performance
 gem "oj"
 # gem 'async'
@@ -43,10 +44,7 @@ group :development do
   gem "rack-test"
   gem "debug"
   gem "base64"
-  gem "standard"<% if context.minitest? %>
-  gem "minitest"
-  gem "minitest-hooks"
-<% else %>
-  gem "rspec"<% end %><% if context.database? %>
-  gem "sequel-annotate"<% end %>
+  gem "standard"
+  gem "rspec"
+  gem "sequel-annotate"
 end

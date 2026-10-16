@@ -12,8 +12,17 @@ class <%= context.const_project_name %> < Roda
   plugin :render, **Config.get[:render]
   plugin :content_for, append: false
   plugin :flash
-  plugin :assets_manifest
-  <% end %>
+  plugin :assets_manifest<% if context.inertia? %>
+  plugin :inertia,
+    version: assets_version,
+    layout: {
+      head: [
+        '<meta http-equiv="x-ua-compatible" content="ie=edge">',
+        css_entrypoint_tag(:app)
+      ].join,
+      body: js_entrypoint_tag(:app)
+    }
+  <% end %><% end %>
   # Request / Response
   plugin :halt
   plugin :json

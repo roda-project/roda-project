@@ -6,12 +6,14 @@
 - **No Rails Magic:** Do not use `ActiveSupport` methods (like `.present?` or `.blank?`) unless the gem is explicitly in the Gemfile.
 - **ORM**: Sequel (STRICT: Do NOT use ActiveRecord. Use Sequel Models, Datasets, and Migrations).
 - **Autoloader**: Zeitwerk (Do NOT manually `require` files located in the `app/` directory. Only require standard libraries or gems).
+- **Frontend**: esbuild + Inertia.js + React.js (Fullstack mode).
 
 ## Code Style & Conventions0
 
 ### 1. Types
 
 - Rely on standard Ruby 3.x patterns. Use explicit YARD docs for method signatures.
+
 
 ### 2. Routing
 

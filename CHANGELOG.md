@@ -1,5 +1,10 @@
 ## [Unreleased]
 
+## [0.1.18] - 2026-10-15
+- Add Inertia.js support to project scaffold
+- Add Inertia.js support to `bin/roda g routes`
+- Default to `get:` when a route param does not have a valid REST method (e.g., `bin/roda g users foo bar` behaves like `bin/roda g users get:foo get:bar`)
+
 ## [0.1.17] - 2026-10-13
 - Change routes generator interface following padrino pattern: `bin/roda g routes :get` to `bin/roda g routes get` 
 - Improve AGENTS.md

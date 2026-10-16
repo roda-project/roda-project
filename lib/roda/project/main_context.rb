@@ -15,7 +15,8 @@ class Roda
         :default_db_url,
         :db_gem,
         :project_name,
-        :base
+        :base,
+        :frontend
       )
 
       def to_thor_option
@@ -29,6 +30,9 @@ class Roda
         RUBY
         if database?
           option << "    database_type: #{id_to_string(database_type, :database)},"
+        end
+        if fullstack?
+          option << "\n    frontend: #{id_to_string(frontend, :frontend)},"
         end
         option << "\n    }"
       end
@@ -47,6 +51,14 @@ class Roda
         end
 
         @base = val
+      end
+
+      def frontend=(val)
+        if ![erb_id, inertia_id].include?(val)
+          raise InvalidValue, "Invalid frontend option: #{val}"
+        end
+
+        @frontend = val
       end
 
       def rodauth=(val)
@@ -106,6 +118,7 @@ class Roda
       end
 
       def root_example
+        return 'inertia("Index")' if inertia?
         return 'view("index")' if fullstack?
 
         '{ message: "hello world" }'
@@ -122,6 +135,14 @@ class Roda
 
       def minimal?
         base == minimal_id
+      end
+
+      def inertia?
+        frontend == inertia_id
+      end
+
+      def erb?
+        frontend == erb_id
       end
 
       def rodauth?

@@ -9,6 +9,8 @@ RSpec.describe Roda::Project::MainContext do
     it { is_expected.to respond_to(:project_name=) }
     it { is_expected.to respond_to(:base) }
     it { is_expected.to respond_to(:base=) }
+    it { is_expected.to respond_to(:frontend) }
+    it { is_expected.to respond_to(:frontend=) }
     it { is_expected.to respond_to(:database) }
     it { is_expected.to respond_to(:database=) }
     it { is_expected.to respond_to(:rodauth) }
@@ -197,6 +199,30 @@ RSpec.describe Roda::Project::MainContext do
     end
   end
 
+  describe "#inertia?" do
+    context "when frontend is INERTIA" do
+      before { context.frontend = Roda::Project::INERTIA }
+      it { is_expected.to be_inertia }
+    end
+
+    context "when frontend is not INERTIA" do
+      before { context.frontend = Roda::Project::ERB }
+      it { is_expected.not_to be_inertia }
+    end
+  end
+
+  describe "#erb?" do
+    context "when frontend is ERB" do
+      before { context.frontend = Roda::Project::ERB }
+      it { is_expected.to be_erb }
+    end
+
+    context "when frontend is not ERB" do
+      before { context.frontend = Roda::Project::INERTIA }
+      it { is_expected.not_to be_erb }
+    end
+  end
+
   describe "#minimal?" do
     context "when base is API" do
       before { context.base = Roda::Project::MINIMAL }
@@ -266,6 +292,13 @@ RSpec.describe Roda::Project::MainContext do
       before { allow(context).to receive(:fullstack?).and_return(true) }
       it "returns the rodauth fullstack example" do
         expect(context.root_example).to eq("view(\"index\")")
+      end
+    end
+
+    context "when inertia? is true" do
+      before { allow(context).to receive(:inertia?).and_return(true) }
+      it "returns the rodauth fullstack example" do
+        expect(context.root_example).to eq("inertia(\"Index\")")
       end
     end
 
@@ -361,6 +394,7 @@ RSpec.describe Roda::Project::MainContext do
     before do
       context.project_name = "test_project"
       context.base = Roda::Project::FULLSTACK
+      context.frontend = Roda::Project::ERB
       context.database = true
       context.database_type = Roda::Project::POSTGRESQL
       context.rodauth = true

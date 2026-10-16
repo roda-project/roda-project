@@ -115,6 +115,7 @@ class CLI < Thor
     tests: Roda::Project::RSPEC,
     database: true,
     database_type: Roda::Project::POSTGRESQL,
+    frontend: Roda::Project::ERB,
     }
   subcommand "generate", Roda::Project::Bin::Generators
 

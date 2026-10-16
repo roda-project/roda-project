@@ -6,7 +6,7 @@ require "tmpdir"
 require "fileutils"
 
 RSpec.describe Roda::Project::Bin::Generators::Routes do
-  let(:context) { double("MainContext", const_project_name: "TestProject") }
+  let(:context) { double("MainContext", const_project_name: "TestProject", inertia?: false) }
   let(:args) { ["users", "get:index", "post:create"] }
   let(:options) { {views: false} }
   let(:generator) do
@@ -241,6 +241,156 @@ RSpec.describe Roda::Project::Bin::Generators::Routes do
             routes_content = File.read("app/routes/users.rb")
             expect(routes_content).not_to include("view('index')")
           end
+        end
+      end
+    end
+
+    context "when inertia? is true" do
+      let(:context) { double("MainContext", const_project_name: "TestProject", inertia?: true) }
+      let(:args) { ["users", "get:name", "post:create"] }
+      let(:options) { {views: true} }
+
+      before do
+        allow($stdout).to receive(:puts)
+      end
+
+      context "and app/assets/js/inertia/views directory exists" do
+        before do
+          FileUtils.mkdir_p("app/assets/js/inertia/views")
+        end
+
+        it "generates the routes file with inertia method" do
+          generator.call
+
+          routes_content = File.read("app/routes/users.rb")
+          expect(routes_content).to include("inertia('users/Name')")
+          expect(routes_content).not_to include("view('index')")
+        end
+
+        it "generates the inertia view file correctly" do
+          generator.call
+
+          expect(File.exist?("app/assets/js/inertia/views/users/Name.jsx")).to be true
+        end
+
+        it "generates the correct JSX content" do
+          generator.call
+
+          content = File.read("app/assets/js/inertia/views/users/Name.jsx")
+          expect(content).to include("import React from 'react'")
+          expect(content).to include("import { Link } from '@inertiajs/react'")
+          expect(content).to include("import Layout from '../components/Layout'")
+          expect(content).to include("const Name = props => {")
+          expect(content).to include("users/name")
+          expect(content).to include("export default Name")
+        end
+
+        it "does not generate views for non-get routes" do
+          generator.call
+
+          expect(File.exist?("app/assets/js/inertia/views/Users/Create.jsx")).to be false
+        end
+
+        context "when route name is empty (root route)" do
+          let(:args) { ["users", "get"] }
+
+          it "defaults inertia path to Index" do
+            generator.call
+
+            routes_content = File.read("app/routes/users.rb")
+            expect(routes_content).to include("inertia('users/Index')")
+          end
+
+          it "generates the inertia view file with Index component" do
+            generator.call
+
+            expect(File.exist?("app/assets/js/inertia/views/users/Index.jsx")).to be true
+
+            content = File.read("app/assets/js/inertia/views/users/Index.jsx")
+            expect(content).to include("const Index = props => {")
+            expect(content).to include("users/index")
+            expect(content).to include("export default Index")
+          end
+        end
+
+        context "with nested branch_name" do
+          let(:args) { ["admin/users", "get:list"] }
+
+          it "generates correct inertia path for nested routes" do
+            generator.call
+
+            routes_content = File.read("app/routes/admin/users.rb")
+            expect(routes_content).to include("inertia('admin/users/List')")
+          end
+
+          it "generates the inertia view file in the correct nested path" do
+            generator.call
+
+            expect(File.exist?("app/assets/js/inertia/views/admin/users/List.jsx")).to be true
+
+            content = File.read("app/assets/js/inertia/views/admin/users/List.jsx")
+            expect(content).to include("const List = props => {")
+            expect(content).to include("admin/users/list")
+            expect(content).to include("export default List")
+          end
+        end
+
+        context "with deep nested branch_name" do
+          let(:args) { ["admin/users/a/b/c", "get:list"] }
+
+          it "generates correct inertia path for nested routes" do
+            generator.call
+
+            routes_content = File.read("app/routes/admin/users/a/b/c.rb")
+            expect(routes_content).to include("inertia('admin/users/a/b/c/List')")
+          end
+
+          it "generates the inertia view file in the correct nested path" do
+            generator.call
+
+            expect(File.exist?("app/assets/js/inertia/views/admin/users/a/b/c/List.jsx")).to be true
+
+            content = File.read("app/assets/js/inertia/views/admin/users/a/b/c/List.jsx")
+            expect(content).to include("const List = props => {")
+            expect(content).to include("admin/users/a/b/c/list")
+            expect(content).to include("export default List")
+          end
+        end
+      end
+
+      context "and app/assets/js/inertia/views directory does not exist" do
+        it "does not add inertia views or create view files" do
+          generator.call
+
+          expect(File.directory?("app/assets/js/inertia/views")).to be false
+          routes_content = File.read("app/routes/users.rb")
+          expect(routes_content).not_to include("inertia('Users/Name')")
+        end
+      end
+    end
+
+    context "when route params omit a valid REST method" do
+      let(:context) { double("MainContext", const_project_name: "TestProject", inertia?: false) }
+      let(:args) { ["users", "foo", "bar"] }
+
+      it "converts bare route names to get routes" do
+        generator.call
+
+        routes_content = File.read("app/routes/users.rb")
+        expect(routes_content).to include('r.get "foo"')
+        expect(routes_content).to include('r.get "bar"')
+      end
+
+      context "with mixed valid and invalid methods" do
+        let(:args) { ["users", "get:foo", "bar", "post:zas"] }
+
+        it "converts invalid methods to get while preserving valid methods" do
+          generator.call
+
+          routes_content = File.read("app/routes/users.rb")
+          expect(routes_content).to include('r.get "foo"')
+          expect(routes_content).to include('r.get "bar"')
+          expect(routes_content).to include('r.post "zas"')
         end
       end
     end

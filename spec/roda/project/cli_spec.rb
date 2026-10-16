@@ -5,6 +5,8 @@ require_relative "../../../lib/roda/project/cli"
 
 # rubocop:disable Lint/ConstantDefinitionInBlock
 RSpec.describe Roda::Project::CLI do
+  include Roda::Project::Helpers::Ids
+
   after { FileUtils.rm_rf(tmp_path) }
   let(:tmp_path) { File.expand_path("../../tmp", __dir__) }
   let(:dir) { "spec/tmp/" }
@@ -59,10 +61,17 @@ RSpec.describe Roda::Project::CLI do
       "db/migrations/001_add_rodauth.rb"
     ]
 
+  INERTIA_FILES =
+    [
+      "app/assets/js/inertia/views/Index.jsx",
+      "app/assets/js/inertia/components/Layout.jsx"
+    ]
+
   FRONT_FILES =
     [
       "app/views/foo/bar.erb",
       "app/views/layout.erb",
+      "app/assets/js/app.js",
       "app/config/locales/en.yml",
       "app/config/locales/pt-br.yml",
       "app/config/locales/foo/en.yml",
@@ -75,7 +84,7 @@ RSpec.describe Roda::Project::CLI do
     let(:app_name) { "fullstack_sqlite_rodauth_project" }
     before do
       allow_any_instance_of(Roda::Project::CLI).to receive(:read_line).and_return(
-        app_name, "1", "2", true, "1", true
+        app_name, fullstack_id, erb_id, minitest_id, true, sqlite_id, true
       )
 
       cli = described_class.new(dir:)
@@ -94,6 +103,31 @@ RSpec.describe Roda::Project::CLI do
         expect(file_exist?(path)).to(be_truthy)
       end
     end
+  end
+
+  context "when creating a fullstack project with RSpec, inertia.js, database (MySQL) and Rodauth >" do
+    let(:app_name) { "fullstack_mysql_inertia_rspec_rodauth_project" }
+    before do
+      allow_any_instance_of(Roda::Project::CLI).to receive(:read_line).and_return(
+        app_name, fullstack_id, inertia_id, rspec_id, true, mysql_id, true
+      )
+
+      cli = described_class.new(dir:)
+      cli.call
+    end
+
+    (BASE_SCAFFOLD_FILES_WITH_LOGIC + ["app/fullstack_mysql_inertia_rspec_rodauth_project.rb"]).each do |path|
+      it "generates the correct: #{path}" do
+        expect(file(path)).to match_snapshot(snap(path))
+      end
+    end
+
+    (FRONT_FILES + INERTIA_FILES + DB_FILES + RODAUTH_BACK_FILES + RODAUTH_FRONT_FILES)
+      .each do |path|
+        it "#{path} exist" do
+          expect(file_exist?(path)).to(be_truthy)
+        end
+      end
   end
 
   context "when creating an API project without a database >" do
@@ -157,7 +191,7 @@ RSpec.describe Roda::Project::CLI do
     let(:app_name) { "fullstack_pg_no_rodauth_project" }
     before do
       allow_any_instance_of(Roda::Project::CLI).to receive(:read_line).and_return(
-        app_name, "1", "1", true, "2", false
+        app_name, "1", "1", "1", true, "2", false
       )
 
       cli = described_class.new(dir:)

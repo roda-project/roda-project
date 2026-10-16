@@ -49,6 +49,10 @@ class Roda
         return if jeremy?
 
         retry_on_error { @context.base = read_line("(#{fullstack_id}) Fullstack (#{api_id}) API (#{minimal_id}) Minimal › ", fullstack_id).to_i }
+        if @context.fullstack?
+          retry_on_error { @context.frontend = read_line("(#{erb_id}) only ERB (#{inertia_id}) Inertia.js › ", erb_id).to_i }
+        end
+
         retry_on_error { @context.tests = read_line("(#{rspec_id}) RSpec (#{minitest_id}) Minitest › ", rspec_id).to_i }
 
         unless @context.minimal?
@@ -75,7 +79,7 @@ class Roda
         puts "* creating base project"
         if @context.minimal?
           TTY::File.copy_directory(
-            File.expand_path("templates/base/minimal", __dir__),
+            File.expand_path("templates/base-minimal", __dir__),
             "#{@dir}#{@context.project_name}",
             context: @context
           )
@@ -84,7 +88,7 @@ class Roda
         end
 
         TTY::File.copy_directory(
-          File.expand_path("templates/base/scaffold", __dir__),
+          File.expand_path("templates/base-scaffold", __dir__),
           "#{@dir}#{@context.project_name}",
           context: @context
         )
@@ -101,16 +105,19 @@ class Roda
       def add_front_end
         if @context.fullstack?
           puts "* adding front-end"
-          erb_cp_dir("front-end", "app/assets")
-          erb_cp_file("front-end", "esbuild.js")
-          erb_cp_file("front-end", "package.json")
-          cp_dir("front-end", "app/config/locales")
+          from_template = "front-end"
+          from_template = "front-end-inertia" if @context.inertia?
+
+          erb_cp_dir(from_template, "app/assets")
+          erb_cp_file(from_template, "esbuild.js")
+          erb_cp_file(from_template, "package.json")
+          cp_dir(from_template, "app/config/locales")
           action_success_message("app/config/locales")
-          cp_dir("front-end", "app/views")
+          cp_dir(from_template, "app/views")
           action_success_message("app/views")
-          cp_dir("front-end", "public/assets")
+          cp_dir(from_template, "public/assets")
           action_success_message("public/assets")
-          cp_dir("front-end", "public/images")
+          cp_dir(from_template, "public/images")
           action_success_message("public/images")
         end
       end
@@ -138,12 +145,12 @@ class Roda
 
       def add_test_files
         puts "* adding test files"
-        minimal_dir = @context.minimal? ? "minimal/" : ""
+        minimal_dir = @context.minimal? ? "minimal-" : ""
 
         if @context.rspec?
-          erb_cp_dir("tests/#{minimal_dir}rspec", "spec")
+          erb_cp_dir("tests-#{minimal_dir}rspec", "spec")
         else
-          erb_cp_dir("tests/#{minimal_dir}minitest", "spec")
+          erb_cp_dir("tests-#{minimal_dir}minitest", "spec")
         end
       end
     end
