@@ -8,7 +8,7 @@
 - **Autoloader**: Zeitwerk (Do NOT manually `require` files located in the `app/` directory. Only require standard libraries or gems).
 - **Frontend**: esbuild + Inertia.js + React.js (Fullstack mode).
 
-## Code Style & Conventions0
+## Code Style & Conventions
 
 ### 1. Types
 
