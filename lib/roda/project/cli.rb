@@ -50,7 +50,7 @@ class Roda
 
         retry_on_error { @context.base = read_line("(#{fullstack_id}) Fullstack (#{api_id}) API (#{minimal_id}) Minimal › ", fullstack_id).to_i }
         if @context.fullstack?
-          retry_on_error { @context.frontend = read_line("(#{erb_id}) only ERB (#{inertia_id}) Inertia.js › ", erb_id).to_i }
+          retry_on_error { @context.frontend = read_line("(#{erb_id}) Only ERB (#{inertia_id}) Inertia.js › ", erb_id).to_i }
         end
 
         retry_on_error { @context.tests = read_line("(#{rspec_id}) RSpec (#{minitest_id}) Minitest › ", rspec_id).to_i }

@@ -4,7 +4,7 @@ describe "hello" do
   it "test requests" do
     get "/"
     expect(last_response.status).to eq(200)<% if context.fullstack? %>
-    expect(last_response.body).to include("Hello world")<% end %>
+    expect(last_response.body).to include(<%= context.inertia? ? "\"public/assets/app.js\"" :  "\"Hello world\"" %>)<% end %>
   end
   <% if context.rodauth? %>
   # run "RACK_ENV=test bin/roda db migrate" to make this spec pass
