@@ -10,9 +10,14 @@ RSpec.describe Roda::Project::Helpers::Inflections do
       expect(described_class.camelize("user_profile")).to eq("UserProfile")
     end
 
-    it "returns string unchanged if it already contains capital letters" do
+    it "returns CamelCase strings unchanged" do
       expect(described_class.camelize("CreateProducts")).to eq("CreateProducts")
       expect(described_class.camelize("AddCategoryToProducts")).to eq("AddCategoryToProducts")
+    end
+
+    it "converts lowerCamelCase and mixed input to CamelCase" do
+      expect(described_class.camelize("myProject")).to eq("MyProject")
+      expect(described_class.camelize("MyProject_extra")).to eq("MyProjectExtra")
     end
   end
 
@@ -21,6 +26,12 @@ RSpec.describe Roda::Project::Helpers::Inflections do
       expect(described_class.underscore("CreateProducts")).to eq("create_products")
       expect(described_class.underscore("AddCategoryToProducts")).to eq("add_category_to_products")
       expect(described_class.underscore("HTTPResponse")).to eq("http_response")
+    end
+
+    it "converts project name variations to snake_case" do
+      expect(described_class.underscore("MyProject")).to eq("my_project")
+      expect(described_class.underscore("myProject")).to eq("my_project")
+      expect(described_class.underscore("MyProject_123")).to eq("my_project_123")
     end
   end
 
