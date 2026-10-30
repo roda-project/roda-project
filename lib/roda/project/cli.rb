@@ -115,6 +115,7 @@ class Roda
             erb_cp_file(from_template, "babel.config.js")
             erb_cp_file(from_template, "jest.config.js")
             erb_cp_file(from_template, "jest.setup.js")
+            erb_cp_file(from_template, "jest.inertia-mock.js")
           end
           cp_dir(from_template, "app/config/locales")
           action_success_message("app/config/locales")
