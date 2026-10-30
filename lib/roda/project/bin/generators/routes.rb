@@ -18,6 +18,7 @@ class Roda
             generate_nested_branch_files
             generate_views
             generate_tests
+            generate_inertia_view_tests
           end
 
           private
@@ -76,6 +77,21 @@ class Roda
               end
             RUBY
             write_file(test_filename, test_content)
+          end
+
+          def generate_inertia_view_tests
+            return unless @context.inertia? && must_generate_views?
+
+            views_dir = "app/assets/js/inertia/views"
+            routes_list.each do |route_str|
+              method, name = parse_route_string(route_str)
+              next unless method == "get"
+
+              path = InertiaPath.new(branch_name, name)
+              test_filename = File.join(views_dir, "#{path.view_path}.test.js")
+              FileUtils.mkdir_p(File.dirname(test_filename))
+              write_file(test_filename, inertia_component_test_content(path))
+            end
           end
 
           def generate_nested_branch_files
@@ -189,11 +205,29 @@ class Roda
             end
           end
 
+          def inertia_component_test_content(path)
+            <<~JS
+              import React from 'react'
+              import { render, screen } from '@testing-library/react'
+              import #{path.component_name} from './#{path.component_name}'
+
+              describe('#{path.component_name}', () => {
+                it('renders', () => {
+                  render(<#{path.component_name} />)
+
+                  expect(
+                    screen.getByText('#{path.display_path}')
+                  ).toBeInTheDocument()
+                })
+              })
+            JS
+          end
+
           def inertia_component_content(path)
             <<~JSX
               import React from 'react'
               import { Link } from '@inertiajs/react'
-              import Layout from '../components/Layout'
+              import Layout from '#{path.layout_import_path}'
 
               const #{path.component_name} = props => {
                 return (<Layout>
@@ -232,15 +266,21 @@ class Roda
           end
 
           class InertiaPath
-            attr_reader :view_path, :component_name, :display_path
+            attr_reader :view_path, :component_name, :display_path, :layout_import_path
 
             def initialize(branch_name, name)
               @view_path = build_view_path(branch_name, name)
               @component_name = build_component_name(name)
               @display_path = build_display_path(branch_name, name)
+              @layout_import_path = build_layout_import_path
             end
 
             private
+
+            def build_layout_import_path
+              prefix = "../" * (view_path.count("/") + 1)
+              "#{prefix}components/Layout"
+            end
 
             def build_view_path(branch_name, name)
               segments = branch_name.split("/")

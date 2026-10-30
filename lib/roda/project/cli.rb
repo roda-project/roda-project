@@ -111,6 +111,11 @@ class Roda
           erb_cp_dir(from_template, "app/assets")
           erb_cp_file(from_template, "esbuild.js")
           erb_cp_file(from_template, "package.json")
+          if @context.inertia?
+            erb_cp_file(from_template, "babel.config.js")
+            erb_cp_file(from_template, "jest.config.js")
+            erb_cp_file(from_template, "jest.setup.js")
+          end
           cp_dir(from_template, "app/config/locales")
           action_success_message("app/config/locales")
           cp_dir(from_template, "app/views")

@@ -64,7 +64,10 @@ RSpec.describe Roda::Project::CLI do
   INERTIA_FILES =
     [
       "app/assets/js/inertia/views/Index.jsx",
-      "app/assets/js/inertia/components/Layout.jsx"
+      "app/assets/js/inertia/components/Layout.jsx",
+      "babel.config.js",
+      "jest.config.js",
+      "jest.setup.js"
     ]
 
   FRONT_FILES =

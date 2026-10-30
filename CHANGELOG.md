@@ -1,4 +1,7 @@
 ## [Unreleased]
+- Generate jest specs for Inertia views in `bin/roda g routes`
+- Add jest + testing-library setup to the Inertia front-end template
+- Fix the relative `Layout` import in generated Inertia views for nested routes
 - Bug fix: Remove "0" in AGENTS.md
 - Improve AGENTS.md
 - Fix failing tests for inertia route

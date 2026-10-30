@@ -4,7 +4,7 @@
   "description": "",
   "main": "esbuild.config.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "jest",
     "build": "node esbuild.js",
     "build:watch": "node esbuild.js --watch"
   },
@@ -16,8 +16,16 @@
     "react-dom": "^19.2.7"
   },
   "devDependencies": {
+    "@babel/core": "^7.29.7",
+    "@babel/preset-env": "^7.29.7",
+    "@babel/preset-react": "^7.29.7",
+    "@testing-library/jest-dom": "^6.10.0",
+    "@testing-library/react": "^16.3.3",
+    "babel-jest": "^30.5.2",
     "esbuild": "^0.19.0",
     "esbuild-plugin-manifest": "^1.0.5",
+    "jest": "^30.5.2",
+    "jest-environment-jsdom": "^30.5.2",
     "path": "^0.12.7"
   }
 }
