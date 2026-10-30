@@ -1,4 +1,5 @@
 ## [Unreleased]
+- Refactor the routes generator into dedicated builder classes under `bin/generators/routes/`
 - Generate jest specs for Inertia views in `bin/roda g routes`
 - Add jest + testing-library setup to the Inertia front-end template
 - Fix the relative `Layout` import in generated Inertia views for nested routes
