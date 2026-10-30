@@ -1,4 +1,8 @@
 ## [Unreleased]
+- Bug fix: Remove "0" in AGENTS.md
+- Improve AGENTS.md
+- Fix failing tests for inertia route
+- Improve project name inflections
 
 ## [0.1.18] - 2026-10-15
 - Add Inertia.js support to project scaffold

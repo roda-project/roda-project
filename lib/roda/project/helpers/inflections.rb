@@ -7,9 +7,9 @@ class Roda
         module_function
 
         def camelize(str)
-          return str if /[A-Z]/.match?(str)
+          return str if /\A[A-Z][a-zA-Z0-9]*\z/.match?(str)
 
-          str.split("_").map(&:capitalize).join
+          underscore(str).split("_").reject(&:empty?).map(&:capitalize).join
         end
 
         def underscore(str)

@@ -4,7 +4,7 @@ describe "hello" do
   it "test requests" do
     get "/"
     expect(last_response.status).to eq(200)
-    expect(last_response.body).to include("Hello world")
+    expect(last_response.body).to include("public/assets/app.js")
   end
   
   # run "RACK_ENV=test bin/roda db migrate" to make this spec pass

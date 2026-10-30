@@ -8,7 +8,7 @@
 - **Autoloader**: Zeitwerk (Do NOT manually `require` files located in the `app/` directory. Only require standard libraries or gems).
 - **Frontend**: esbuild + Inertia.js + React.js (Fullstack mode).
 
-## Code Style & Conventions0
+## Code Style & Conventions
 
 ### 1. Types
 
@@ -21,6 +21,7 @@
 - Calling `inertia('Something')` will search an inertia view file in "app/assets/js/inertia/views/Something.jsx".
 - Calling `inertia('Zoo', { name: "foo", age: 3 })` will search an inertia view file in "app/assets/js/inertia/views/Zoo.jsx" and set the props data in the React function component.
 - Calling `inertia('Foo/Bar')` will search an inertia view file in "app/assets/js/inertia/views/Foo/Bar.jsx".
+- **STRICT:** When creating routes with `bin/roda g routes` always use the generated views files (when necessary) instead of creating new ones
 
 ### 3. Routing
 

@@ -23,7 +23,7 @@ RSpec.describe Roda::Project::MainContext do
 
     it "allows setting and getting project_name" do
       context.project_name = "MyProject"
-      expect(context.project_name).to eq("MyProject")
+      expect(context.project_name).to eq("my_project")
     end
   end
 
@@ -146,9 +146,29 @@ RSpec.describe Roda::Project::MainContext do
 
   describe "#project_name=" do
     context "with a valid project name" do
-      it "sets the project_name attribute" do
+      it "keeps snake_case unchanged" do
+        context.project_name = "my_project"
+        expect(context.project_name).to eq("my_project")
+      end
+
+      it "converts CamelCase to snake_case" do
+        context.project_name = "MyProject"
+        expect(context.project_name).to eq("my_project")
+      end
+
+      it "converts lowerCamelCase to snake_case" do
+        context.project_name = "myProject"
+        expect(context.project_name).to eq("my_project")
+      end
+
+      it "converts mixed CamelCase and snake_case to snake_case" do
         context.project_name = "MyProject_123"
-        expect(context.project_name).to eq("MyProject_123")
+        expect(context.project_name).to eq("my_project_123")
+      end
+
+      it "normalizes repeated and trailing underscores" do
+        context.project_name = "My__Project_"
+        expect(context.project_name).to eq("my_project")
       end
     end
 
@@ -160,6 +180,31 @@ RSpec.describe Roda::Project::MainContext do
       it "raises an InvalidValue error for containing special characters" do
         expect { context.project_name = "My-Project" }.to raise_error(Roda::Project::MainContext::InvalidValue, "Project name must start with a letter and contains only letters, numbers and _")
       end
+    end
+  end
+
+  describe "#const_project_name" do
+    it "returns CamelCase for snake_case project names" do
+      context.project_name = "my_project"
+      expect(context.const_project_name).to eq("MyProject")
+    end
+
+    it "returns CamelCase for CamelCase project names" do
+      context.project_name = "MyProject"
+      expect(context.const_project_name).to eq("MyProject")
+    end
+
+    it "returns CamelCase for multi-word project names" do
+      context.project_name = "my_cool_app_123"
+      expect(context.const_project_name).to eq("MyCoolApp123")
+    end
+
+    it "recalculates the constant when the project name changes" do
+      context.project_name = "first_project"
+      expect(context.const_project_name).to eq("FirstProject")
+
+      context.project_name = "second_project"
+      expect(context.const_project_name).to eq("SecondProject")
     end
   end
 

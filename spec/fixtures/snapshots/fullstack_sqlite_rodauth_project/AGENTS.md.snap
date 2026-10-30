@@ -8,7 +8,7 @@
 - **Autoloader**: Zeitwerk (Do NOT manually `require` files located in the `app/` directory. Only require standard libraries or gems).
 - **Frontend**: esbuild + ERB (Fullstack mode).
 
-## Code Style & Conventions0
+## Code Style & Conventions
 
 ### 1. Types
 
@@ -20,6 +20,7 @@
 - The `view` method inside a route block will match the hash branch to find the view path location:
 - For `hash_branch "foo/bar", "zas" do |r|`, calling `view('something')` will search an erb file in "views/foo/bar/zas/something.erb".
 - For `hash_branch "zas" do |r|`, calling `view('something')` will search an erb file in "views/zas/something.erb".
+- **STRICT:** When creating routes with `bin/roda g routes` always use the generated views files (when necessary) instead of creating new ones
 
 ### 3. Routing
 

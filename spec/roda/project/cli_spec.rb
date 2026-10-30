@@ -230,6 +230,29 @@ RSpec.describe Roda::Project::CLI do
     end
   end
 
+  context "when the project name is informed in CamelCase >" do
+    let(:app_name) { "MyRodaApp" }
+    let(:normalized_name) { "my_roda_app" }
+
+    before do
+      allow_any_instance_of(Roda::Project::CLI).to receive(:read_line).and_return(
+        app_name, api_id, rspec_id, false
+      )
+
+      cli = described_class.new(dir:)
+      cli.call
+    end
+
+    it "normalizes the folder, main app file and constant names" do
+      expect(File.directory?("#{tmp_path}/#{normalized_name}")).to be(true)
+      expect(File.exist?("#{tmp_path}/#{normalized_name}/app/#{normalized_name}.rb")).to be(true)
+      expect(File.exist?("#{tmp_path}/#{app_name}")).to be(false)
+
+      app_file = File.read("#{tmp_path}/#{normalized_name}/app/#{normalized_name}.rb")
+      expect(app_file).to include("class MyRodaApp < Roda")
+    end
+  end
+
   context "when --jeremy option is passed" do
     let(:app_name) { "jeremy_project" }
     let(:jeremy_creator) { instance_double(Roda::Project::JeremyTemplateCreator) }

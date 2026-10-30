@@ -5,7 +5,7 @@ class Roda
       include Helpers::Ids
 
       class InvalidValue < Roda::Project::Error; end
-      VALID_PROJECT_NAME_REGEX = /^[a-zA-Z][a-zA-Z0-9_]*$/
+      VALID_PROJECT_NAME_REGEX = /\A[a-zA-Z][a-zA-Z0-9_]*\z/
 
       attr_reader(
         :tests,
@@ -95,11 +95,12 @@ class Roda
       # rubocop:enable Lint/InterpolationCheck
 
       def project_name=(val)
-        if !(val =~ VALID_PROJECT_NAME_REGEX)
+        unless VALID_PROJECT_NAME_REGEX.match?(val.to_s)
           raise InvalidValue, "Project name must start with a letter and contains only letters, numbers and _"
         end
 
-        @project_name = val
+        @project_name = Helpers::Inflections.underscore(val.to_s).squeeze("_").sub(/_+\z/, "")
+        @const_project_name = nil
       end
 
       def rspec?
@@ -172,7 +173,7 @@ class Roda
       end
 
       def const_project_name
-        @const_project_name ||= project_name.split("_").map(&:capitalize).join
+        @const_project_name ||= Helpers::Inflections.camelize(project_name)
       end
     end
   end
