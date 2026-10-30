@@ -1,4 +1,11 @@
 ## [Unreleased]
+
+## [0.1.19] - 2026-10-30
+- Fix generated Inertia jest setup: add the missing `@testing-library/dom` peer and mock the ESM-only `@inertiajs/react`
+- Refactor the routes generator into dedicated builder classes under `bin/generators/routes/`
+- Generate jest specs for Inertia views in `bin/roda g routes`
+- Add jest + testing-library setup to the Inertia front-end template
+- Fix the relative `Layout` import in generated Inertia views for nested routes
 - Bug fix: Remove "0" in AGENTS.md
 - Improve AGENTS.md
 - Fix failing tests for inertia route

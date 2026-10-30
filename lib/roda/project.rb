@@ -74,6 +74,13 @@ require_relative "project/bin/generators/migration/code_builder"
 require_relative "project/bin/generators/model"
 # Generators/routes
 require_relative "project/bin/generators/routes"
+require_relative "project/bin/generators/routes/route"
+require_relative "project/bin/generators/routes/inertia_path"
+require_relative "project/bin/generators/routes/namespace"
+require_relative "project/bin/generators/routes/routes_file_builder"
+require_relative "project/bin/generators/routes/nested_branch_file_builder"
+require_relative "project/bin/generators/routes/route_spec_builder"
+require_relative "project/bin/generators/routes/inertia_view_builder"
 # Generators/service
 require_relative "project/bin/generators/service"
 # Generators/base

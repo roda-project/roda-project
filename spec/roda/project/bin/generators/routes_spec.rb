@@ -279,10 +279,43 @@ RSpec.describe Roda::Project::Bin::Generators::Routes do
           content = File.read("app/assets/js/inertia/views/users/Name.jsx")
           expect(content).to include("import React from 'react'")
           expect(content).to include("import { Link } from '@inertiajs/react'")
-          expect(content).to include("import Layout from '../components/Layout'")
+          expect(content).to include("import Layout from '../../components/Layout'")
           expect(content).to include("const Name = props => {")
           expect(content).to include("users/name")
           expect(content).to include("export default Name")
+        end
+
+        it "generates the jest spec next to the inertia view" do
+          generator.call
+
+          expect(File.exist?("app/assets/js/inertia/views/users/Name.test.js")).to be true
+        end
+
+        it "generates the jest spec content" do
+          generator.call
+
+          content = File.read("app/assets/js/inertia/views/users/Name.test.js")
+          expect(content).to eq(<<~JS)
+            import React from 'react'
+            import { render, screen } from '@testing-library/react'
+            import Name from './Name'
+
+            describe('Name', () => {
+              it('renders', () => {
+                render(<Name />)
+
+                expect(
+                  screen.getByText('users/name')
+                ).toBeInTheDocument()
+              })
+            })
+          JS
+        end
+
+        it "does not generate jest specs for non-get routes" do
+          generator.call
+
+          expect(File.exist?("app/assets/js/inertia/views/users/Create.test.js")).to be false
         end
 
         it "does not generate views for non-get routes" do
@@ -310,6 +343,18 @@ RSpec.describe Roda::Project::Bin::Generators::Routes do
             expect(content).to include("const Index = props => {")
             expect(content).to include("users/index")
             expect(content).to include("export default Index")
+            expect(content).to include("import Layout from '../../components/Layout'")
+          end
+
+          it "generates the jest spec for the Index component" do
+            generator.call
+
+            expect(File.exist?("app/assets/js/inertia/views/users/Index.test.js")).to be true
+
+            content = File.read("app/assets/js/inertia/views/users/Index.test.js")
+            expect(content).to include("import Index from './Index'")
+            expect(content).to include("render(<Index />)")
+            expect(content).to include("screen.getByText('users/index')")
           end
         end
 
@@ -332,6 +377,18 @@ RSpec.describe Roda::Project::Bin::Generators::Routes do
             expect(content).to include("const List = props => {")
             expect(content).to include("admin/users/list")
             expect(content).to include("export default List")
+            expect(content).to include("import Layout from '../../../components/Layout'")
+          end
+
+          it "generates the jest spec in the component folder" do
+            generator.call
+
+            expect(File.exist?("app/assets/js/inertia/views/admin/users/List.test.js")).to be true
+
+            content = File.read("app/assets/js/inertia/views/admin/users/List.test.js")
+            expect(content).to include("import List from './List'")
+            expect(content).to include("render(<List />)")
+            expect(content).to include("screen.getByText('admin/users/list')")
           end
         end
 
@@ -354,7 +411,28 @@ RSpec.describe Roda::Project::Bin::Generators::Routes do
             expect(content).to include("const List = props => {")
             expect(content).to include("admin/users/a/b/c/list")
             expect(content).to include("export default List")
+            expect(content).to include("import Layout from '../../../../../../components/Layout'")
           end
+
+          it "generates the jest spec in the component folder" do
+            generator.call
+
+            expect(File.exist?("app/assets/js/inertia/views/admin/users/a/b/c/List.test.js")).to be true
+
+            content = File.read("app/assets/js/inertia/views/admin/users/a/b/c/List.test.js")
+            expect(content).to include("import List from './List'")
+            expect(content).to include("screen.getByText('admin/users/a/b/c/list')")
+          end
+        end
+      end
+
+      context "and views option is false" do
+        let(:options) { {views: false} }
+
+        it "does not generate jest specs" do
+          generator.call
+
+          expect(Dir.glob("app/assets/js/inertia/**/*.test.js")).to be_empty
         end
       end
 
@@ -365,6 +443,12 @@ RSpec.describe Roda::Project::Bin::Generators::Routes do
           expect(File.directory?("app/assets/js/inertia/views")).to be false
           routes_content = File.read("app/routes/users.rb")
           expect(routes_content).not_to include("inertia('Users/Name')")
+        end
+
+        it "does not generate jest specs" do
+          generator.call
+
+          expect(Dir.glob("app/assets/js/inertia/**/*.test.js")).to be_empty
         end
       end
     end

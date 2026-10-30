@@ -2,6 +2,7 @@
 
 require_relative "../../../lib/roda/project"
 require_relative "../../../lib/roda/project/cli"
+require "json"
 
 # rubocop:disable Lint/ConstantDefinitionInBlock
 RSpec.describe Roda::Project::CLI do
@@ -64,7 +65,11 @@ RSpec.describe Roda::Project::CLI do
   INERTIA_FILES =
     [
       "app/assets/js/inertia/views/Index.jsx",
-      "app/assets/js/inertia/components/Layout.jsx"
+      "app/assets/js/inertia/components/Layout.jsx",
+      "babel.config.js",
+      "jest.config.js",
+      "jest.setup.js",
+      "jest.inertia-mock.js"
     ]
 
   FRONT_FILES =
@@ -128,6 +133,16 @@ RSpec.describe Roda::Project::CLI do
           expect(file_exist?(path)).to(be_truthy)
         end
       end
+
+    it "installs the @testing-library/dom peer dependency required by @testing-library/react" do
+      dev_dependencies = JSON.parse(file("package.json"))["devDependencies"]
+
+      expect(dev_dependencies["@testing-library/dom"]).to eq("^10.4.2")
+    end
+
+    it "maps @inertiajs/react to the jest mock so its ESM build is not loaded" do
+      expect(file("jest.config.js")).to include("'^@inertiajs/react$': '<rootDir>/jest.inertia-mock.js'")
+    end
   end
 
   context "when creating an API project without a database >" do
